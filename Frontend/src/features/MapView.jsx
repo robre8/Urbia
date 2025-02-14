@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import PropTypes from 'prop-types';
 
 const MapView = ({ reports }) => {
   const defaultPosition = [ -34.6037, -58.3816 ]; // Ubicación por defecto (Ej: Buenos Aires)
@@ -24,5 +25,16 @@ const MapView = ({ reports }) => {
     </MapContainer>
   );
 };
+MapView.propTypes = {
+  reports: PropTypes.arrayOf(
+    PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lng: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 
 export default MapView;
+
