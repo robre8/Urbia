@@ -1,7 +1,6 @@
-// MyLocationButton.jsx
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import PropTypes from 'prop-types';
-// Importamos el ícono desde react-icons/ri
 import { RiCrosshair2Line } from 'react-icons/ri';
 
 export default function MyLocationButton({
@@ -19,15 +18,24 @@ export default function MyLocationButton({
   };
 
   return (
-    <Button
-      variant='ghost'
-      className={`flex items-center justify-center w-12 h-12 rounded-full 
-              [box-shadow:0_0_10px_4px_rgba(146,173,69,0.5)]
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant='ghost'
+            className={` w-12 h-12 rounded-full 
+              [box-shadow:0_0_10px_4px_rgba(155, 238, 94,0.5)]
               bg-white ${className}`}
-      onClick={handleClick}
-    >
-      <RiCrosshair2Line className='text-xl' />
-    </Button>
+            onClick={handleClick}
+          >
+            <RiCrosshair2Line className='text-xl' />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="left">
+          <p>Mostrar tu ubicación</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
