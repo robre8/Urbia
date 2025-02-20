@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.backend.urbia.UrbiaApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.352 s -- in com.backend.urbia.UrbiaApplicationTests

@@ -1,2 +1,2 @@
-com\nocountry\Urbia\controller\HelloController.class
-com\nocountry\Urbia\UrbiaApplication.class
+com\backend\urbia\controller\HelloController.class
+com\backend\urbia\UrbiaApplication.class
