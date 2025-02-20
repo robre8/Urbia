@@ -7,61 +7,84 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
   const [loading, setLoading] = useState(true);
   const [attempts, setAttempts] = useState(0);
 
+  const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY; // Para Vite
+  // const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY; // Para Create React App
+
   useEffect(() => {
+    let isMounted = true;
+
+    async function fetchIPLocation() {
+      try {
+        const res = await fetch("https://ipinfo.io/json?token=TU_TOKEN");
+        const data = await res.json();
+        const [lat, lon] = data.loc.split(",");
+        if (isMounted) {
+          setPosition([parseFloat(lat), parseFloat(lon)]);
+          setAccuracy(5000);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Error obteniendo ubicación por IP:", err);
+      }
+    }
+
     if (!navigator.geolocation) {
-      console.warn('Geolocalización no soportada en este navegador.');
-      setError('Geolocalización no soportada.');
+      console.warn("Geolocalización no soportada.");
+      setError("Geolocalización no soportada.");
       setLoading(false);
+      fetchIPLocation();
       return;
     }
 
     const options = {
-      enableHighAccuracy: true, // Intentar usar GPS o Wi-Fi
-      timeout: 5000, // Máximo 5 segundos esperando respuesta
-      maximumAge: 0, // No usar cache
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
     };
 
-    const handleSuccess = (pos) => {
+    const handleSuccess = async (pos) => {
       const { latitude, longitude, accuracy } = pos.coords;
-      setPosition([latitude, longitude]);
-      setAccuracy(accuracy);
-      setLoading(false);
 
-      // Si la precisión es muy baja, intentamos otra vez hasta un máximo de 3 veces
-      if (accuracy > 1000 && attempts < 3) {
-        console.warn(`Precisión baja (${accuracy}m). Reintentando...`);
-        setAttempts(prev => prev + 1);
-        navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
+      if (isMounted) {
+        setPosition([latitude, longitude]);
+        setAccuracy(accuracy);
+        setLoading(false);
+      }
+
+      if (accuracy > 1000 && attempts < 2) {
+        console.warn(`Precisión baja (${accuracy}m). Intentando Google API...`);
+        setAttempts((prev) => prev + 1);
+
+        try {
+          const googleRes = await fetch(
+            `https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_API_KEY}`,
+            { method: "POST" }
+          );
+          const googleData = await googleRes.json();
+          if (googleData.location && isMounted) {
+            setPosition([googleData.location.lat, googleData.location.lng]);
+            setAccuracy(googleData.accuracy);
+          }
+        } catch (err) {
+          console.error("Error con Google API:", err);
+        }
       }
     };
 
     const handleError = (err) => {
-      console.error('Error obteniendo la ubicación:', err);
-      let errorMsg = 'No se pudo obtener la ubicación.';
-
-      switch (err.code) {
-        case err.PERMISSION_DENIED:
-          errorMsg = 'El usuario denegó el permiso de ubicación.';
-          break;
-        case err.POSITION_UNAVAILABLE:
-          errorMsg = 'La información de ubicación no está disponible.';
-          break;
-        case err.TIMEOUT:
-          errorMsg = 'Tiempo de espera agotado al obtener la ubicación.';
-          break;
-        default:
-          errorMsg = 'Ocurrió un error desconocido.';
-      }
-
-      setError(errorMsg);
+      console.error("Error obteniendo ubicación:", err);
+      setError("No se pudo obtener la ubicación.");
       setLoading(false);
+      fetchIPLocation();
     };
 
     navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
 
-  }, [attempts]); // Se reintentará si la precisión es muy baja
+    return () => {
+      isMounted = false;
+    };
+  }, [attempts]);
 
-  // Si no hay ubicación, usar el centro por defecto
   const center = position || defaultCenter;
 
   return { center, position, accuracy, error, loading };
