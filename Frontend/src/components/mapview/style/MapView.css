@@ -1,4 +1,40 @@
 .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-    margin-right: 1.75rem;
-  }
-  
+  width: 38px;
+  height: 78px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1.75rem;
+  border: none;
+}
+
+.leaflet-bottom.leaflet-right .leaflet-control-zoom a {
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 20px 0 !important;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #000;
+  text-decoration: none;
+}
+
+.leaflet-bottom.leaflet-right .leaflet-control-zoom a:first-child {
+  position: relative;
+}
+
+.leaflet-bottom.leaflet-right .leaflet-control-zoom a:first-child::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  border-bottom: 1px solid #ccc;
+}
