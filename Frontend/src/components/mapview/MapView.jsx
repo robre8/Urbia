@@ -15,8 +15,10 @@ import ReportMarker from './ReportMarker';
 import Recenter from './Recenter';
 import userIcon from '@/assets/userIcon.png';
 import { useUserLocation } from './hooks/useUserLocation';
+import { useReverseGeocode } from './hooks/useReverseGeocode'; // <-- Importas tu nuevo hook
 import MyLocationButton from './MyLocationButton'; 
-import './style/MapView.css'
+import './style/MapView.css';
+import { AddressCard } from '../Adress/AdressCard';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -28,8 +30,15 @@ const wazeIcon = L.icon({
 export default function MapView({ reports }) {
   const { center, position, accuracy, error, loading } = useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
-
   const [map, setMap] = useState(null);
+
+  // Aquí usamos el hook de reverse geocode SOLO UNA VEZ,
+  // pasándole la misma "position" que ya tenemos
+  const {
+    address,
+    loadingAddress,
+    error: addressError
+  } = useReverseGeocode(position);
 
   if (loading) {
     return <div className="p-4">Cargando ubicación...</div>;
@@ -78,13 +87,22 @@ export default function MapView({ reports }) {
         ))}
       </MapContainer>
 
-      {/* Aquí usamos el botón flotante como componente aparte */}
       <MyLocationButton
         map={map}
         position={position}
         defaultZoom={defaultZoom}
         className="absolute bottom-28 right-5 z-[9999]"
       />
+
+      {/* Pasamos la dirección y estados de loading/error a AddressCard */}
+      <div className='absolute top-5 left-24 z-[9999]'>
+
+      <AddressCard
+        address={address}
+        loadingAddress={loadingAddress}
+        addressError={addressError}
+      />
+      </div>
     </div>
   );
 }
