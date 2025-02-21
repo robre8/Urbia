@@ -30,7 +30,8 @@ const wazeIcon = L.icon({
 });
 
 export default function MapView({ reports }) {
-  const { center, position, accuracy, error, loading, geolocationStatus } = useUserLocation([16, -97.6667]);
+  const { center, position, accuracy, error, loading, geolocationStatus } = useUserLocation([15.977, -97.696]);
+
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 
