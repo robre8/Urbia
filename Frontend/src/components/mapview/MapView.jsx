@@ -14,11 +14,13 @@ import 'leaflet/dist/leaflet.css';
 import ReportMarker from './ReportMarker';
 import Recenter from './Recenter';
 import userIcon from '@/assets/userIcon.png';
+import sadFrog from '@/assets/sadFrog.png';
 import { useUserLocation } from './hooks/useUserLocation';
 import { useReverseGeocode } from './hooks/useReverseGeocode';
 import MyLocationButton from './MyLocationButton';
 import './style/MapView.css';
 import { AddressCard } from '../Adress/AdressCard';
+import { ErrorMessage } from '../ui/ErrorMessage';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -28,17 +30,12 @@ const wazeIcon = L.icon({
 });
 
 export default function MapView({ reports }) {
-  const { center, position, accuracy, error, loading, geolocationStatus } = useUserLocation([-34.6037, -58.3816]);
+  const { center, position, accuracy, error, loading, geolocationStatus } = useUserLocation([16, -97.6667]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 
-  const {
-    address,
-    loadingAddress,
-    error: addressError
-  } = useReverseGeocode(position);
+  const { address, loadingAddress, error: addressError } = useReverseGeocode(position);
 
-  // Dynamic loading message based on geolocationStatus
   let loadingMessage = "Cargando ubicación...";
   if (geolocationStatus === 'google_api_attempt') {
     loadingMessage = "Refinando ubicación con Google API...";
@@ -46,7 +43,6 @@ export default function MapView({ reports }) {
     loadingMessage = "Obteniendo ubicación aproximada por IP...";
   }
 
-  // Dynamic error message based on geolocationStatus and error
   let errorMessage = null;
   if (error) {
     if (geolocationStatus === 'browser_denied') {
@@ -86,9 +82,10 @@ export default function MapView({ reports }) {
         <Recenter center={center} zoom={defaultZoom} />
 
         {errorMessage && (
-          <div className="absolute top-5 left-5 z-[9999] bg-red-500 text-white p-2 rounded shadow-md">
-            {errorMessage}
-          </div>
+          <ErrorMessage
+            message={errorMessage}
+            imageSrc={sadFrog}
+          />
         )}
 
         {!error && position && (
