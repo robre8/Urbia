@@ -43,7 +43,7 @@ export default function MapView({ reports }) {
   if (loading) {
     return <div className="p-4">Cargando ubicación...</div>;
   }
-
+  console.log(accuracy)
   return (
     <div className="relative w-full h-screen">
       <MapContainer
@@ -71,7 +71,7 @@ export default function MapView({ reports }) {
             </Marker>
             <Circle
               center={position}
-              radius={accuracy || 50}
+              radius={accuracy || 5}
               pathOptions={{
                 color: 'blue',
                 fillColor: 'blue',

@@ -35,7 +35,7 @@ export default {
   				foreground: 'hsl(var(--secondary-foreground))'
   			},
   			destructive: {
-  				DEFAULT: 'hsl(var(--destructive))',
+  			  DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
   			muted: {
@@ -89,7 +89,10 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
-  	}
+  	},
+    fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
+    },
   },
   plugins: [tailwindcssAnimate, require("tailwindcss-animate")],
 };
