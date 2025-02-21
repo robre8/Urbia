@@ -1,42 +1,35 @@
-package com.nocountry.Urbia.model;
+package com.backend.urbia.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "usuarios")
 public class Usuarios {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
-    @Column(nullable = false, unique = true)
-    @NotBlank(message = "El correo es obligatorio")
+    @Column(unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private String password;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reportes> reportes;
 
-    public void agregarReporte(Reportes reporte) {
-        reportes.add(reporte);
-        reporte.setUsuario(this);
-    }
+    public Usuarios() {}
 
-    public Usuarios() {
-    }
-
-
-    public Usuarios(String nombre, String email) {
+    public Usuarios(String nombre, String email, String password) {
         this.nombre = nombre;
         this.email = email;
+        this.password = password;
     }
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -59,6 +52,14 @@ public class Usuarios {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Reportes> getReportes() {

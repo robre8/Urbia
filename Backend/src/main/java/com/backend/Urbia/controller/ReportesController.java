@@ -1,57 +1,33 @@
-package com.nocountry.Urbia.controller;
+package com.backend.urbia.controller;
 
-import com.nocountry.Urbia.model.Reportes;
-import com.nocountry.Urbia.model.Usuarios;
-import com.nocountry.Urbia.service.ReportesService;
-import com.nocountry.Urbia.service.UsuariosService;
+import com.backend.urbia.dto.request.ReporteRequest;
+import com.backend.urbia.dto.response.ReporteResponse;
+import com.backend.urbia.service.impl.ReporteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/reportes")
 public class ReportesController {
 
-    @Autowired
-    private ReportesService reportesService;
+    private final ReporteServiceImpl reporteService;
 
     @Autowired
-    private UsuariosService usuariosService;
+    public ReportesController(ReporteServiceImpl reporteService) {
+
+        this.reporteService = reporteService;
+    }
 
     @PostMapping
-    public ResponseEntity<?> crearReportes(@RequestBody Reportes reportes, @RequestParam Long usuarioId) {
-        try {
-            Optional<Usuarios> usuarioOpt = usuariosService.obtenerPorId(usuarioId);
-            if (usuarioOpt.isEmpty()) {
-                return ResponseEntity.badRequest().body("Usuario no encontrado");
-            }
-
-            Usuarios usuario = usuarioOpt.get();
-            usuario.agregarReporte(reportes);
-            Reportes nuevoReporte = reportesService.guardarReportes(reportes);
-            return ResponseEntity.ok(nuevoReporte);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ReporteResponse> createReporte(
+            @RequestParam("archivos") MultipartFile[] archivos,
+            @RequestBody ReporteRequest reporteRequest) {
+        ReporteResponse response = reporteService.createReporte(reporteRequest,archivos);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Reportes>> obtenerReportes() {
-        List<Reportes> reportes = reportesService.obtenerReportes();
-        if (reportes.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(reportes);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Reportes> obtenerReportePorId(@PathVariable Long id) {
-        return reportesService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    // Puedes agregar aquí endpoints adicionales para obtener o actualizar reportes.
 }

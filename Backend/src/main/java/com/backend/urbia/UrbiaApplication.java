@@ -1,4 +1,4 @@
-package com.nocountry.Urbia;
+package com.backend.urbia;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UrbiaApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(UrbiaApplication.class, args);
 	}
-
 }

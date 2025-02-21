@@ -1,26 +1,15 @@
-FROM amazoncorretto:17-alpine-jdk
 
+# Imagen base con JDK 17
+FROM eclipse-temurin:17-jdk-alpine
+
+# Directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copiar el archivo JAR generado por Maven
 COPY target/urbia-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Exponer el puerto de la aplicación
+EXPOSE 8080
 
-
-# FROM maven:3.8.6-openjdk-11 AS build
-# WORKDIR /app
-# COPY . .
-# RUN mvn clean package -DskipTests
-
-# FROM openjdk:11-jre-slim
-# WORKDIR /app
-# COPY --from=build /app/target/*.jar app.jar
-# COPY --from=build /app/src/main/resources/my-service-account-key.json /app/keys/
-
-# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/keys/my-service-account-key.json
-
-# CMD ["java", "-jar", "app.jar"]
-
-
-
-##para ejecutarlo
-#   docker build -t gcs-app .
-#   docker run -it --rm gcs-app
+# Comando para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
