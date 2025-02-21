@@ -118,7 +118,7 @@ export default function MapView({ reports }) {
         map={map}
         position={position}
         defaultZoom={defaultZoom}
-        className="absolute bottom-32 lg:bottom-28 right-7 z-[9999]"
+        className="absolute bottom-36 lg:bottom-28 right-7 z-[9999]"
       />
 
       <div className="absolute top-5 left-24 z-[9999]">

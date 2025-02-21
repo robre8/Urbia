@@ -43,6 +43,6 @@
 
 @media screen and (max-width: 768px) {
   .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-  margin-bottom: 1.75rem;
+  margin-bottom: 2.75rem;
   }
 }
