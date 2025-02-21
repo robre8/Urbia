@@ -15,8 +15,8 @@ import ReportMarker from './ReportMarker';
 import Recenter from './Recenter';
 import userIcon from '@/assets/userIcon.png';
 import { useUserLocation } from './hooks/useUserLocation';
-import { useReverseGeocode } from './hooks/useReverseGeocode'; // <-- Importas tu nuevo hook
-import MyLocationButton from './MyLocationButton'; 
+import { useReverseGeocode } from './hooks/useReverseGeocode';
+import MyLocationButton from './MyLocationButton';
 import './style/MapView.css';
 import { AddressCard } from '../Adress/AdressCard';
 
@@ -28,22 +28,42 @@ const wazeIcon = L.icon({
 });
 
 export default function MapView({ reports }) {
-  const { center, position, accuracy, error, loading } = useUserLocation([-34.6037, -58.3816]);
+  const { center, position, accuracy, error, loading, geolocationStatus } = useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 
-  // Aquí usamos el hook de reverse geocode SOLO UNA VEZ,
-  // pasándole la misma "position" que ya tenemos
   const {
     address,
     loadingAddress,
     error: addressError
   } = useReverseGeocode(position);
 
-  if (loading) {
-    return <div className="p-4">Cargando ubicación...</div>;
+  // Dynamic loading message based on geolocationStatus
+  let loadingMessage = "Cargando ubicación...";
+  if (geolocationStatus === 'google_api_attempt') {
+    loadingMessage = "Refinando ubicación con Google API...";
+  } else if (geolocationStatus === 'ip_fallback' || geolocationStatus === 'ip_error_default') {
+    loadingMessage = "Obteniendo ubicación aproximada por IP...";
   }
-  console.log(accuracy)
+
+  // Dynamic error message based on geolocationStatus and error
+  let errorMessage = null;
+  if (error) {
+    if (geolocationStatus === 'browser_denied') {
+      errorMessage = "Permiso de ubicación denegado. Habilita la ubicación en tu navegador para una mejor experiencia.";
+    } else if (geolocationStatus === 'browser_unavailable' || geolocationStatus === 'browser_timeout' || geolocationStatus === 'ip_error_default' || geolocationStatus === 'timeout_default') {
+      errorMessage = "No se pudo obtener tu ubicación precisa. Mostrando ubicación aproximada o por defecto.";
+    } else if (geolocationStatus === 'unsupported') {
+      errorMessage = "Tu navegador no soporta geolocalización. Usando ubicación por defecto.";
+    } else {
+      errorMessage = "Error al obtener ubicación: " + error;
+    }
+  }
+
+  if (loading) {
+    return <div className="p-4">{loadingMessage}</div>;
+  }
+
   return (
     <div className="relative w-full h-screen">
       <MapContainer
@@ -55,14 +75,21 @@ export default function MapView({ reports }) {
           const mapInstance = event.target;
           setMap(mapInstance);
         }}
+        minZoom={4}
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          attribution='&copy; OpenStreetMap contributors &copy; CARTO'
+          attribution='© OpenStreetMap contributors © CARTO'
           maxZoom={20}
         />
-        <ZoomControl position="bottomright"/>
+        <ZoomControl position="bottomright" />
         <Recenter center={center} zoom={defaultZoom} />
+
+        {errorMessage && (
+          <div className="absolute top-5 left-5 z-[9999] bg-red-500 text-white p-2 rounded shadow-md">
+            {errorMessage}
+          </div>
+        )}
 
         {!error && position && (
           <>
@@ -76,7 +103,7 @@ export default function MapView({ reports }) {
                 color: 'blue',
                 fillColor: 'blue',
                 fillOpacity: 0.2,
-                stroke: false
+                stroke: false,
               }}
             />
           </>
@@ -94,14 +121,12 @@ export default function MapView({ reports }) {
         className="absolute bottom-28 right-5 z-[9999]"
       />
 
-      {/* Pasamos la dirección y estados de loading/error a AddressCard */}
-      <div className='absolute top-5 left-24 z-[9999]'>
-
-      <AddressCard
-        address={address}
-        loadingAddress={loadingAddress}
-        addressError={addressError}
-      />
+      <div className="absolute top-5 left-24 z-[9999]">
+        <AddressCard
+          address={address}
+          loadingAddress={loadingAddress}
+          addressError={addressError}
+        />
       </div>
     </div>
   );
