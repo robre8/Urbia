@@ -79,8 +79,10 @@ export default function MapView({ reports }) {
           attribution='© OpenStreetMap contributors © CARTO'
           maxZoom={20}
         />
+
         <ZoomControl position="bottomright" />
         <Recenter center={center} zoom={defaultZoom} />
+
 
         {errorMessage && (
           <ErrorMessage
@@ -116,7 +118,7 @@ export default function MapView({ reports }) {
         map={map}
         position={position}
         defaultZoom={defaultZoom}
-        className="absolute bottom-28 right-5 z-[9999]"
+        className="absolute bottom-32 lg:bottom-28 right-7 z-[9999]"
       />
 
       <div className="absolute top-5 left-24 z-[9999]">

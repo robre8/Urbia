@@ -23,12 +23,12 @@ export default function MyLocationButton({
         <TooltipTrigger asChild>
           <Button
             variant='ghost'
-            className={` w-12 h-12 rounded-full 
-              [box-shadow:0_0_10px_4px_rgba(155, 238, 94,0.5)]
+            size='icon' // Asegúrate de que el tamaño del botón sea 'icon'
+            className={`w-[38px] h-[38px] rounded-full shadow-md
               bg-white ${className}`}
             onClick={handleClick}
           >
-            <RiCrosshair2Line className='text-xl' />
+            <RiCrosshair2Line className='w-6 h-6' /> 
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left">
