@@ -91,11 +91,11 @@ export default function MapView({ reports }) {
         map={map}
         position={position}
         defaultZoom={defaultZoom}
-        className="absolute bottom-28 right-5 z-[9999]"
+        className="absolute bottom-28 right-5 z-[9990]"
       />
 
       {/* Pasamos la dirección y estados de loading/error a AddressCard */}
-      <div className='absolute top-5 left-24 z-[9999]'>
+      <div className='absolute top-5 left-24 z-[9990]'>
 
       <AddressCard
         address={address}
