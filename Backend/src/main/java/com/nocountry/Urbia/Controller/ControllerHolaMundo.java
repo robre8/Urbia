@@ -1,4 +1,4 @@
-package com.backend.urbia.controller;
+package com.nocountry.Urbia.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

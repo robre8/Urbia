@@ -1,4 +1,4 @@
-package com.nocountry.Urbia.controller;
+package com.nocountry.Urbia.Controller;
 
 import com.nocountry.Urbia.model.Usuarios;
 import com.nocountry.Urbia.service.UsuariosService;
