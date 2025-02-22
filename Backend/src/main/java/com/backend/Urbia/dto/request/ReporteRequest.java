@@ -2,9 +2,11 @@ package com.backend.urbia.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ReporteRequest {
     private String titulo;
     private String descripcion;
@@ -12,4 +14,6 @@ public class ReporteRequest {
     private double latitud;
     private double longitud;
     private String imagenUrl;
+
+
 }

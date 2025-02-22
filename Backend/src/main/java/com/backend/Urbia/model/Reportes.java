@@ -1,33 +1,35 @@
 package com.backend.urbia.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "reportes")
-@TypeDef(name = "geometry", typeClass = org.hibernate.spatial.GeometryType.class)
 public class Reportes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String titulo;
 
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private String descripcion;
 
     @Column(name = "resumen_ia")
     private String resumenIA;
 
     // Almacenamos la ubicación como un Point, con definición de columna para PostGIS
-    @Column(columnDefinition = "Geometry")
-    @Type(type = "geometry")
+    @Column(columnDefinition = "geometry")
+    @JdbcTypeCode(SqlTypes.GEOMETRY)
     private Point ubicacion;
+
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
@@ -37,6 +39,10 @@ public class Reportes {
     @Column(name = "archivo_url")
     private List<String> archivos;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuarios usuario;
+
     public Reportes() {}
 
     public Reportes(String titulo, String descripcion, String resumenIA, Point ubicacion, LocalDateTime fechaCreacion) {
@@ -45,7 +51,6 @@ public class Reportes {
         this.resumenIA = resumenIA;
         this.ubicacion = ubicacion;
         this.fechaCreacion = fechaCreacion;
-        this.archivos = archivos;
     }
 
     // Getters y Setters
@@ -104,5 +109,11 @@ public class Reportes {
 
     public void setArchivos(List<String> archivos) {
         this.archivos = archivos;
+    }
+
+    public Usuarios getUsuario() {return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {this.usuario = usuario;
     }
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 public class GoogleCloudStorageService {
-    private static final String BUCKET_NAME = "tu-bucket-en-gcp";
+    private static final String BUCKET_NAME = "bucket-urbia";
 
     private final Storage storage;
 
@@ -21,7 +21,7 @@ public class GoogleCloudStorageService {
         this.storage = StorageOptions.getDefaultInstance().getService();
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFileToGCS(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
         BlobId blobId = BlobId.of(BUCKET_NAME, fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();

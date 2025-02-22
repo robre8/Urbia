@@ -4,6 +4,7 @@ import com.backend.urbia.model.Usuarios;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -11,9 +12,11 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Idealmente estos valores se inyectan desde application.properties
-    private final String jwtSecret = "yourSecretKey";
-    private final long jwtExpirationMs = 86400000; // 24 horas
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpirationMs;
 
     public String generateToken(Usuarios usuario) {
         return Jwts.builder()
