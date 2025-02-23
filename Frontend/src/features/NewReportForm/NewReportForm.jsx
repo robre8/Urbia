@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 
 const reportOptions = [
   { id: 0, value: "seguridad", label: "Seguridad" },
@@ -114,7 +114,7 @@ const NewReportForm = () => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="fixed bottom-44 right-5"  onClick={() => setOpen(true)}>
+      <SheetTrigger className="fixed bottom-48 lg:bottom-40 right-7"  onClick={() => setOpen(true)}>
         <ButtonAddNewReport />
       </SheetTrigger>
       <SheetContent className="overflow-y-auto px-4 flex flex-col gap-2">
