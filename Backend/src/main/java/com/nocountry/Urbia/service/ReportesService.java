@@ -1,6 +1,6 @@
 package com.nocountry.Urbia.service;
 
-import com.nocountry.Urbia.model.Reportes;
+import com.nocountry.Urbia.model.Reportesv1;
 import com.nocountry.Urbia.repository.ReportesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ public class ReportesService {
     @Autowired
     private ReportesRepository reportesRepository;
 
-    public List<Reportes> obtenerReportes() {
+    public List<Reportesv1> obtenerReportes() {
         return reportesRepository.findAll();
     }
 
-    public Optional<Reportes> obtenerPorId(Long id) {
+    public Optional<Reportesv1> obtenerPorId(Long id) {
         return reportesRepository.findById(id);
     }
 
-    public Reportes guardarReportes(Reportes reportes) {
+    public Reportesv1 guardarReportes(Reportesv1 reportes) {
         if (reportes.getTitulo() == null || reportes.getTitulo().isEmpty()) {
             throw new IllegalArgumentException("El título no puede estar vacío");
         }
