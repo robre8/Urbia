@@ -21,9 +21,9 @@ public class Usuarios {
     private String email;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reportes> reportes;
+    private List<Reportesv1> reportes;
 
-    public void agregarReporte(Reportes reporte) {
+    public void agregarReporte(Reportesv1 reporte) {
         reportes.add(reporte);
         reporte.setUsuario(this);
     }
@@ -61,11 +61,11 @@ public class Usuarios {
         this.email = email;
     }
 
-    public List<Reportes> getReportes() {
+    public List<Reportesv1> getReportes() {
         return reportes;
     }
 
-    public void setReportes(List<Reportes> reportes) {
+    public void setReportes(List<Reportesv1> reportes) {
         this.reportes = reportes;
     }
 }
