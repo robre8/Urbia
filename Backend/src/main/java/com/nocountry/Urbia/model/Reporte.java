@@ -1,20 +1,45 @@
-package com.nocountry.Urbia.dto;
+package com.nocountry.Urbia.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-public class ReporteDTO {
+@Entity
+@Table(name = "reportes")
+public class Reporte {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // URL de la imagen o audio
+    @Column(name = "url_medio")
     private String urlMedio;
+
+    // Descripción original del incidente
+    @Column(length = 500)
     private String descripcion;
-    private String descripcionDespuesDeIa;  // Nuevo campo para la descripción mejorada por IA
+
+    // Fecha y hora del reporte
+    @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
+
+    // Coordenadas: latitud y longitud
     private Double latitud;
     private Double longitud;
-    private Long categoriaId;
-    private Long usuarioId;
 
-    public ReporteDTO() {
+    // Relación con Categoría
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    // Relación con Usuario
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    // Getters & Setters
+
+    public Reporte() {
     }
 
     public Long getId() {
@@ -41,13 +66,9 @@ public class ReporteDTO {
         this.descripcion = descripcion;
     }
 
-    public String getDescripcionDespuesDeIa() {
-        return descripcionDespuesDeIa;
-    }
 
-    public void setDescripcionDespuesDeIa(String descripcionDespuesDeIa) {
-        this.descripcionDespuesDeIa = descripcionDespuesDeIa;
-    }
+
+
 
     public LocalDateTime getFechaHora() {
         return fechaHora;
@@ -73,19 +94,22 @@ public class ReporteDTO {
         this.longitud = longitud;
     }
 
-    public Long getCategoriaId() {
-        return categoriaId;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setCategoriaId(Long categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
+
+
+
 }
