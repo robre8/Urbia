@@ -1,5 +1,0 @@
-# Created at 2025-02-19T16:21:14.131
-Boot Manifest-JAR contains absolute paths in classpath 'G:\Users\albsa\Documentos\Actual-Pojects\Astro\s21-19-t-webapp\Backend\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
