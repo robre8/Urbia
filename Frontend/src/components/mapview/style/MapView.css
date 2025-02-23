@@ -9,6 +9,7 @@
   flex-direction: column;
   align-items: center;
   margin-right: 1.75rem;
+
   border: none;
 }
 
@@ -37,4 +38,11 @@
   left: 20%;
   width: 60%;
   border-bottom: 1px solid #ccc;
+}
+
+
+@media screen and (max-width: 768px) {
+  .leaflet-bottom.leaflet-right .leaflet-control-zoom {
+  margin-bottom: 2.75rem;
+  }
 }
