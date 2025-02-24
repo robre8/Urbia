@@ -3,6 +3,7 @@ import historialIcon from "../../assets/history-line.svg"
 import iconMap from "../../assets/map-pin-2-line.svg" // provisorio
 import dotsIcons from "../../assets/more-line.svg"
 import useReportsStore from "@/lib/store/useReportsStore"
+import styles from "./styles/MyReports.module.css"
 import { useEffect } from "react";
 
 function MyReports() {
@@ -23,20 +24,21 @@ function MyReports() {
       </AccordionTrigger>
       <AccordionContent>
         {reports.length > 0 ? (
-          reports.map((report, index) => (
+        <div className={styles.scrollContainer}>
+          {reports.map((report, index) => (
             <div key={index} className="flex items-center justify-between py-3">
               <div className="flex items-center gap-2">
                 <img src={iconMap} alt="" />
                 <p>{report.title}</p>
               </div>
-            
-              <button>
+              <button className="px-3">
                 <img src={dotsIcons} alt="" />
               </button>
             </div>
-          ))
+          ))}
+        </div>   
         ):(
-        <p>Aun no has creado ningún reporte</p>
+        <p className="text-center">Aun no has creado ningún reporte</p>
         )}
 
       </AccordionContent>
