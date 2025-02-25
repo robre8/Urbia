@@ -43,7 +43,7 @@ export default function UserMenu() {
           </div>
 
           {/* Opciones alineadas con el nombre */}
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-3">
             <Link to="/settings" className="flex items-center gap-3 w-full py-2 text-left hover:bg-gray-100 rounded-md pl-4">
               <Settings className="w-5 h-5 text-gray-600" />
               <span>Ajustes</span>
