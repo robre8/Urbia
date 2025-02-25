@@ -1,62 +1,72 @@
 [
-    {
-      "title": "Incidente 1",
-      "description": "Árbol caído",
-      "lat": -34.6037,
-      "lng": -58.3816
-    },
-    {
-      "title": "Incidente 2",
-      "description": "Accidente de tráfico",
-      "lat": -34.6083,
-      "lng": -58.3722
-    },
-    {
-      "title": "Incidente 3",
-      "description": "Fuga de agua",
-      "lat": -34.6128,
-      "lng": -58.3855
-    },
-    {
-      "title": "Incidente 4",
-      "description": "Incendio en edificio",
-      "lat": -34.6055,
-      "lng": -58.3901
-    },
-    {
-      "title": "Incidente 5",
-      "description": "Robo en comercio",
-      "lat": -34.6102,
-      "lng": -58.3789
-    },
-    {
-      "title": "Incidente 6",
-      "description": "Cable eléctrico suelto",
-      "lat": -34.6015,
-      "lng": -58.3880
-    },
-    {
-      "title": "Incidente 7",
-      "description": "Obstrucción en la vía pública",
-      "lat": -34.6140,
-      "lng": -58.3745
-    },
-    {
-      "title": "Incidente 8",
-      "description": "Semáforo averiado",
-      "lat": -34.6077,
-      "lng": -58.3833
-    },
-    {
-      "title": "Incidente 9",
-      "description": "Basura acumulada",
-      "lat": -34.6111,
-      "lng": -58.3922
-    },
-    {
-      "title": "Incidente 10",
-      "description": "Inundación en calle",
-      "lat": -34.6029,
-      "lng": -58.3767
-    }
-  ]
+  {
+    "title": "Incidente 1",
+    "description": "Árvore caída",
+    "lat": -23.5505,
+    "lng": -46.6333,
+    "category": "Infraestructura"
+  },
+  {
+    "title": "Incidente 2",
+    "description": "Acidente de trânsito",
+    "lat": -23.5558,
+    "lng": -46.6400,
+    "category": "Seguridad"
+  },
+  {
+    "title": "Incidente 3",
+    "description": "Vazamento de água",
+    "lat": -23.5631,
+    "lng": -46.6544,
+    "category": "Infraestructura"
+  },
+  {
+    "title": "Incidente 4",
+    "description": "Incêndio em prédio",
+    "lat": -23.5489,
+    "lng": -46.6427,
+    "category": "Seguridad"
+  },
+  {
+    "title": "Incidente 5",
+    "description": "Roubo em comércio",
+    "lat": -23.5600,
+    "lng": -46.6500,
+    "category": "Seguridad"
+  },
+  {
+    "title": "Incidente 6",
+    "description": "Fio elétrico solto",
+    "lat": -23.5450,
+    "lng": -46.6356,
+    "category": "Infraestructura"
+  },
+  {
+    "title": "Incidente 7",
+    "description": "Obstrução na via pública",
+    "lat": -23.5582,
+    "lng": -46.6608,
+    "category": "Infraestructura"
+  },
+  {
+    "title": "Incidente 8",
+    "description": "Semáforo quebrado",
+    "lat": -23.5514,
+    "lng": -46.6462,
+    "category": "Infraestructura"
+  },
+  {
+    "title": "Incidente 9",
+    "description": "Lixo acumulado",
+    "lat": -23.5653,
+    "lng": -46.6567,
+    "category": "Eventos Sociales"
+  },
+  {
+    "title": "Incidente 10",
+    "description": "Enchente na rua",
+    "lat": -23.5527,
+    "lng": -46.6391,
+    "category": "Salud"
+  }
+]
