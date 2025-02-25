@@ -1,10 +1,13 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import historialIcon from "../../assets/history-line.svg"
 import iconMap from "../../assets/map-pin-2-line.svg" // provisorio
-import dotsIcons from "../../assets/more-line.svg"
 import useReportsStore from "@/lib/store/useReportsStore"
 import styles from "./styles/MyReports.module.css"
 import { useEffect } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { Ellipsis, Pencil, Trash2 } from "lucide-react"
+
 
 function MyReports() {
   const {reports, fetchReports} = useReportsStore();
@@ -31,9 +34,25 @@ function MyReports() {
                 <img src={iconMap} alt="" />
                 <p>{report.title}</p>
               </div>
-              <button className="px-3">
-                <img src={dotsIcons} alt="" />
-              </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="px-3">
+              <Ellipsis color="#222222" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white rounded-lg shadow-xl border border-slate-300">
+                <DropdownMenuItem>
+                  <Button variant="link" className="w-full flex items-center justify-evenly px-4 py-2 hover:bg-gray-100">
+                  <Pencil className="size-4" />
+                  Editar
+                  </Button> 
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Button variant="link" className="flex items-center gap-1 px-4 py-2 text-[#F53434] hover:text-white hover:bg-[#F53434]">
+                  <Trash2 className="size-4" />
+                    Eliminar
+                  </Button> 
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             </div>
           ))}
         </div>   
