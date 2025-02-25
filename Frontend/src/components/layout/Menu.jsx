@@ -1,7 +1,20 @@
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import menuIcon from "../../assets/menu.svg"
-import { Switch } from "@/components/ui/switch"
-import MyReports from "@/features/reports/MyReports"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
+import MyReports from "@/features/reports/MyReports";
+
+import menuIcon from "../../assets/menu.svg";
+import SapoInfra from "../../assets/svgs/SapoInfra.svg";
+import SapoPoli from "../../assets/svgs/SapoPoli.svg";
+import SapoSalud from "../../assets/svgs/SapoSalud.svg";
+import SapoSocial from "../../assets/svgs/SapoSocial.svg";
+
+// Definir categorías con sus respectivos íconos
+const categories = [
+  { id: "seguridad", label: "Seguridad", icon: SapoPoli },
+  { id: "infraestructura", label: "Infraestructura", icon: SapoInfra },
+  { id: "eventos-soc", label: "Eventos Sociales", icon: SapoSocial },
+  { id: "salud", label: "Salud", icon: SapoSalud },
+];
 
 function Menu() {
   return (
@@ -12,30 +25,23 @@ function Menu() {
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
-              <SheetTitle>
-                <div className="text-[26px] p-4 font-[900]">
-                URBIA
-                </div>
-              </SheetTitle>
+            <SheetTitle>
+              <div className="text-[26px] p-4 font-[900]">URBIA</div>
+            </SheetTitle>
             <hr className="w-full" />
             <SheetDescription>
               <section className="space-y-4 p-4">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="seguridad" className="text-[16px] font-medium">Seguridad</label>
-                  <Switch id="seguridad" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="infraestructura" className="text-[16px] font-medium">Infraestructura</label>
-                  <Switch id="infraestructura" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="eventos-soc" className="text-[16px] font-medium">Eventos Sociales</label>
-                  <Switch id="eventos-soc" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="salud" className="text-[16px] font-medium">Salud</label>
-                  <Switch id="salud" />
-                </div>
+                {categories.map((category) => (
+                  <div key={category.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <img src={category.icon} alt={category.label} className="w-8 h-8" />
+                      <label htmlFor={category.id} className="text-[16px] font-medium">
+                        {category.label}
+                      </label>
+                    </div>
+                    <Switch id={category.id} />
+                  </div>
+                ))}
               </section>
               <hr />
               <section>
@@ -46,7 +52,7 @@ function Menu() {
         </SheetContent>
       </Sheet>
     </div>
-  )
+  );
 }
 
-export default Menu
+export default Menu;
