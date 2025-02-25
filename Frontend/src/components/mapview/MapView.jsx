@@ -21,6 +21,11 @@ import MyLocationButton from './MyLocationButton';
 import './style/MapView.css';
 import { AddressCard } from '../Adress/AdressCard';
 import { ErrorMessage } from '../ui/ErrorMessage';
+import UserLogin from '@/features/auth/UserLogin';
+
+import UserMenu from '@/features/auth/UserMenu';
+import { useUserAuth } from '@/lib/store/useUserAuth';
+
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -34,6 +39,8 @@ export default function MapView({ reports }) {
 
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
+
+  const { user } = useUserAuth();
 
   const { address, loadingAddress, error: addressError } = useReverseGeocode(position);
 
@@ -121,13 +128,18 @@ export default function MapView({ reports }) {
         className="absolute bottom-36 lg:bottom-28 right-7 z-[9999]"
       />
 
-      <div className="absolute top-5 left-24 z-[9999]">
+<div className="hidden md:block overflow-hidden absolute top-5 left-24 z-[9999]">
+
         <AddressCard
           address={address}
           loadingAddress={loadingAddress}
           addressError={addressError}
         />
       </div>
+      <div className='absolute top-5 right-5 z-[9999]'>
+  {user ? <UserMenu /> : <UserLogin />}
+</div>
+
     </div>
   );
 }
