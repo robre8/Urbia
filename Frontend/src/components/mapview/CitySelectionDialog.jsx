@@ -1,4 +1,3 @@
-"use client";
 
 import { Dialog, DialogContent, DialogDescription } from "@/components/ui/dialog";
 import { useFilteredCities } from "./hooks/useFilteredCities";
