@@ -1,0 +1,15 @@
+* [33m5aa03e8[m[33m ([m[1;31morigin/frontend-bug[m[33m, [m[1;32mfrontend-bug[m[33m)[m 🐛actualizacon de lock.json
+* [33m82c9314[m No changes made restayrar el node  modules
+*   [33m1a9d331[m Merge branch 'frontend-bug' of https://github.com/No-Country-simulation/s21-19-t-webapp into frontend-bug
+[32m|[m[33m\[m  
+[32m|[m *   [33mbee2db8[m Merge pull request #80 from No-Country-simulation/76-frontend---crear-geolocalizacion-por-ciudades-importantes
+[32m|[m [34m|[m[35m\[m  
+[32m|[m * [35m\[m   [33mc2536b6[m Merge pull request #77 from No-Country-simulation/76-frontend---crear-geolocalizacion-por-ciudades-importantes
+[32m|[m [36m|[m[1;31m\[m [35m\[m  
+* [36m|[m [1;31m|[m [35m|[m [33m3e89f57[m No changes made
+* [36m|[m [1;31m|[m [35m|[m [33m8c4f0fe[m Fix: npm install --legacy-peer-deps && npm run build
+[1;31m|[m [36m|[m [1;31m|[m [35m|[m * [33m18b3cfd[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on 76-frontend---crear-geolocalizacion-por-ciudades-importantes: c29f524 🏗️ Add backend classes for exception handling, repositories, and application configuration; initialize application properties
+[1;31m|[m [36m|[m [1;31m|[m [35m|[m[35m/[m[1;33m|[m 
+[1;31m|[m [36m|[m [1;31m|[m [35m|[m * [33m0f02f34[m index on 76-frontend---crear-geolocalizacion-por-ciudades-importantes: c29f524 🏗️ Add backend classes for exception handling, repositories, and application configuration; initialize application properties
+[1;31m|[m [36m|[m [1;31m|[m [35m|[m[35m/[m  
+[1;31m|[m [36m|[m [1;31m|[m * [33mc29f524[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m76-frontend---crear-geolocalizacion-por-ciudades-importantes[m[33m, [m[1;31morigin/76-frontend---crear-geolocalizacion-por-ciudades-importantes[m[33m)[m 🏗️ Add backend classes for exception handling, repositories, and application configuration; initialize application properties
