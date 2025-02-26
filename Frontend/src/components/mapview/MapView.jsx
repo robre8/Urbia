@@ -19,7 +19,7 @@ import CityNavigation from "./CityNavigation";
 import CitySelectionDialog from "./CitySelectionDialog";
 import { useCities } from "./hooks/useCities";
 import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
-import InstallPWAButton from "./InstallPWAButton"; // ✅ Importamos el nuevo botón flotante
+import InstallPWAButton from "./AddPWAButton";
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
