@@ -3,10 +3,10 @@ package com.nocountry.urbia.service.impl;
 import com.nocountry.urbia.dto.request.ReporteDTO;
 import com.nocountry.urbia.model.Categoria;
 import com.nocountry.urbia.model.Reporte;
-import com.nocountry.urbia.model.Usuario;
+import com.nocountry.urbia.model.Usuarios;
 import com.nocountry.urbia.repository.CategoriaRepository;
 import com.nocountry.urbia.repository.ReporteRepository;
-import com.nocountry.urbia.repository.UsuarioRepository;
+import com.nocountry.urbia.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class ReporteService {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuariosRepository usuarioRepository;
 
     // Crear reporte
     public ReporteDTO crearReporte(ReporteDTO reporteDTO) {
@@ -44,7 +44,7 @@ public class ReporteService {
         reporte.setCategoria(categoria);
 
         // Buscar y asignar el usuario
-        Usuario usuario = usuarioRepository.findById(reporteDTO.getUsuarioId())
+        Usuarios usuario = usuarioRepository.findById(reporteDTO.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         reporte.setUsuario(usuario);
 
@@ -77,7 +77,7 @@ public class ReporteService {
         }
 
         if (reporteDTO.getUsuarioId() != null) {
-            Usuario usuario = usuarioRepository.findById(reporteDTO.getUsuarioId())
+            Usuarios usuario = usuarioRepository.findById(reporteDTO.getUsuarioId())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
             reporte.setUsuario(usuario);
         }

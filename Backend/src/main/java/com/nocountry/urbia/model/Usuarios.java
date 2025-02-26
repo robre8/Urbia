@@ -1,10 +1,12 @@
 package com.nocountry.urbia.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "usuarios")
 public class Usuarios {
 
@@ -20,7 +22,7 @@ public class Usuarios {
     private String password;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Reportes> reportes;
+    private List<Reporte> reportes;
 
     public Usuarios() {}
 
@@ -63,11 +65,11 @@ public class Usuarios {
         this.password = password;
     }
 
-    public List<Reportes> getReportes() {
+    public List<Reporte> getReportes() {
         return reportes;
     }
 
-    public void setReportes(List<Reportes> reportes) {
+    public void setReportes(List<Reporte> reportes) {
         this.reportes = reportes;
     }
 }
