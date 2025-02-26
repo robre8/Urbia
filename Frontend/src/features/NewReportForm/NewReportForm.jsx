@@ -200,7 +200,7 @@ const NewReportForm = () => {
                         key={cat.id ?? index}
                         value={cat.id?.toString() ?? index.toString()}
                       >
-                        {cat.name || 'Categoría sin nombre'}
+                        {cat.nombre || 'Categoría sin nombre'}
                       </SelectItem>
                     ))
                   )}
