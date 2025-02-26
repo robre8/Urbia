@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 
 import ReportMarker from "./ReportMarker";
 import Recenter from "./Recenter";
-import userIcon from "@/assets/userIcon.png";
+import userIcon from "/frogIco.png";
 import sadFrog from "@/assets/frogError.png";
 import { useUserLocation } from "./hooks/useUserLocation";
 import { useReverseGeocode } from "./hooks/useReverseGeocode";

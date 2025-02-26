@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Settings, LifeBuoy, Megaphone, LogOut, User } from 'lucide-react';
-import userIcon from '@/assets/userIcon.png'; // Imagen de la rana
+import userIcon from '/frogIco.png'; // Imagen de la rana
 
 export default function UserMenu() {
   const { user, logout } = useUserAuth(); 

@@ -47,13 +47,13 @@ export default function CityNavigation({ map }) {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="flex items-center gap-2 w-[220px] bg-green-500 text-black rounded-full px-4 py-3 shadow-lg transition-all hover:bg-green-600 focus:ring-2 focus:ring-green-400"
+            className="flex items-center gap-2 w-[220px] bg-[#9bee5e] text-black rounded-full px-4 py-3 shadow-lg transition-all hover:bg-[#9bee5e]/80 focus:ring-2 focus:ring-[#9bee5e]"
           >
             <MapPin className="w-5 h-5" />
             {selectedCity || "Selecciona una ciudad"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[220px] p-0 z-[9999]">
+        <PopoverContent side="bottom" align="center" className="w-[220px] p-0 z-[9999]">
           <Command>
             <CommandList className="max-h-[240px] overflow-y-auto">
               <CommandEmpty>No se encontró ninguna ciudad.</CommandEmpty>
