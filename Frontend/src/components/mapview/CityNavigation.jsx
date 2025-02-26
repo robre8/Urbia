@@ -1,58 +1,121 @@
-import { useEffect, useState } from "react";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+"use client";
+
+import {  useState } from "react";
 import { useFilteredCities } from "./hooks/useFilteredCities";
-import { MapPin } from "lucide-react"; // Ícono de ubicación
+import { MapPin, Check, Search } from "lucide-react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandEmpty,
+  CommandGroup,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function CityNavigation({ map }) {
   const { priorityCities, groupedCities, loading } = useFilteredCities();
+  const [open, setOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
 
-  useEffect(() => {
-    if (selectedCity && map) {
+  const handleCitySelect = (value) => {
+    setSelectedCity(value);
+    setOpen(false);
+
+    if (map) {
       const city = [...priorityCities, ...groupedCities.flatMap(group => group.cities)]
-        .find((c) => c.name === selectedCity);
+        .find((c) => c.name === value);
       if (city) {
-        map.flyTo([city.lat, city.lng], 12, { duration: 1.2 }); // 👈 Animación suave al moverse
+        map.flyTo([city.lat, city.lng], 12, { duration: 1.2 });
       }
     }
-  }, [selectedCity, map]);
+  };
 
   if (loading) return null;
 
   return (
     <div className="absolute bottom-5 left-5 lg:bottom-10 lg:left-10 z-[9999]">
-      <Select onValueChange={setSelectedCity}>
-        <SelectTrigger className="flex items-center gap-2 w-[220px] bg-green-500 text-black rounded-full px-4 py-3 shadow-lg transition-all hover:bg-green-600 focus:ring-2 focus:ring-green-400">
-          <MapPin className="w-5 h-5" /> 
-          {selectedCity || "Selecciona una ciudad"}
-        </SelectTrigger>
-        <SelectContent className="max-h-[240px] overflow-y-auto bg-white shadow-md rounded-lg">
-          {/* Ciudades recomendadas */}
-          {priorityCities.length > 0 && (
-            <>
-              <div className="px-2 py-1 text-sm font-bold bg-gray-200">🌎 Ciudades recomendadas</div>
-              {priorityCities.map((city) => (
-                <SelectItem key={city.name} value={city.name}>
-                  {city.name}
-                </SelectItem>
-              ))}
-              <div className="border-b border-gray-300 my-1" />
-            </>
-          )}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="flex items-center gap-2 w-[220px] bg-green-500 text-black rounded-full px-4 py-3 shadow-lg transition-all hover:bg-green-600 focus:ring-2 focus:ring-green-400"
+          >
+            <MapPin className="w-5 h-5" />
+            {selectedCity || "Selecciona una ciudad"}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[220px] p-0 z-[9999]">
+          <Command>
+            <CommandList className="max-h-[240px] overflow-y-auto">
+              <CommandEmpty>No se encontró ninguna ciudad.</CommandEmpty>
 
-          {/* Ciudades agrupadas por letra */}
-          {groupedCities.map(({ letter, cities }) => (
-            <div key={letter}>
-              <div className="px-2 py-1 text-sm font-bold bg-gray-100">{letter}</div>
-              {cities.map(city => (
-                <SelectItem key={city.name} value={city.name}>
-                  {city.name}
-                </SelectItem>
+              {/* Ciudades recomendadas - ahora en negrita */}
+              {priorityCities.length > 0 && (
+                <CommandGroup>
+                  <div className="text-xs font-bold text-black">
+                    🌎 Ciudades recomendadas
+                  </div>
+                  {priorityCities.map((city) => (
+                    <CommandItem
+                      key={city.name}
+                      value={city.name}
+                      onSelect={handleCitySelect}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedCity === city.name ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {city.name}
+                    </CommandItem>
+                  ))}
+                  <div className="h-[1px] w-full bg-gray-300 "></div>
+                </CommandGroup>
+              )}
+
+              {/* Ciudades agrupadas por letra con diseño mejorado */}
+              {groupedCities.map(({ letter, cities }) => (
+                <CommandGroup key={letter}>
+                  <div className="px-2 py-1 text-sm font-bold text-black bg-gray-200 uppercase">
+                    {letter}
+                  </div>
+                  {cities.map((city) => (
+                    <CommandItem
+                      key={city.name}
+                      value={city.name}
+                      onSelect={handleCitySelect}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedCity === city.name ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {city.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
               ))}
+            </CommandList>
+
+            {/* Search en la parte de abajo bien alineado */}
+            <div className="relative p-2 border-t flex items-center gap-2">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <CommandInput placeholder="Buscar ciudad..." className="w-full" />
             </div>
-          ))}
-        </SelectContent>
-      </Select>
+          </Command>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

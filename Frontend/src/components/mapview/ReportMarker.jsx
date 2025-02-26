@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import L from 'leaflet';
 
 // Importar íconos personalizados según la categoría
-import infraIcon from '@/assets/svgs/infraestructura.svg';
-import seguridadIcon from '@/assets/svgs/seguridad.svg';
-import saludIcon from '@/assets/svgs/salud.svg';
-import eventosIcon from '@/assets/svgs/social.svg';
+import infraIcon from '@/assets/svgs/FrogPinInfra.svg';
+import seguridadIcon from '@/assets/svgs/FrogPinPoli.svg';
+import saludIcon from '@/assets/svgs/FrogPinSalud.svg';
+import eventosIcon from '@/assets/svgs/FrogPinSocial.svg';
 
 // Mapeo de categorías a íconos
 const categoryIcons = {

@@ -1,4 +1,3 @@
-// MapView.jsx
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, ZoomControl, Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
@@ -7,21 +6,19 @@ import "leaflet/dist/leaflet.css";
 import ReportMarker from "./ReportMarker";
 import Recenter from "./Recenter";
 import userIcon from "@/assets/userIcon.png";
-import sadFrog from "@/assets/sadFrog.png";
+import sadFrog from "@/assets/frogError.png";
 import { useUserLocation } from "./hooks/useUserLocation";
 import { useReverseGeocode } from "./hooks/useReverseGeocode";
 import MyLocationButton from "./MyLocationButton";
 import "./style/MapView.css";
 import { AddressCard } from "../Adress/AdressCard";
-import { ErrorMessage } from "../ui/ErrorMessage";
 import UserLogin from "@/features/auth/UserLogin";
 import { useUserAuth } from "@/lib/store/useUserAuth";
 import UserMenu from "@/features/auth/MenuUser";
 import CityNavigation from "./CityNavigation";
-
-// Importamos el modal de selección de ciudad y el hook para obtener ciudades desde OSM
 import CitySelectionDialog from "./CitySelectionDialog";
 import { useCities } from "./hooks/useCities";
+import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -41,12 +38,9 @@ export default function MapView({ reports }) {
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);
-  const geolocationNotPrecise = (status) => {
-    return status === "browser_denied" || status === "ip_error_default" || status === "timeout_default";
-  };
 
   useEffect(() => {
-    if (!loading && geolocationNotPrecise(geolocationStatus) && !modalHasBeenOpened.current) {
+    if (!loading && ["browser_denied", "ip_error_default", "timeout_default"].includes(geolocationStatus) && !modalHasBeenOpened.current) {
       setModalOpen(true);
       modalHasBeenOpened.current = true;
     }
@@ -60,23 +54,8 @@ export default function MapView({ reports }) {
     }
   };
 
-  let errorMessage = null;
-  if (error) {
-    if (geolocationStatus === "browser_denied") {
-      errorMessage = "Permiso de ubicación denegado. Habilita la ubicación en tu navegador para una mejor experiencia.";
-    } else if (
-      geolocationStatus === "browser_unavailable" ||
-      geolocationStatus === "browser_timeout" ||
-      geolocationStatus === "ip_error_default" ||
-      geolocationStatus === "timeout_default"
-    ) {
-      errorMessage = "No se pudo obtener tu ubicación precisa. Mostrando ubicación aproximada o por defecto.";
-    } else if (geolocationStatus === "unsupported") {
-      errorMessage = "Tu navegador no soporta geolocalización. Usando ubicación por defecto.";
-    } else {
-      errorMessage = "Error al obtener ubicación: " + error;
-    }
-  }
+  // Obtenemos el mensaje de error desde la función modularizada
+  const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
 
   return (
     <div className="relative w-full h-screen">
@@ -98,8 +77,6 @@ export default function MapView({ reports }) {
 
         <ZoomControl position="bottomright" />
         <Recenter center={center} zoom={defaultZoom} />
-
-        {errorMessage && <ErrorMessage message={errorMessage} imageSrc={sadFrog} />}
 
         {!error && position && (
           <>
@@ -137,12 +114,15 @@ export default function MapView({ reports }) {
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           cities={cities}
+          map={map}
           onCitySelect={handleCitySelect}
-          message="No se pudo obtener una ubicación precisa. Selecciona tu ciudad:"
+          message=""
+          errorMessage={errorMessage} // 📌 Pasamos el mensaje de error desde la función modularizada
+          errorImage={sadFrog} // 📌 Pasamos la imagen de error
         />
       )}
 
-<CityNavigation map={map} />
+      <CityNavigation map={map} />
     </div>
   );
 }

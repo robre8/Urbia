@@ -4,22 +4,17 @@ import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
 
 import menuIcon from "../../assets/menu.svg";
-import SapoInfra from "../../assets/svgs/SapoInfra.svg";
-import SapoPoli from "../../assets/svgs/SapoPoli.svg";
-import SapoSalud from "../../assets/svgs/SapoSalud.svg";
-import SapoSocial from "../../assets/svgs/SapoSocial.svg";
-
-import MenuIcoInfra from "../../assets/svgs/MenuIcoInfra.svg";
-import MenuIcoPoli from "../../assets/svgs/MenuIcoSeguri.svg";
-import MenuIcoSalud from "../../assets/svgs/MenuIcoSalud.svg";
-import MenuIcoSocial from "../../assets/svgs/MenuIcoSocial.svg";
+import FrogInfra from "../../assets/svgs/FrogInfra.svg";
+import FrogPoli from "../../assets/svgs/FrogPoli.svg";
+import FrogSalud from "../../assets/svgs/FrogSalud.svg";
+import FrogSocial from "../../assets/svgs/FrogSocial.svg";
 
 // Definir categorías con sus respectivos íconos
 const categories = [
-  { id: "seguridad", label: "Seguridad", icon: SapoPoli, iconMenu: MenuIcoPoli },
-  { id: "infraestructura", label: "Infraestructura", icon: SapoInfra, iconMenu: MenuIcoInfra },
-  { id: "eventos-soc", label: "Eventos Sociales", icon: SapoSocial, iconMenu: MenuIcoSocial },
-  { id: "salud", label: "Salud", icon: SapoSalud, iconMenu: MenuIcoSalud },
+  { id: "infraestructura", label: "Infraestructura", icon: FrogInfra },
+  { id: "seguridad", label: "Seguridad", icon: FrogPoli },
+  { id: "salud", label: "Salud", icon: FrogSalud },
+  { id: "eventos-soc", label: "Eventos Sociales", icon: FrogSocial },
 ];
 
 function Menu() {
@@ -51,11 +46,7 @@ function Menu() {
                 {categories.map((category) => (
                   <div key={category.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img
-                        src={switchStates[category.id] ? category.iconMenu : category.icon}
-                        alt={category.label}
-                        className="w-8 h-8"
-                      />
+                      <img src={category.icon} alt={category.label} className="w-8 h-8" />
                       <label htmlFor={category.id} className="text-[16px] font-medium">
                         {category.label}
                       </label>
