@@ -12,13 +12,15 @@ public class JwtResponse {
     private String type = "Bearer";
     private Long id;
     private String email;
+    private String nombre;
 
     public JwtResponse() {}
 
-    public JwtResponse(String token, Long id, String email) {
+    public JwtResponse(String token, Long id, String email, String nombre) {
         this.token = token;
         this.id = id;
         this.email = email;
+        this.nombre = nombre;
     }
 
     // Getters y Setters
