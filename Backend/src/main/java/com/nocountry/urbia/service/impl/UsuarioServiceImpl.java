@@ -56,7 +56,7 @@ public class UsuarioServiceImpl {
     public UsuarioResponse getUserById(Long id) {
         Usuarios usuario = usuariosRepository.findById(id)
                 .orElseThrow(() -> new ValidacionException("Usuario no encontrado"));
-        return new UsuarioResponse(usuario.getId(), usuario.getNombre(), usuario.getEmail());
+        return new UsuarioResponse(usuario.getId(), usuario.getNombre(), usuario.getEmail(), usuario.getNombre());
     }
 
     public List<UsuarioResponse> getAllUsers() {
