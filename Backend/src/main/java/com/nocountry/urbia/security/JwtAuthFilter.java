@@ -35,6 +35,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        // Si la request es para Swagger, continúa sin aplicar el filtro JWT
+        String uri = request.getRequestURI();
+        if (uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtil.validateToken(jwt)) {
@@ -51,6 +58,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");

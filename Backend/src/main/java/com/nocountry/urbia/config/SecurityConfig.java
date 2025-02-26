@@ -51,17 +51,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**", "/api/health").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/health",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .anyRequest().permitAll()
                 );
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
