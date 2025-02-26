@@ -36,7 +36,7 @@ public class UsuarioServiceImpl {
             throw new ValidacionException("Credenciales inválidas");
         }
         String token = jwtUtil.generateToken(usuario);
-        return new JwtResponse(token, usuario.getId(), usuario.getEmail());
+        return new JwtResponse(token, usuario.getId(), usuario.getEmail(), usuario.getNombre());
     }
 
     public UsuarioResponse registerUser(UsuarioRegistroRequest request) {
@@ -56,7 +56,7 @@ public class UsuarioServiceImpl {
     public UsuarioResponse getUserById(Long id) {
         Usuarios usuario = usuariosRepository.findById(id)
                 .orElseThrow(() -> new ValidacionException("Usuario no encontrado"));
-        return new UsuarioResponse(usuario.getId(), usuario.getNombre(), usuario.getEmail(), usuario.getNombre());
+        return new UsuarioResponse(usuario.getId(), usuario.getNombre(), usuario.getEmail());
     }
 
     public List<UsuarioResponse> getAllUsers() {
