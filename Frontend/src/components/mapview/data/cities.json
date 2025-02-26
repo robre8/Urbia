@@ -30,6 +30,7 @@
     { "name": "Copenhagen", "lat": 55.6761, "lng": 12.5683 },
     { "name": "Vienna", "lat": 48.2082, "lng": 16.3738 },
     { "name": "Stockholm", "lat": 59.3293, "lng": 18.0686 },
-    { "name": "Caracas", "lat": 10.4806, "lng": -66.9036 }
+    { "name": "Caracas", "lat": 10.4806, "lng": -66.9036 },
+    { "name": "San José", "lat": 9.9281, "lng": -84.0907 }
   ]
   

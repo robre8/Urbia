@@ -3,7 +3,7 @@ import { useCities } from "./useCities";
 
 // Mapeo de ciudades prioritarias por idioma
 const languageCityMap = {
-  es: ["Madrid", "Buenos Aires", "Ciudad de México", "Santiago", "Bogotá", "Caracas"],
+  es: ["Madrid", "Buenos Aires", "Ciudad de México", "Santiago", "Bogotá", "Caracas","San José"],
   en: ["New York", "London", "Sydney", "Los Angeles"],
   fr: ["Paris", "Marseille", "Lyon"],
   pt: ["São Paulo", "Rio de Janeiro", "Lisboa", "Brasilia"],
