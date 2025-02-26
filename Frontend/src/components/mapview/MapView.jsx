@@ -19,6 +19,7 @@ import CityNavigation from "./CityNavigation";
 import CitySelectionDialog from "./CitySelectionDialog";
 import { useCities } from "./hooks/useCities";
 import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
+import InstallPWAButton from "./InstallPWAButton"; // ✅ Importamos el nuevo botón flotante
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -54,7 +55,6 @@ export default function MapView({ reports }) {
     }
   };
 
-  // Obtenemos el mensaje de error desde la función modularizada
   const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
 
   return (
@@ -108,7 +108,7 @@ export default function MapView({ reports }) {
       </div>
       <div className="absolute top-5 right-5 z-[9999]">{user ? <UserMenu /> : <UserLogin />}</div>
 
-      {/* Renderizamos el modal solo si modalOpen es true */}
+      {/* Modal de selección de ciudad */}
       {modalOpen && (
         <CitySelectionDialog
           open={modalOpen}
@@ -117,12 +117,15 @@ export default function MapView({ reports }) {
           map={map}
           onCitySelect={handleCitySelect}
           message=""
-          errorMessage={errorMessage} // 📌 Pasamos el mensaje de error desde la función modularizada
-          errorImage={sadFrog} // 📌 Pasamos la imagen de error
+          errorMessage={errorMessage}
+          errorImage={sadFrog}
         />
       )}
 
       <CityNavigation map={map} />
+
+      {/* ✅ Botón flotante de instalación de la PWA */}
+      <InstallPWAButton />
     </div>
   );
 }
