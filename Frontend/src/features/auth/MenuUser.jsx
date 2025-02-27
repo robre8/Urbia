@@ -1,5 +1,5 @@
 import { useUserAuth } from '@/lib/store/useUserAuth';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Settings, LifeBuoy, Megaphone, LogOut, User } from 'lucide-react';
@@ -8,11 +8,26 @@ import userIcon from '/frogIco.png'; // Imagen de la rana
 export default function UserMenu() {
   const { user, logout } = useUserAuth(); 
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
   if (!user) return null;
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
   return (
-    <div className="relative z-[9999]">
+    <div className="relative z-[9999]" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-12 h-12 rounded-full overflow-hidden flex shadow-xl items-center justify-center bg-white border border-grey-500"
