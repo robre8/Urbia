@@ -1,5 +1,5 @@
 .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-  width: 38px;
+  width: 42px;
   height: 78px;
   border-radius: 9999px;
   background: #fff;
@@ -8,9 +8,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 1.75rem;
+  margin-right: 2rem;
 
-  border: none;
+  border: 1px solid #ccc;
 }
 
 .leaflet-bottom.leaflet-right .leaflet-control-zoom a {
@@ -43,6 +43,6 @@
 
 @media screen and (max-width: 768px) {
   .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-  margin-bottom: 2.75rem;
+  display: none;
   }
 }

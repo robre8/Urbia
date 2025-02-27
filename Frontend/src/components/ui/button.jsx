@@ -1,3 +1,5 @@
+// button.jsx
+
 import * as React from "react"
 import PropTypes from "prop-types"
 import { Slot } from "@radix-ui/react-slot"
@@ -9,22 +11,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary",
+        // Nuevo variant para fondo blanco
+        white: "bg-white border border-gray-300 text-gray-900 shadow-md",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
+        // Nuevo size para aspecto "pastilla"
+        pill: "h-12 px-4 rounded-2xl text-sm",
       },
     },
     defaultVariants: {
@@ -34,18 +36,16 @@ const buttonVariants = cva(
   }
 )
 
-const Button = React.forwardRef(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
+const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
+  const Comp = asChild ? Slot : "button"
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref}
+      {...props}
+    />
+  )
+})
 
 Button.displayName = "Button"
 
@@ -58,8 +58,9 @@ Button.propTypes = {
     "secondary",
     "ghost",
     "link",
+    "white", // Asegúrate de incluir el nuevo variant
   ]),
-  size: PropTypes.oneOf(["default", "sm", "lg", "icon"]),
+  size: PropTypes.oneOf(["default", "sm", "lg", "icon", "pill"]), // y el nuevo size
   asChild: PropTypes.bool,
 }
 

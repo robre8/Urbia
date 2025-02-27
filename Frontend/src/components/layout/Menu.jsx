@@ -2,14 +2,12 @@ import { useState } from "react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
-
-import menuIcon from "../../assets/menu.svg";
+import { Menu as MenuIcon } from "lucide-react"; // Importar ícono de Lucide
 import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
 import FrogSalud from "../../assets/svgs/FrogSalud.svg";
 import FrogSocial from "../../assets/svgs/FrogSocial.svg";
 
-// Definir categorías con sus respectivos íconos
 const categories = [
   { id: "infraestructura", label: "Infraestructura", icon: FrogInfra },
   { id: "seguridad", label: "Seguridad", icon: FrogPoli },
@@ -32,8 +30,12 @@ function Menu() {
   return (
     <div>
       <Sheet>
-        <SheetTrigger className="fixed top-1">
-          <img src={menuIcon} alt="menu hamburguesa" />
+        <SheetTrigger asChild>
+          <button
+            className="flex items-center justify-center w-12 h-12 rounded-full border fixed top-5 left-5 border-gray-300 shadow-md bg-white hover:bg-gray-100 transition"
+          >
+            <MenuIcon size={22} />
+          </button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>

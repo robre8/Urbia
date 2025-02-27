@@ -1,4 +1,4 @@
-// AddressCard.jsx
+import { Button } from "@/components/ui/button";
 
 export function AddressCard({ address, loadingAddress, addressError }) {
   if (loadingAddress) {
@@ -14,9 +14,13 @@ export function AddressCard({ address, loadingAddress, addressError }) {
   }
 
   return (
-    <div className="max-w-xs bg-white shadow rounded-3xl p-4">
-{/*       <p className="text-gray-700 font-medium">Tu ubicación aproximada:</p> */}
-      <p className="text-gray-900 text-sm">{address}</p>
-    </div>
+    <Button
+      variant="white"
+      size="pill"
+     
+      className="cursor-text focus:outline-none focus:ring-0 pointer-events-auto"
+    >
+      {address}
+    </Button>
   );
 }
