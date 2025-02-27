@@ -110,7 +110,6 @@ export default function CityNavigation({ map }) {
 
             {/* Search en la parte de abajo bien alineado */}
             <div className="relative p-2 border-t flex items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
               <CommandInput placeholder="Buscar ciudad..." className="w-full" />
             </div>
           </Command>
