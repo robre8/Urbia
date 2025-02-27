@@ -3,18 +3,16 @@ import { motion } from "framer-motion";
 import { Download, QrCode, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { QRCodeCanvas } from "qrcode.react";
-import logo from "/frogIco.png"; 
+import logo from "/frogIco.png";
 
 export default function InstallPWAButton() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
   const [showQR, setShowQR] = useState(false);
-  const [showIosInfo, setShowIosInfo] = useState(false); // Estado para mostrar instrucciones en iPhone
+  const [showIosInfo, setShowIosInfo] = useState(false);
 
-  // ✅ Detectar si el usuario está en iPhone
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-  // ✅ Detectar si la PWA ya está instalada
   const checkIfPWAIsInstalled = () => {
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
@@ -51,8 +49,7 @@ export default function InstallPWAButton() {
 
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-2 z-[9999]">
-        {/* Botón de instalación para Android (oculto en iOS) */}
+      <div className="relative flex items-center gap-2 z-[9999]">
         {!isIOS && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -78,7 +75,6 @@ export default function InstallPWAButton() {
           </Tooltip>
         )}
 
-        {/* Botón para mostrar QR */}
         <Tooltip>
           <TooltipTrigger asChild>
             <motion.button
@@ -95,7 +91,6 @@ export default function InstallPWAButton() {
           <TooltipContent className="z-[9999]">Escanear QR</TooltipContent>
         </Tooltip>
 
-        {/* Botón para mostrar instrucciones en iPhone */}
         {isIOS && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -113,38 +108,22 @@ export default function InstallPWAButton() {
             <TooltipContent className="z-[9999]">Cómo instalar en iPhone</TooltipContent>
           </Tooltip>
         )}
+
+        {showQR && (
+          <motion.div
+            className="absolute top-full right-0 mt-2 p-4 w-64 bg-white border border-gray-300 shadow-lg rounded-lg flex items-center gap-4 z-[9999]"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
+            <div className="flex flex-col items-center">
+              <p className="text-sm text-gray-700 text-center mb-2">Escanea para instalar</p>
+              <QRCodeCanvas value={window.location.origin} size={128} bgColor="transparent" fgColor="#000000" level="H" />
+            </div>
+          </motion.div>
+        )}
       </div>
-
-      {/* QR Code flotante con Logo al lado */}
-      {showQR && (
-        <motion.div
-          className="absolute top-20 right-36 p-4 w-64 bg-white border border-gray-300 shadow-lg rounded-lg z-[9999] flex items-center gap-4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
-          <div className="flex flex-col items-center">
-            <p className="text-sm text-gray-700 text-center mb-2">Escanea para instalar</p>
-            <QRCodeCanvas value={window.location.origin} size={128} bgColor="transparent" fgColor="#000000" level="H" />
-          </div>
-        </motion.div>
-      )}
-
-      {/* Instrucciones flotantes para iPhone */}
-      {showIosInfo && (
-        <motion.div
-          className="absolute top-20 right-36 p-4 bg-white border border-gray-300 shadow-lg rounded-lg z-[9999] flex flex-col"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <p className="text-sm text-gray-700 text-center mb-2">
-            Para instalar en iPhone:
-            <br /> 1️⃣ Abre Safari <br /> 2️⃣ Presiona "Compartir" <br /> 3️⃣ Selecciona "Añadir a pantalla de inicio"
-          </p>
-        </motion.div>
-      )}
     </TooltipProvider>
   );
 }
