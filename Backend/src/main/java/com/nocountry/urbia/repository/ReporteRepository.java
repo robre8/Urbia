@@ -8,4 +8,5 @@ import java.util.List;
 public interface ReporteRepository extends JpaRepository<Reporte, Long> {
     // Método para buscar reportes por usuarioId
     List<Reporte> findByUsuarioId(Long usuarioId);
+    boolean existsByCategoriaId(Long categoriaId);
 }

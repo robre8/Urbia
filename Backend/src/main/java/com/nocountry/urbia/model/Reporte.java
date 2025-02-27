@@ -43,7 +43,7 @@ public class Reporte {
     // Relación con Usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    private Usuarios usuario;
 
     // Getters y Setters
     public Reporte() {
@@ -121,11 +121,11 @@ public class Reporte {
         this.categoria = categoria;
     }
 
-    public Usuario getUsuario() {
+    public Usuarios getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Usuarios usuario) {
         this.usuario = usuario;
     }
 }
