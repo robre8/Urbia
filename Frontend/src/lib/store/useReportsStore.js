@@ -26,7 +26,13 @@ const useReportsStore = create(
           } catch (error) {
             console.error('Error fetching reports:', error);
           }
-        }
+        },
+        
+        deleteReport: (id) => {
+          set((state) => ({
+            reports: state.reports.filter((report) => report.id !== id),
+          }));
+        },
       }),
       {
         name: 'reports-storage', // Nombre para persistencia en localStorage

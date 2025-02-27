@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Ellipsis, Pencil, Trash2 } from "lucide-react"
-import deleteAlert from "@/components/alerts/editAlert/deleteAlert/DeleteAlert"
+import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert"
 
 
 function MyReports({ closeDrawer }) {

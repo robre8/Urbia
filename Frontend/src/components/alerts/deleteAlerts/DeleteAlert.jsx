@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-//import "../../../components/alerts/styles/sweetAlertStyles.css"
+import "@/components/alerts/styles/sweetAlertStyles.css"
 import warning from "@/assets/Warning.svg"
 
 const deleteAlert = (id, onDelete) => {
@@ -33,7 +33,7 @@ const deleteAlert = (id, onDelete) => {
     
       document.querySelector(".swal2-html-container").style.cssText = `
         font-size: 16px;
-        padding: 10px;
+        padding: 9px;
         max-width: 500px;
         text-align: center;
         margin: 0 auto;
@@ -54,7 +54,7 @@ const deleteAlert = (id, onDelete) => {
       customClass: {
         popup: "w-[590px] h-[320px] shadow-xl rounded-[16px] no-scroll-swal",
         title: "text-[24px] text-center text-black font-semibold",
-        htmlContainer: "text-[18px] text-gray-700 px-6 py-3", 
+        htmlContainer: "text-[16px] text-gray-700 px-6 py-3", 
         confirmButton: "bg-[#9BEE5E] text-black px-6 py-2 rounded-lg hover:bg-[#9BEE5E]-700 transition",
       },
     });
