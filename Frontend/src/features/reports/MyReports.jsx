@@ -7,10 +7,20 @@ import { useEffect } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Ellipsis, Pencil, Trash2 } from "lucide-react"
+import deleteAlert from "@/components/alerts/editAlert/deleteAlert/DeleteAlert"
 
 
-function MyReports() {
-  const {reports, fetchReports} = useReportsStore();
+function MyReports({ closeDrawer }) {
+  const {reports, deleteReport, fetchReports} = useReportsStore();
+
+  const handleDelete = (id) => {
+    closeDrawer();
+  
+    deleteAlert(id, (deletedId) => {
+      console.log("Confirmación de eliminación recibida para ID:", deletedId);
+      deleteReport(deletedId); 
+    });
+  };
 
   useEffect(() => {
     fetchReports();
@@ -46,7 +56,7 @@ function MyReports() {
                   </Button> 
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Button variant="link" className="flex items-center gap-1 px-4 py-2 text-[#F53434] hover:text-white hover:bg-[#F53434]">
+                  <Button variant="link" onClick={() => handleDelete(report.id)} className="flex items-center gap-1 px-4 py-2 text-[#F53434] hover:text-white hover:bg-[#F53434]">
                   <Trash2 className="size-4" />
                     Eliminar
                   </Button> 
