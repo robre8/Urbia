@@ -16,7 +16,7 @@ public class JwtResponse {
 
     public JwtResponse() {}
 
-    public JwtResponse(String token, Long id, String email, String nombre) {
+    public JwtResponse(String token, Long id, String email) {
         this.token = token;
         this.id = id;
         this.email = email;
