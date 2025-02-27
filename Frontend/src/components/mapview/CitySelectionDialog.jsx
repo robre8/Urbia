@@ -95,7 +95,7 @@ export default function CitySelectionDialog({
             className='w-[min(500px,90vw)] p-0 z-[9999] max-h-[65vh] overflow-y-auto'
           >
             <Command>
-              <CommandList className='max-h-[240px] overflow-y-auto'>
+              <CommandList className='max-h-[180px] overflow-y-auto'>
                 <CommandEmpty>No se encontró ninguna ciudad.</CommandEmpty>
 
                 {/* Ciudades recomendadas */}

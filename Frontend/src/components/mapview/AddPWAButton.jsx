@@ -51,7 +51,7 @@ export default function InstallPWAButton() {
 
   return (
     <TooltipProvider>
-      <div className="absolute top-5 right-52 flex items-center gap-2 z-[9999]">
+      <div className="flex items-center gap-2 z-[9999]">
         {/* Botón de instalación para Android (oculto en iOS) */}
         {!isIOS && (
           <Tooltip>
@@ -118,7 +118,7 @@ export default function InstallPWAButton() {
       {/* QR Code flotante con Logo al lado */}
       {showQR && (
         <motion.div
-          className="absolute top-20 right-36 p-4 bg-white border border-gray-300 shadow-lg rounded-lg z-[9999] flex items-center gap-4"
+          className="absolute top-20 right-36 p-4 w-64 bg-white border border-gray-300 shadow-lg rounded-lg z-[9999] flex items-center gap-4"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
