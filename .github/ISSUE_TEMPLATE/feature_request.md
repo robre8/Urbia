@@ -1,10 +1,11 @@
-![image](https://github.com/user-attachments/assets/05642501-ddb8-4b4b-a7f5-b470c68e6a14)---
+---
 name: "Feature Request"
 about: "Sugiere una nueva funcionalidad para el proyecto"
 title: "[ROL] - Título descriptivo"
 labels: "enhancement"
 assignees: ""
 ---
+
 ## 📌 Descripción
 **Como** usuario **quiero** describir_acción **para** describir_justificcación  
 
