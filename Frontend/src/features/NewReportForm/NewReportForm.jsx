@@ -84,7 +84,7 @@ const NewReportForm = () => {
   const handleClickBtnImg = (e)  => {
     e.preventDefault();
     setFormData(prev => ({...prev, image: e.target.files[0]}));
-    console.log('click on image load');
+    //console.log('click on image load');
   }
 
   const handleClickBtnAudio = (e)  => {
