@@ -7,7 +7,7 @@ assignees: ""
 ---
 
 ## 📌 Descripción
-**Como** usuario **quiero** describir_acción **para** describir_justificcación  
+**Como** usuario **quiero** describir_acción **para** describir_justificación  
 
 ## ✅ Criterios de Aceptación
 - [ ] Criterio 1
