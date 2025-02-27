@@ -17,7 +17,7 @@ Describe el error encontrado, su impacto y cómo reproducirlo.
 3. Paso 3
 
 ## ❌ Comportamiento Actual
-Explica como lo realiza actualmenete
+Explica como lo realiza actualmente
 
 ## ✅ Comportamiento Esperado
 Explica qué debería suceder en lugar del bug.
