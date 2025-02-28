@@ -1,7 +1,7 @@
 // lib/store/useReportsStore.js
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { getReports } from '../api/reports/gerReports';
+import { getReports } from '../api/reports/getReports';
 
 const STORAGE_VERSION = 2;
 
