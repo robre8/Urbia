@@ -1,7 +1,7 @@
 // lib/store/useReportsStore.js
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { getReports } from '../service/reports/gerReports';
+import { getReports } from '../api/reports/gerReports';
 
 const STORAGE_VERSION = 2;
 
@@ -17,7 +17,7 @@ const useReportsStore = create(
           set({ loading: true, error: null });
           try {
             const data = await getReports();
- 
+
             console.log('✅ Reports:', data);
             set({ reports: data, loading: false });
           } catch (err) {
@@ -35,10 +35,11 @@ const useReportsStore = create(
         name: 'reports-storage',
         version: STORAGE_VERSION,
         migrate: (persisted, version) => {
-          if (version < STORAGE_VERSION) return { reports: [], loading: false, error: null };
+          if (version < STORAGE_VERSION)
+            return { reports: [], loading: false, error: null };
           return persisted;
         },
-        partialize: (state) => ({
+        partialize: state => ({
           reports: state.reports,
           loading: state.loading,
           error: state.error
