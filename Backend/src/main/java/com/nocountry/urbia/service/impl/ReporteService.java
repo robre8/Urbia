@@ -7,8 +7,13 @@ import com.nocountry.urbia.model.Usuarios;
 import com.nocountry.urbia.repository.CategoriaRepository;
 import com.nocountry.urbia.repository.ReporteRepository;
 import com.nocountry.urbia.repository.UsuariosRepository;
+import com.nocountry.urbia.service.integration.GeminiService;
+import com.nocountry.urbia.service.integration.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +30,65 @@ public class ReporteService {
 
     @Autowired
     private UsuariosRepository usuarioRepository;
+
+    @Autowired
+    private GeminiService geminiService; // Inyección del servicio Gemini
+
+    @Autowired
+    private S3Service s3Service;  // Para la carga de imágenes
+
+    // Crear reporte y analizar con IA
+    public ResponseEntity<ReporteDTO> getReportesIA(MultipartFile audio, MultipartFile imagen, ReporteDTO reporteDTO) {
+        // Validar que la descripción no sea nula o vacía
+        if (reporteDTO.getDescripcion() == null || reporteDTO.getDescripcion().trim().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String detallesArchivo = "";
+
+        // Procesar el archivo de audio, si se envió
+        if (audio != null && !audio.isEmpty()) {
+            String audioContentType = audio.getContentType();
+            if (audioContentType == null || !audioContentType.startsWith("audio/")) {
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
+            // Subir audio a S3 y obtener URL
+            String audioUrl = s3Service.uploadFile(audio);
+            reporteDTO.setUrlAudio(audioUrl);
+            // Analizar el audio con Gemini
+            String detalleAudio = geminiService.analizarAudioPublica(audioUrl);
+            if (!detalleAudio.isEmpty()) {
+                detallesArchivo += "Audio: " + detalleAudio + "\n";
+            }
+        }
+
+        // Procesar el archivo de imagen, si se envió
+        if (imagen != null && !imagen.isEmpty()) {
+            String imagenContentType = imagen.getContentType();
+            if (imagenContentType == null || !imagenContentType.startsWith("image/")) {
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
+            // Subir imagen a S3 y obtener URL
+            String imageUrl = s3Service.uploadFile(imagen);
+            reporteDTO.setUrlImagen(imageUrl);
+            // Analizar la imagen con Gemini
+            String detalleImagen = geminiService.analizarImagenPublica(imageUrl);
+            if (!detalleImagen.isEmpty()) {
+                detallesArchivo += "Imagen: " + detalleImagen + "\n";
+            }
+        }
+
+        // Actualizar la descripción con los detalles obtenidos por IA
+        String descripcionActual = reporteDTO.getDescripcion();
+        reporteDTO.setDescripcion(descripcionActual + "\nDetalles IA: " + detallesArchivo);
+
+        // Crear el reporte
+        ReporteDTO nuevoReporte = crearReporte(reporteDTO);
+        return new ResponseEntity<>(nuevoReporte, HttpStatus.CREATED);
+    }
+
+
+
 
     // Crear reporte
     public ReporteDTO crearReporte(ReporteDTO reporteDTO) {
@@ -48,7 +112,16 @@ public class ReporteService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         reporte.setUsuario(usuario);
 
+        // Guardar el reporte inicial
         Reporte reporteGuardado = reporteRepository.save(reporte);
+
+        // Llamada a Gemini IA para mejorar la descripción
+        String descripcionMejorada = geminiService.mejorarDescripcion(reporteGuardado.getDescripcion());
+        reporteGuardado.setDescripcionDespuesDeIA(descripcionMejorada);
+
+        // Actualizar el reporte con la descripción mejorada
+        reporteGuardado = reporteRepository.save(reporteGuardado);
+
         return mapearDTO(reporteGuardado);
     }
 
@@ -108,6 +181,7 @@ public class ReporteService {
         dto.setUrlImagen(reporte.getUrlImagen());
         dto.setTitulo(reporte.getTitulo());
         dto.setDescripcion(reporte.getDescripcion());
+        dto.setDescripcionDespuesDeIa(reporte.getDescripcionDespuesDeIa());
         dto.setFechaHora(reporte.getFechaHora());
         dto.setLatitud(reporte.getLatitud());
         dto.setLongitud(reporte.getLongitud());
