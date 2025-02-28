@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { fileURLToPath } from "url"; // <-- Necesario para manejar rutas en ESM
+import { fileURLToPath } from "url"; // Necesario para manejar rutas en ESM
 
 // Obtener __dirname en ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -13,5 +13,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "src"), // Ahora `@` apunta a `src/`
     },
+  },
+  server: {
+    port: 3000, // Cambia el puerto a 3000
   },
 });

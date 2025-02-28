@@ -7,7 +7,7 @@ export default function UserLogin() {
   if (user) return null;
 
   return (
-    <Button onClick={login} className="bg-[#9bee5e] text-black w-[162px] h-[48px] rounded-full z-[9999]">
+    <Button onClick={login} className="bg-[#9bee5e] hover:bg-[#C8F79f] text-black w-[162px] h-[48px] rounded-2xl z-[9999]">
       Iniciar sesión
     </Button>
   );

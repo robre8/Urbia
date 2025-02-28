@@ -15,7 +15,7 @@ public class Reporte {
     @Column(name = "url_imagen")
     private String urlImagen;
 
-    // URL de la imagen o audio
+    // URL del  audio
     @Column(name = "url_audio")
     private String urlAudio;
 
@@ -23,9 +23,13 @@ public class Reporte {
     @Column(length = 500)
     private String titulo;
 
-    // Descripción del incidente
-    @Column(length = 500)
+    // Descripción original del incidente
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
+
+    // Nueva columna: Descripción después de aplicar IA
+    @Column(name = "descripcion_despues_de_ia", columnDefinition = "TEXT")
+    private String descripcionDespuesDeIa;
 
     // Fecha y hora del reporte
     @Column(name = "fecha_hora")
@@ -43,7 +47,7 @@ public class Reporte {
     // Relación con Usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    private Usuarios usuario;
 
     // Getters y Setters
     public Reporte() {
@@ -121,11 +125,18 @@ public class Reporte {
         this.categoria = categoria;
     }
 
-    public Usuario getUsuario() {
+    public Usuarios getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Usuarios usuario) {
         this.usuario = usuario;
+    }
+
+    public void setDescripcionDespuesDeIA(String descripcionMejorada) {
+        this.descripcionDespuesDeIa = descripcionMejorada;
+    }
+    public String getDescripcionDespuesDeIa() {
+        return descripcionDespuesDeIa;
     }
 }

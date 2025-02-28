@@ -6,7 +6,7 @@ export const useUserAuth = create((set) => ({
     set({
       user: {
         name: 'Alejandro Pérez',
-        avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+        avatar: '',
       },
     }),
   logout: () => set({ user: null }),

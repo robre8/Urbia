@@ -1,35 +1,48 @@
 // lib/store/useReportsStore.js
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { getReports } from '../service/reports/gerReports';
+
+const STORAGE_VERSION = 2;
 
 const useReportsStore = create(
   devtools(
     persist(
-      (set) => ({
-        // Estado inicial
+      (set, get) => ({
         reports: [],
-        
-        // Acción para setear los reports
-        setReports: (newReports) => set({ reports: newReports }),
+        loading: false,
+        error: null,
 
-        // Acción para hacer fetch de los reports (ejemplo con mock o API real)
         fetchReports: async () => {
+          set({ loading: true, error: null });
           try {
-            // Aquí podrías hacer un fetch real:
-            // const response = await fetch('/api/reports');
-            // const data = await response.json();
-
-            // O cargar desde un mock local (si lo tienes en /mocks)
-            const data = await import('../../mocks/reports/reports.json');
-            
-            set({ reports: data.default }); // data.default por ser import dinámico
-          } catch (error) {
-            console.error('Error fetching reports:', error);
+            const data = await getReports();
+ 
+            console.log('✅ Reports:', data);
+            set({ reports: data, loading: false });
+          } catch (err) {
+            set({ error: err.message, loading: false });
           }
+        },
+
+        clearStorage: () => {
+          localStorage.removeItem('reports-storage');
+          set({ reports: [] });
+          window.location.reload();
         }
       }),
       {
-        name: 'reports-storage', // Nombre para persistencia en localStorage
+        name: 'reports-storage',
+        version: STORAGE_VERSION,
+        migrate: (persisted, version) => {
+          if (version < STORAGE_VERSION) return { reports: [], loading: false, error: null };
+          return persisted;
+        },
+        partialize: (state) => ({
+          reports: state.reports,
+          loading: state.loading,
+          error: state.error
+        })
       }
     )
   )

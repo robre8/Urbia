@@ -2,6 +2,7 @@ package com.nocountry.urbia.controller;
 
 import com.nocountry.urbia.model.Categoria;
 import com.nocountry.urbia.repository.CategoriaRepository;
+import com.nocountry.urbia.repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,15 @@ public class CategoriaController {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private ReporteRepository reporteRepository;
+
     // Endpoint para obtener todas las categorías
     @GetMapping
     public List<Categoria> getAllCategorias() {
         return categoriaRepository.findAll();
     }
 
-    // Endpoint para obtener una categoría por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
     // Endpoint para crear una nueva categoría
     @PostMapping
@@ -52,14 +49,20 @@ public class CategoriaController {
         return ResponseEntity.notFound().build();
     }
 
-    // Endpoint para eliminar una categoría
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCategoria(@PathVariable Long id) {
         Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
         if (categoriaOptional.isPresent()) {
+            if (reporteRepository.existsByCategoriaId(id)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("La categoría no se puede eliminar porque tiene reportes asociados");
+            }
             categoriaRepository.delete(categoriaOptional.get());
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
+
 }

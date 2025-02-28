@@ -63,6 +63,7 @@
 			<optional>true</optional>
 		</dependency>
 
+
 		<!--h2 y test-->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -183,6 +184,12 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>1.12.442</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20220320</version>
 		</dependency>
 
 

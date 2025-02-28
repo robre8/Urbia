@@ -13,6 +13,8 @@ import java.io.IOException;
 @RequestMapping("/api/files")
 public class FileController {
 
+    //implementar servicio de S3
+
     private final GoogleCloudStorageService googleCloudStorageService;
 
     @Autowired
