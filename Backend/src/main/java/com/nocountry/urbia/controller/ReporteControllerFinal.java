@@ -21,10 +21,16 @@ public class ReporteControllerFinal {
     @Autowired
     private S3Service s3Service;  // Se agrega la inyección de S3Service
 
+    @Autowired
+    private WebSocketController webSocketController;
+
     // Endpoint para crear un reporte
     @PostMapping
     public ResponseEntity<ReporteDTO> crearReporte(@RequestBody ReporteDTO reporteDTO) {
         ReporteDTO nuevoReporte = reporteService.crearReporte(reporteDTO);
+        // En caso de que no se elimine este endpoint agregar:
+        // webSocketController.notificarNuevoReporte("Nuevo reporte creado");
+
         return new ResponseEntity<>(nuevoReporte, HttpStatus.CREATED);
     }
 
@@ -71,6 +77,9 @@ public class ReporteControllerFinal {
         reporteDTO.setUrlImagen(imageUrl);
         // Crea el reporte con los datos actualizados
         ReporteDTO nuevoReporte = reporteService.crearReporte(reporteDTO);
+
+        webSocketController.notificarNuevoReporte("Nuevo reporte con imagen/audio creado ");
+
         return new ResponseEntity<>(nuevoReporte, HttpStatus.CREATED);
     }
 }

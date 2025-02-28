@@ -36,7 +36,7 @@ public class UsuarioServiceImpl {
             throw new ValidacionException("Credenciales inválidas");
         }
         String token = jwtUtil.generateToken(usuario);
-        return new JwtResponse(token, usuario.getId(), usuario.getEmail());
+        return new JwtResponse(token, usuario.getId(), usuario.getEmail(), usuario.getNombre());
     }
 
     public UsuarioResponse registerUser(UsuarioRegistroRequest request) {
