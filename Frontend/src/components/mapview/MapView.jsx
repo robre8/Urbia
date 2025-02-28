@@ -114,9 +114,11 @@ export default function MapView({ reports }) {
           </>
         )}
 
-        {reports.map((report, i) => (
-          <ReportMarker key={i} report={report} />
-        ))}
+{reports.map((report, i) => {
+  console.log(`Report ${i}:`, report); // Verifica si cada reporte tiene lat y lng
+  return <ReportMarker key={i} report={report} />;
+})}
+
       </MapContainer>
 
       <MyLocationButton
