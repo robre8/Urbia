@@ -103,7 +103,7 @@ export default function MapView({ reports }) {
             </Marker>
             <Circle
               center={position}
-              radius={accuracy || 5}
+              radius={80}
               pathOptions={{
                 color: 'blue',
                 fillColor: 'blue',
