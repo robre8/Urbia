@@ -16,6 +16,7 @@ const categories = [
 ];
 
 function Menu() {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [switchStates, setSwitchStates] = useState(
     categories.reduce((acc, category) => ({ ...acc, [category.id]: true }), {})
   );
@@ -29,7 +30,7 @@ function Menu() {
 
   return (
     <div>
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <button
             className="flex items-center justify-center w-12 h-12 rounded-full border fixed top-5 left-5 border-gray-300 shadow-md bg-white hover:bg-gray-100 transition"
@@ -63,7 +64,7 @@ function Menu() {
               </section>
               <hr />
               <section>
-                <MyReports />
+                <MyReports closeDrawer={() => setIsSheetOpen(false)} />
               </section>
             </SheetDescription>
           </SheetHeader>
@@ -74,3 +75,4 @@ function Menu() {
 }
 
 export default Menu;
+
