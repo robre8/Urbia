@@ -123,7 +123,7 @@ const NewReportForm = () => {
     console.log('⏳ Ejecutando fetchCategories...');
     fetchCategories();
   }, []);
-  console.log('categorias', categories);
+
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

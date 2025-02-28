@@ -12,7 +12,6 @@ const useCategoryStore = create((set) => ({
 
     try {
       const categories = await getCategories();
-      console.log("🚀 Categorías obtenidas en Zustand:", categories);
       set({ categories, loading: false });
     } catch (error) {
       console.error("⚠️ Error en fetchCategories:", error);
