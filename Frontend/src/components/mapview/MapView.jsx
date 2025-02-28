@@ -40,7 +40,6 @@ export default function MapView({ reports }) {
     useUserLocation([15.977, -97.696]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
-
   const { user } = useUserAuth();
   const {
     address,
@@ -114,9 +113,9 @@ export default function MapView({ reports }) {
           </>
         )}
 
-{reports.map((report, i) => {
-  console.log(`Report ${i}:`, report); // Verifica si cada reporte tiene lat y lng
-  return <ReportMarker key={i} report={report} />;
+{reports.map((report, id) => {
+
+  return <ReportMarker key={id} report={report} />;
 })}
 
       </MapContainer>

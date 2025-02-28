@@ -1,59 +1,30 @@
 // lib/store/useReportsStore.js
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { getReports } from '../service/reports/gerReports';
 
-const STORAGE_VERSION = 2; // Incrementa este número si necesitas limpiar el storage en futuras actualizaciones
+const STORAGE_VERSION = 2;
 
 const useReportsStore = create(
   devtools(
     persist(
       (set, get) => ({
-        // Estado inicial
         reports: [],
-        
-        // Acción para setear los reports con validación
-        setReports: (newReports) => {
-          const validReports = newReports.filter(report => 
-            typeof report.lat === 'number' &&
-            typeof report.lng === 'number' &&
-            !isNaN(report.lat) &&
-            !isNaN(report.lng)
-          );
+        loading: false,
+        error: null,
 
-          set({ reports: validReports });
-        },
-
-        // Acción para hacer fetch de los reports
         fetchReports: async () => {
+          set({ loading: true, error: null });
           try {
-            // Aquí podrías hacer un fetch real:
-            // const response = await fetch('/api/reports');
-            // const data = await response.json();
-
-            // O cargar desde un mock local
-            const data = await import('../../mocks/reports/reports.json');
-
-            const validReports = data.default.filter(report => 
-              typeof report.lat === 'number' &&
-              typeof report.lng === 'number' &&
-              !isNaN(report.lat) &&
-              !isNaN(report.lng)
-            );
-
-            set({ reports: validReports });
-          } catch (error) {
-            console.error('Error fetching reports:', error);
+            const data = await getReports();
+ 
+            console.log('✅ Reports:', data);
+            set({ reports: data, loading: false });
+          } catch (err) {
+            set({ error: err.message, loading: false });
           }
         },
 
-        // Eliminar un reporte por ID
-        deleteReport: (id) => {
-          set((state) => ({
-            reports: state.reports.filter((report) => report.id !== id),
-          }));
-        },
-
-        // Acción para limpiar manualmente el almacenamiento local
         clearStorage: () => {
           localStorage.removeItem('reports-storage');
           set({ reports: [] });
@@ -62,13 +33,16 @@ const useReportsStore = create(
       }),
       {
         name: 'reports-storage',
-        version: STORAGE_VERSION, // Incrementar la versión limpia el almacenamiento local
-        migrate: (persistedState, version) => {
-          if (version < STORAGE_VERSION) {
-            return { reports: [] }; // Si la versión es menor, limpiamos los datos antiguos
-          }
-          return persistedState;
-        }
+        version: STORAGE_VERSION,
+        migrate: (persisted, version) => {
+          if (version < STORAGE_VERSION) return { reports: [], loading: false, error: null };
+          return persisted;
+        },
+        partialize: (state) => ({
+          reports: state.reports,
+          loading: state.loading,
+          error: state.error
+        })
       }
     )
   )

@@ -11,7 +11,7 @@ function HomePage() {
     if (reports.length === 0) {
       fetchReports();
     }
-  }, [fetchReports, reports]);
+  }, [fetchReports]);
 
   return (
     <div className='h-screen w-full'>
