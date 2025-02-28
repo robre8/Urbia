@@ -17,6 +17,7 @@ public class ReporteDTO {
     private String urlImagen;
     private String titulo;
     private String descripcion;
+    private String descripcionDespuesDeIa;  // Nuevo campo para la descripción mejorada por IA
     private LocalDateTime fechaHora;
     private Double latitud;
     private Double longitud;
