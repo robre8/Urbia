@@ -114,9 +114,10 @@ export default function MapView({ reports }) {
         )}
 
 {reports.map((report, id) => {
-
+  if (!report.latitud || !report.longitud) return null;
   return <ReportMarker key={id} report={report} />;
 })}
+
 
       </MapContainer>
 
