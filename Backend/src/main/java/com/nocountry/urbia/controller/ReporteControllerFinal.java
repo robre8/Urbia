@@ -59,18 +59,14 @@ public class ReporteControllerFinal {
     // Endpoint combinado para cargar imagen y crear reporte
     @PostMapping("/combinado")
     public ResponseEntity<ReporteDTO> crearReporteConImagen(
-            @RequestPart("audio") MultipartFile audio,
-            @RequestPart("imagen") MultipartFile imagen,
+            @RequestPart(value = "audio", required = false) MultipartFile audio,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
             @RequestPart("reporte") ReporteDTO reporteDTO) {
-        // Sube el audio a S3 y obtiene la URL
-        String audioUrl = s3Service.uploadFile(audio);
-        // Sube la imagen
-        String imageUrl = s3Service.uploadFile(imagen);
-        // Asigna la URL al reporte
-        reporteDTO.setUrlAudio(audioUrl);
-        reporteDTO.setUrlImagen(imageUrl);
-        // Crea el reporte con los datos actualizados
-        ReporteDTO nuevoReporte = reporteService.crearReporte(reporteDTO);
-        return new ResponseEntity<>(nuevoReporte, HttpStatus.CREATED);
+        // Si ambos archivos faltan, retorna error 400
+        if ((reporteDTO == null ) ) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return reporteService.getReportesIA(audio,imagen, reporteDTO);
     }
 }
