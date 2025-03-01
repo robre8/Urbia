@@ -40,7 +40,6 @@ export default function MapView({ reports }) {
     useUserLocation([15.977, -97.696]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
-
   const { user } = useUserAuth();
   const {
     address,
@@ -114,9 +113,12 @@ export default function MapView({ reports }) {
           </>
         )}
 
-        {reports.map((report, i) => (
-          <ReportMarker key={i} report={report} />
-        ))}
+{reports.map((report, id) => {
+  if (!report.latitud || !report.longitud) return null;
+  return <ReportMarker key={id} report={report} />;
+})}
+
+
       </MapContainer>
 
       <MyLocationButton
