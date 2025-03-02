@@ -1,0 +1,12 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    - cron: '0/14 * * * *'  # Ejecuta cada 14 minutos
+
+jobs:
+  keep_alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send request to backend health check
+        run: curl -s https://urbia-back.onrender.com/api/health || echo "Backend no respondió"
