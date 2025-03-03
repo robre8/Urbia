@@ -198,7 +198,7 @@ const NewReportForm = () => {
         latitud: reportPreview.latitud || 0.1,
         longitud: reportPreview.longitud || 0.1,
         categoriaId: reportPreview.categoriaId || '',
-        usuarioId: reportPreview.usuarioId || user.id 
+        usuarioId: reportPreview.usuarioId || user?.id 
       }
     });
     setPreviewImageFileName(reportPreview.urlImagen || '');
@@ -218,7 +218,7 @@ const NewReportForm = () => {
         ...prev,
         reporte: {
           ...prev.reporte,
-          usuarioId: user.id
+          usuarioId: user?.id 
         }
       }));
     }
@@ -235,6 +235,7 @@ const NewReportForm = () => {
 
       <ConfirmReport open={openConfirm} setOpen={setOpenConfirm} setOpenParent ={setOpen} setIsConfirm={setIsConfirm}/>
       <SheetTrigger
+        disabled={!user}
         className="fixed bottom-48 lg:bottom-40 right-7"
         onClick={() => setOpen(true)}
       >
