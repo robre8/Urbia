@@ -28,17 +28,17 @@ import { LuMapPin   } from 'react-icons/lu';
 const categoryDefault = {id:99, nombre:'default'}
 
 
-const ConfirmReport = ({open, setOpen, setOpenParent}) => {
+const ConfirmReport = ({open, setOpen, setOpenParent, setIsConfirm}) => {
   const { categories  } = useCategoryStore();
-  const { reportPreview, clearStorage } = useReportsStore();   
+  const { reportPreview, clearReportPreview } = useReportsStore();   
   //const [open, setOpen] = useState(false);     
   const [currentCategory, setCurrentCategory] = useState({});
   const handleConfirm = (e) => {
     e.preventDefault();
     setOpen(false);
     setOpenParent(false);
-    clearStorage();
-    
+    clearReportPreview();    
+    setIsConfirm(false);
   }
   const handleGoBack = () => {
     setOpen(false);

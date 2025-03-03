@@ -25,16 +25,15 @@ import {
 import ButtonAddNewReport from './ButtonAddNewReport';
 import { LuMic, LuCamera, LuSparkles, LuImagePlus  } from 'react-icons/lu';
 import noImageSvg from  "../../assets/svgs/no-image-svgrepo-com.svg";
-import { getReports } from '@/lib/api/reports/getReports';
+import deleteReport from '@/lib/api/reports/deleteReport';
 
 const NewReportForm = () => {
   const { categories, fetchCategories, loading, error } = useCategoryStore();
-  const { reports, fetchReports, loading : loadingReport, errorReport, reportPreview, clearStorage, sendReport } = useReportsStore();
+  const {loading : loadingReports, loading : loadingReport, errorReport, reportPreview, clearReportPreview, sendReport, editReport } = useReportsStore();
   const [previewImageFileName, setPreviewImageFileName] = useState(reportPreview.urlImagen || '');
   const [open, setOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false); 
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState({});
+  const [openConfirm, setOpenConfirm] = useState(false);  
   const [isConfirm, setIsConfirm] = useState(false);
   
   // Estado con el formato solicitado
@@ -42,6 +41,7 @@ const NewReportForm = () => {
     audio:  '', 
     imagen: '', 
     reporte: {            
+      id: parseInt(reportPreview.id) || '',
       titulo: reportPreview.titulo || '',
       descripcion: reportPreview.descripcionDespuesDeIa || '',
       latitud: reportPreview.latitud || 0.1,
@@ -62,7 +62,6 @@ const NewReportForm = () => {
     titulo: 0,
     descripcion: 0
   });
-
 
   const validateForm = () => {
     const newErrors = {
@@ -90,32 +89,31 @@ const NewReportForm = () => {
 
   //console.log(reportPreview != undefined)
   const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    // Si no hay reportPreview, es un nuevo reporte, validamos el formulario y enviamos
-    if (!isConfirm) {
-      if (validateForm()) {
-        const formDataToSend = new FormData();
+    e.preventDefault();  
+    
+    if (validateForm()) {
+      const formDataToSend = new FormData();
+      formDataToSend.append(
+        'reporte',
+        new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
+      );
+      
+      if (!isConfirm) {
         formDataToSend.append("audio", formData.audio);
         formDataToSend.append("imagen", formData.imagen);
-        formDataToSend.append(
-          'reporte',
-          new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
-        );
-        await sendReport(formDataToSend);
-        // Abrir confirmación o realizar otra acción para reporte nuevo
+        console.log('Se envia a sendReport.');
+        await sendReport(formDataToSend);        
         handleOpenConfirm();
       }
-    } else {
-      // Si reportPreview existe, se asume que se trata de un reporte existente y se
-      // puede proceder a una acción diferente. Por ejemplo, podrías querer solo actualizar
-      // o redirigir sin enviar un nuevo reporte.
-      console.log('Reporte ya existe, se procede a otra acción.');
-      // Aquí puedes agregar la lógica que necesites para el caso de reportPreview existente.
-      // Por ejemplo:
-      clearStorage();
-      // y cerrar el sheet o redirigir:
+     else {      
+      console.log('Se envia a editReport.', formData.reporte);      
+      await editReport(formData.reporte);
+      clearReportPreview();   
+      setIsConfirm(false);   
       setOpen(false);
+    }
+    }else{
+      console.log("formulario no valido")
     }
   };
   
@@ -155,11 +153,18 @@ const NewReportForm = () => {
     console.log('click on Audio load');
   };
 
-  // Función para cancelar y cerrar
-  const handleCancel = () => {
-    console.log('close sheet');
-    setOpen(false);
-    // Opcional: resetear el formulario si lo deseas.
+  // Función para cancelar y/o eliminar
+  const handleCancel = async () => {
+    if (!isConfirm){
+      console.log("close report form");
+      setOpen(false);   
+    }else{
+      console.log("delete report");
+      await deleteReport(formData.reporte.id);
+      clearReportPreview();
+      setIsConfirm(false);
+      setOpen(false);   
+    }
   };
 
   const handleOpenConfirm = () => {
@@ -172,14 +177,15 @@ const NewReportForm = () => {
   useEffect(() => {
     //console.log('⏳ Ejecutando fetchCategories...');
     fetchCategories();
-    //fetchReports(1);
+    //fetchReports();
   }, []);  
 
   useEffect(() => {
     setFormData({
       audio: '',
       imagen: '',
-      reporte: {            
+      reporte: {        
+        id: parseInt(reportPreview.id) || '',  
         titulo: reportPreview.titulo || '',
         descripcion: reportPreview.descripcionDespuesDeIa || '',
         latitud: reportPreview.latitud || 0.1,
@@ -193,17 +199,17 @@ const NewReportForm = () => {
   
 
   
-  if (loading) {
+  if (loading ) {
     return(
       <div>cargando...</div>
     )
   }
-  //console.log(reportPreview );
+  //console.log(reports );
 
   return (    
     <Sheet open={open} onOpenChange={setOpen}>
 
-      <ConfirmReport open={openConfirm} setOpen={setOpenConfirm} setOpenParent ={setOpen}/>
+      <ConfirmReport open={openConfirm} setOpen={setOpenConfirm} setOpenParent ={setOpen} setIsConfirm={setIsConfirm}/>
       <SheetTrigger
         className="fixed bottom-48 lg:bottom-40 right-7"
         onClick={() => setOpen(true)}

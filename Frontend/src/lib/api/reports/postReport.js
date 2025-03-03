@@ -9,14 +9,7 @@ const postReport = async (formData) => {
   };
 
   try {
-   const response = await api.post("/api/reporte/combinado", formData, config);
-   /*
-   const response = await fetch('https://urbia-back.onrender.com/api/reporte/combinado', {       
-      method: 'POST',
-      body: formData
-    });
-    */
-    //console.log(response);
+   const response = await api.post("/api/reporte/combinado", formData, config);   
     if (response.status == 201) {
       return { message: "OK", data: response.data };
     } else {
@@ -24,7 +17,7 @@ const postReport = async (formData) => {
     }
   } catch (error) {
     console.error("Error al enviar el reporte:", error);
-    // throw error;
+    throw error;
   }
 };
 

@@ -3,6 +3,8 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { getReports } from '../api/reports/getReports';
 import postReport from '../api/reports/postReport';
+import putReport from '../api/reports/putReport';
+import deleteReport from '../api/reports/deleteReport';
 
 const STORAGE_VERSION = 2;
 
@@ -29,8 +31,12 @@ const useReportsStore = create(
 
         clearStorage: () => {
           localStorage.removeItem('reports-storage');
-          set({ reports: [], reportPreview: {} });
+          set({ reports: [] });
           window.location.reload();
+        },    
+        
+        clearReportPreview: () => {
+          set({ reportPreview: {} });
         },        
 
         sendReport: async (data) => {
@@ -39,6 +45,24 @@ const useReportsStore = create(
             const response = await postReport(data);
             //console.log('reportPreview', response.data);
             set({reportPreview: response.data, loading: false})
+          } catch (error) {
+              set({ error: err.message, loading: false });
+          }
+        },
+        editReport: async (data) => {
+          set({loading: true, error: null});
+          try {
+            const response = await putReport(data);
+            set({reportPreview: response.data, loading: false})
+          } catch (error) {
+              set({ error: err.message, loading: false });
+          }
+        },
+        deleteReport: async (id) => {
+          set({loading: true, error: null});
+          try {
+            const response = await deleteReport(id);
+            set({loading: false});
           } catch (error) {
               set({ error: err.message, loading: false });
           }
