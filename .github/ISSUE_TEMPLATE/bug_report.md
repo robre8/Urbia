@@ -1,9 +1,10 @@
 ---
 name: "Bug Report"
 about: "Reporta un error encontrado en el proyecto"
-title: "[BUG] Breve descripción"
-labels: "bug"
+title: "[BUG] - Breve descripción"
+labels: "bug, QA - Testing"
 assignees: ""
+type: "Bug"
 ---
 ## 💻 Versión 
 0.0.1
