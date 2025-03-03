@@ -5,7 +5,7 @@ title: "[BACKEND] - Título descriptivo"
 labels: "enhancement, Backend"
 assignees: ""
 type: "Feature"
-milestone: "Backend"
+milestones: "Backend"
 ---
 
 ## 📌 Descripción
