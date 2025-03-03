@@ -2,9 +2,9 @@
 name: "Feature Request Backend"
 about: "Sugiere una nueva funcionalidad para el proyecto"
 title: "[BACKEND] - Título descriptivo"
-labels: "enhancement"
+labels: "enhancement", "Backend"
 assignees: ""
-type: "Feacture"
+type: "Feature"
 milestone: "Backend"
 ---
 
