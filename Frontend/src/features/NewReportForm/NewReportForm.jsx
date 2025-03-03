@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import useCategoryStore from '@/lib/store/useCategoryStore';
 import useReportsStore from '@/lib/store/useReportsStore';
 import ConfirmReport from './ConfirmReport';
+import { useUserAuth } from '@/lib/store/useUserAuth';
+
 
 import {
   Sheet,
@@ -37,6 +39,9 @@ const NewReportForm = () => {
   const [openConfirm, setOpenConfirm] = useState(false);  
   const [isConfirm, setIsConfirm] = useState(false);
   const {position, loading : loadingLocation} = useUserLocation();
+
+  const {user, loading : loadingUser } = useUserAuth();
+
   
   // Estado con el formato solicitado
   const [formData, setFormData] = useState({
@@ -193,7 +198,7 @@ const NewReportForm = () => {
         latitud: reportPreview.latitud || 0.1,
         longitud: reportPreview.longitud || 0.1,
         categoriaId: reportPreview.categoriaId || '',
-        usuarioId: reportPreview.usuarioId || 1
+        usuarioId: reportPreview.usuarioId || user.id 
       }
     });
     setPreviewImageFileName(reportPreview.urlImagen || '');
@@ -207,13 +212,23 @@ const NewReportForm = () => {
           longitud: position[1]
         }
       }));
+
+    if (!loadingUser){
+      setFormData(prev => ({
+        ...prev,
+        reporte: {
+          ...prev.reporte,
+          usuarioId: user.id
+        }
+      }));
+    }
       //console.log(`latitud: ${position[0]}, longitud: ${position[1]}`);
     }
-  }, [reportPreview, loadingLocation]);
+  }, [reportPreview, loadingLocation, loadingUser]);
 
   
  
-  //console.log(reports );
+  console.log(user );
 
   return (    
     <Sheet open={open} onOpenChange={setOpen}>
