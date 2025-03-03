@@ -90,15 +90,9 @@ const NewReportForm = () => {
 
   const handleClickBtnImg = e => {
     e.preventDefault();
-<<<<<<< HEAD
-    setFormData(prev => ({...prev, image: e.target.files[0]}));
-    //console.log('click on image load');
-  }
-=======
     setFormData(prev => ({ ...prev, image: e.target.files[0] }));
     console.log('click on image load');
   };
->>>>>>> 56d66391d301a4abad037d71e24c2cf8c2185fbb
 
   const handleClickBtnAudio = e => {
     setFormData(prev => ({ ...prev, audio: e.target.files[0] }));
