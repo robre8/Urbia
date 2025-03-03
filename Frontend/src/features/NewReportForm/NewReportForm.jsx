@@ -26,6 +26,7 @@ import ButtonAddNewReport from './ButtonAddNewReport';
 import { LuMic, LuCamera, LuSparkles, LuImagePlus  } from 'react-icons/lu';
 import noImageSvg from  "../../assets/svgs/no-image-svgrepo-com.svg";
 import deleteReport from '@/lib/api/reports/deleteReport';
+import { useUserLocation } from '@/components/mapview/hooks/useUserLocation';
 
 const NewReportForm = () => {
   const { categories, fetchCategories, loading, error } = useCategoryStore();
@@ -35,6 +36,7 @@ const NewReportForm = () => {
   const [isFormValid, setIsFormValid] = useState(false); 
   const [openConfirm, setOpenConfirm] = useState(false);  
   const [isConfirm, setIsConfirm] = useState(false);
+  const {position, loading : loadingLocation} = useUserLocation();
   
   // Estado con el formato solicitado
   const [formData, setFormData] = useState({
@@ -101,7 +103,7 @@ const NewReportForm = () => {
       if (!isConfirm) {
         formDataToSend.append("audio", formData.audio);
         formDataToSend.append("imagen", formData.imagen);
-        console.log('Se envia a sendReport.');
+        console.log('Se envia a sendReport.', formData);
         await sendReport(formDataToSend);        
         handleOpenConfirm();
       }
@@ -195,15 +197,22 @@ const NewReportForm = () => {
       }
     });
     setPreviewImageFileName(reportPreview.urlImagen || '');
-  }, [reportPreview]);
-  
+     // Si ya se cargó la posición, actualizamos solo latitud y longitud
+    if (!loadingLocation ) {
+      setFormData(prev => ({
+        ...prev,
+        reporte: {
+          ...prev.reporte,
+          latitud: position[0],
+          longitud: position[1]
+        }
+      }));
+      //console.log(`latitud: ${position[0]}, longitud: ${position[1]}`);
+    }
+  }, [reportPreview, loadingLocation]);
 
   
-  if (loading ) {
-    return(
-      <div>cargando...</div>
-    )
-  }
+ 
   //console.log(reports );
 
   return (    
