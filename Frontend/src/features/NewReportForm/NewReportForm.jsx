@@ -228,7 +228,7 @@ const NewReportForm = () => {
 
   
  
-  console.log(user );
+  //console.log(user );
 
   return (    
     <Sheet open={open} onOpenChange={setOpen}>
@@ -248,7 +248,7 @@ const NewReportForm = () => {
                 Reportar incidente
               </SheetTitle>
               <SheetDescription>
-                {/* Por favor, completa los siguientes campos para reportar un
+                {/* Por favor, completa los siguientes campos para reportar un  
                 incidente. */}
               </SheetDescription>
             </SheetHeader>
