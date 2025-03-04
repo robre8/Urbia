@@ -149,7 +149,7 @@ export default function MapView({ reports }) {
         </div>
       )}
 
-      <div className='absolute top-5 right-5 z-[9999] flex items-center gap-4'>
+      <div className='absolute top-5 right-5 z-[9999] hidden md:flex items-center gap-4 '>
         {/* ✅ Botón flotante de instalación de la PWA */}
         <InstallPWAButton />
         {user ? <UserMenu /> : <UserLogin />}

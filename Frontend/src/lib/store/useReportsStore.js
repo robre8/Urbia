@@ -12,9 +12,8 @@ const useReportsStore = create(
   devtools(
     persist(
       (set) => ({
-      (set) => ({
         reports: [],
-        reportPreview: {},
+        reportPreview: {}, //Reporte que obtengo apenas hago un POST reporte/combinado, tiene la descripcion de IA... se usa para mostrar el preview del reporte 
         loading: false,
         error: null,
 
@@ -22,6 +21,8 @@ const useReportsStore = create(
           set({ loading: true, error: null });
           try {
             const data = await getReports();
+
+            console.log('✅ Reports:', data);
             set({ reports: data, loading: false });
           } catch (err) {
             set({ error: err.message, loading: false });
@@ -32,14 +33,14 @@ const useReportsStore = create(
           localStorage.removeItem('reports-storage');
           set({ reports: [] });
           window.location.reload();
-        },
-
+        },    
+        
         clearReportPreview: () => {
           set({ reportPreview: {} });
-        },
+        },        
 
         sendReport: async (data) => {
-          set({ loading: true, error: null });
+          set({loading: true, error: null});
           try {
             const response = await postReport(data);
             //console.log('reportPreview', response.data);
@@ -48,9 +49,8 @@ const useReportsStore = create(
               set({ error: error.message, loading: false });
           }
         },
-
         editReport: async (data) => {
-          set({ loading: true, error: null });
+          set({loading: true, error: null});
           try {
             const response = await putReport(data);
             set({reportPreview: response.data, loading: false})
@@ -58,9 +58,8 @@ const useReportsStore = create(
               set({ error: error.message, loading: false });
           }
         },
-
         deleteReport: async (id) => {
-          set({ loading: true, error: null });
+          set({loading: true, error: null});
           try {
             const response = await deleteReport(id);
             set({loading: false});
@@ -78,6 +77,7 @@ const useReportsStore = create(
           return persisted;
         },
         partialize: state => ({
+          reports: state.reports,
           reportPreview: state.reportPreview,
           loading: state.loading,
           error: state.error

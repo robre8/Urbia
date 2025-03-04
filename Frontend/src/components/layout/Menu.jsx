@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
-import { Menu as MenuIcon } from "lucide-react"; // Importar ícono de Lucide
+import { Menu as MenuIcon } from "lucide-react";
 import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
 import FrogSalud from "../../assets/svgs/FrogSalud.svg";
 import FrogSocial from "../../assets/svgs/FrogSocial.svg";
 import useCategoryStore from "@/lib/store/useCategoryStore";
+import { useUserAuth } from "@/lib/store/useUserAuth";
+import UserMenu from "@/features/auth/MenuUser";
+import UserLogin from "@/features/auth/UserLogin";
 
 const categories = [
   { id: "infraestructura", label: "Infraestructura", icon: FrogInfra },
@@ -19,6 +29,7 @@ const categories = [
 function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { toggles, toggleCategory } = useCategoryStore();
+  const { user } = useUserAuth();
 
   return (
     <div>
@@ -30,7 +41,12 @@ function Menu() {
             <MenuIcon size={22} />
           </button>
         </SheetTrigger>
-        <SheetContent>
+
+        {/* 
+          Forcing the menu content to fill available height (h-full) and
+          using flex + flex-col allows us to place an element at the bottom.
+        */}
+        <SheetContent className="flex flex-col h-full">
           <SheetHeader>
             <SheetTitle>
               <div className="text-[26px] p-4 font-[900]">URBIA</div>
@@ -39,10 +55,20 @@ function Menu() {
             <SheetDescription>
               <section className="space-y-4 p-4">
                 {categories.map((category) => (
-                  <div key={category.id} className="flex items-center justify-between">
+                  <div
+                    key={category.id}
+                    className="flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-2">
-                      <img src={category.icon} alt={category.label} className="w-8 h-8" />
-                      <label htmlFor={category.id} className="text-[16px] font-medium">
+                      <img
+                        src={category.icon}
+                        alt={category.label}
+                        className="w-8 h-8"
+                      />
+                      <label
+                        htmlFor={category.id}
+                        className="text-[16px] font-medium"
+                      >
                         {category.label}
                       </label>
                     </div>
@@ -60,6 +86,14 @@ function Menu() {
               </section>
             </SheetDescription>
           </SheetHeader>
+
+          {/* 
+            Espacio flexible para que el contenido ocupe el espacio sobrante,
+            de modo que este contenedor quede abajo.
+          */}
+          <div className="mt-auto p-4 md:hidden">
+            {user ? <UserMenu /> : <UserLogin />}
+          </div>
         </SheetContent>
       </Sheet>
     </div>
@@ -67,4 +101,3 @@ function Menu() {
 }
 
 export default Menu;
-
