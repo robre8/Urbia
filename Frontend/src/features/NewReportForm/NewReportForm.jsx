@@ -77,7 +77,7 @@ const NewReportForm = () => {
         !formData.reporte.titulo || formData.reporte.titulo.length > 50,
       descripcion:
         !formData.reporte.descripcion ||
-        formData.reporte.descripcion.length > 200
+        formData.reporte.descripcion.length > 400
     };
     setErrors(newErrors);
     const isValid = !Object.values(newErrors).some((error) => error);
@@ -195,15 +195,15 @@ const NewReportForm = () => {
         id: parseInt(reportPreview.id) || '',  
         titulo: reportPreview.titulo || '',
         descripcion: reportPreview.descripcionDespuesDeIa || '',
-        latitud: reportPreview.latitud || 0.1,
-        longitud: reportPreview.longitud || 0.1,
+        latitud: reportPreview.latitud || -0.3460,
+        longitud: reportPreview.longitud ||-0.5838,
         categoriaId: reportPreview.categoriaId || '',
         usuarioId: reportPreview.usuarioId || user?.id 
       }
     });
     setPreviewImageFileName(reportPreview.urlImagen || '');
      // Si ya se cargó la posición, actualizamos solo latitud y longitud
-    if (!loadingLocation ) {
+    if (!loadingLocation && position ) {
       setFormData(prev => ({
         ...prev,
         reporte: {
@@ -228,15 +228,14 @@ const NewReportForm = () => {
 
   
  
-  console.log(user );
+  //console.log(user );
 
   return (    
     <Sheet open={open} onOpenChange={setOpen}>
 
       <ConfirmReport open={openConfirm} setOpen={setOpenConfirm} setOpenParent ={setOpen} setIsConfirm={setIsConfirm}/>
-      <SheetTrigger
-        disabled={!user}
-        className="fixed bottom-48 lg:bottom-40 right-7"
+      <SheetTrigger        
+        className={`fixed bottom-48 lg:bottom-40 right-7 ${(!user) ? 'hidden' : ''}`}
         onClick={() => setOpen(true)}
       >
         <ButtonAddNewReport />
@@ -248,7 +247,7 @@ const NewReportForm = () => {
                 Reportar incidente
               </SheetTitle>
               <SheetDescription>
-                {/* Por favor, completa los siguientes campos para reportar un
+                {/* Por favor, completa los siguientes campos para reportar un  
                 incidente. */}
               </SheetDescription>
             </SheetHeader>
@@ -409,12 +408,12 @@ const NewReportForm = () => {
                     )}
                     <span
                       className={`text-sm ml-auto ${
-                        charCount.descripcion > 200
+                        charCount.descripcion > 400
                           ? 'text-red-500'
                           : 'text-gray-500'
                       }`}
                     >
-                      {charCount.descripcion}/200
+                      {charCount.descripcion}/400
                     </span>
                   </div>
                   {
@@ -452,7 +451,7 @@ const NewReportForm = () => {
                 disabled={!isFormValid || loadingReport }
               >
                 {
-                (!reportPreview)
+                (!isConfirm)
                 ?(<><LuSparkles  className="h-5 w-fit"/><span>Generar reporte</span></>)
                 : <span>Guardar cambios</span>
                 }
@@ -473,3 +472,31 @@ const NewReportForm = () => {
 };
 
 export default NewReportForm;
+
+/*
+# Cambios:
+- Fix bugs position - seleccion de formulario - 
+- Cambios descripcion hasta 400 caracteres.
+- Se oculta el boton de Agregar Reporte cuando el usuario no esta logeado.
+# Observaciones:
+- No se actualiza el pin en el mapa... fetchReports() en mapView ??
+
+# Pruebas manuales hechas
+## No poner geolocalizacion: 
+- Aparece en la laguna de cachahua.
+- El formulario de reporte OK
+- reporte se envia y abre la preview,
+### Click en reportar
+- Se verifica en POST en el Backend.
+- Cierra el formulario.
+### Click en Volver
+- Vuelve a abrir el formulario con el resultado de IA y los demas campos
+- La descripcion de IA se carga en la descripcion.
+#### Click en Guardar Cambios
+- Se cierra el formulario
+- Envia los datos por PUT a /api/reporte/api
+- Se comprueba que se actualizan todos los campos en el EndPoint
+#### Click en Cancelar.
+- Se cierra el formulario.
+- Se comprueba que no se creo ningun reporte en el endpoint 
+*/
