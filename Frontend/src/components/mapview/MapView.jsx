@@ -44,7 +44,7 @@ const categoryMapping = {
 };
 
 export default function MapView({ reports }) {
-  const { center, position, accuracy, error, loading, geolocationStatus } =
+  const { center, position, error, loading, geolocationStatus } =
     useUserLocation([15.977, -97.696]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
@@ -139,15 +139,17 @@ export default function MapView({ reports }) {
         className='absolute bottom-10 lg:bottom-32 right-7 z-[9999]'
       />
 
-      <div className='hidden md:block overflow-hidden absolute top-5 left-20 z-[9999]'>
-        <AddressCard
-          address={address}
-          loadingAddress={loadingAddress}
-          addressError={addressError}
-        />
-      </div>
+      {position && (address || loadingAddress || addressError) && (
+        <div className='hidden md:block overflow-hidden absolute bottom-5 left-20 z-[9999]'>
+          <AddressCard
+            address={address}
+            loadingAddress={loadingAddress}
+            addressError={addressError}
+          />
+        </div>
+      )}
 
-      <div className='absolute top-5 right-5 z-[9999] flex items-center gap-4'>
+      <div className='absolute top-5 right-5 z-[9999] hidden md:flex items-center gap-4 '>
         {/* ✅ Botón flotante de instalación de la PWA */}
         <InstallPWAButton />
         {user ? <UserMenu /> : <UserLogin />}

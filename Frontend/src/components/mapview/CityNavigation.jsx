@@ -2,7 +2,7 @@
 
 import {  useState } from "react";
 import { useFilteredCities } from "./hooks/useFilteredCities";
-import { MapPin, Check, Search } from "lucide-react";
+import { MapPin, Check } from "lucide-react";
 import {
   Popover,
   PopoverTrigger,
@@ -40,20 +40,22 @@ export default function CityNavigation({ map }) {
   if (loading) return null;
 
   return (
-    <div className="absolute bottom-10 left-5 lg:bottom-10 lg:left-10 z-[9999]">
+    <div className="absolute top-5 left-20 lg:bottom-10 lg:left-20 z-[9999]">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="flex items-center  w-[218px] h-[48px] bg-[#9bee5e] text-black rounded-2xl  shadow-lg transition-all hover:bg-[#C8F79f] z-[9999]"
+            className="flex items-center gap-2  w-[188px] lg:w-[280px] h-[48px] bg-white text-black rounded-2xl  shadow-lg transition-all hover:bg-[#C8F79f] z-[9999]"
           >
-            <MapPin className="w-5 h-5" />
+            <MapPin className="w-4 h-4 lg:w-5 lg:h-5" />
+            <p className="text-[11px] lg:text-sm">
             {selectedCity || "Selecciona una ciudad"}
+            </p>
           </Button>
         </PopoverTrigger>
-        <PopoverContent side="bottom" align="center" className="w-[220px] p-0   z-[9999]">
+        <PopoverContent side="bottom" align="center" className="w-[188px] lg:w-[280px] p-0   z-[9999]">
           <Command>
             <CommandList className="max-h-[240px] overflow-y-auto">
               <CommandEmpty>No se encontró ninguna ciudad.</CommandEmpty>
@@ -61,7 +63,7 @@ export default function CityNavigation({ map }) {
               {/* Ciudades recomendadas - ahora en negrita */}
               {priorityCities.length > 0 && (
                 <CommandGroup>
-                  <div className="text-xs font-bold text-black">
+                  <div className="text-[10px] lg:text-sm font-bold text-black">
                     🌎 Ciudades recomendadas
                   </div>
                   {priorityCities.map((city) => (
