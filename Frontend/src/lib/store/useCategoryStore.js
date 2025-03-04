@@ -5,6 +5,12 @@ const useCategoryStore = create(set => ({
   categories: [],
   loading: false,
   error: null,
+  toggles: {
+    infraestructura: true,
+    seguridad: true,
+    salud: true,
+    eventosSociales: true,
+  },
 
   fetchCategories: async () => {
     console.log('🛠 Ejecutando fetchCategories en Zustand...');
@@ -17,7 +23,12 @@ const useCategoryStore = create(set => ({
       console.error('⚠️ Error en fetchCategories:', error);
       set({ error: error.message, loading: false });
     }
-  }
+  },
+
+  toggleCategory: (id) =>
+    set((state) => ({
+      toggles: { ...state.toggles, [id]: !state.toggles[id] },
+    })),
 }));
 
 export default useCategoryStore;
