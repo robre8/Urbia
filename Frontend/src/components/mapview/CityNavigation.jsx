@@ -2,7 +2,7 @@
 
 import {  useState } from "react";
 import { useFilteredCities } from "./hooks/useFilteredCities";
-import { MapPin, Check, Search } from "lucide-react";
+import { MapPin, Check } from "lucide-react";
 import {
   Popover,
   PopoverTrigger,
@@ -40,20 +40,20 @@ export default function CityNavigation({ map }) {
   if (loading) return null;
 
   return (
-    <div className="absolute bottom-10 left-5 lg:bottom-10 lg:left-10 z-[9999]">
+    <div className="absolute top-5 left-5 lg:bottom-10 lg:left-20 z-[9999]">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="flex items-center  w-[218px] h-[48px] bg-[#9bee5e] text-black rounded-2xl  shadow-lg transition-all hover:bg-[#C8F79f] z-[9999]"
+            className="flex items-center gap-2  w-[288px] h-[48px] bg-white text-black rounded-2xl  shadow-lg transition-all hover:bg-[#C8F79f] z-[9999]"
           >
             <MapPin className="w-5 h-5" />
             {selectedCity || "Selecciona una ciudad"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent side="bottom" align="center" className="w-[220px] p-0   z-[9999]">
+        <PopoverContent side="bottom" align="center" className="w-[280px] p-0   z-[9999]">
           <Command>
             <CommandList className="max-h-[240px] overflow-y-auto">
               <CommandEmpty>No se encontró ninguna ciudad.</CommandEmpty>
