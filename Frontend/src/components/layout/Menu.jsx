@@ -7,26 +7,18 @@ import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
 import FrogSalud from "../../assets/svgs/FrogSalud.svg";
 import FrogSocial from "../../assets/svgs/FrogSocial.svg";
+import useCategoryStore from "@/lib/store/useCategoryStore";
 
 const categories = [
   { id: "infraestructura", label: "Infraestructura", icon: FrogInfra },
   { id: "seguridad", label: "Seguridad", icon: FrogPoli },
   { id: "salud", label: "Salud", icon: FrogSalud },
-  { id: "eventos-soc", label: "Eventos Sociales", icon: FrogSocial },
+  { id: "eventosSociales", label: "Eventos Sociales", icon: FrogSocial },
 ];
 
 function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [switchStates, setSwitchStates] = useState(
-    categories.reduce((acc, category) => ({ ...acc, [category.id]: true }), {})
-  );
-
-  const handleToggle = (id) => {
-    setSwitchStates((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+  const { toggles, toggleCategory } = useCategoryStore();
 
   return (
     <div>
@@ -56,8 +48,8 @@ function Menu() {
                     </div>
                     <Switch
                       id={category.id}
-                      checked={switchStates[category.id]}
-                      onCheckedChange={() => handleToggle(category.id)}
+                      checked={toggles[category.id]}
+                      onCheckedChange={() => toggleCategory(category.id)}
                     />
                   </div>
                 ))}

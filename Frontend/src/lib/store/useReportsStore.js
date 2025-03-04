@@ -11,7 +11,7 @@ const STORAGE_VERSION = 2;
 const useReportsStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         reports: [],
         reportPreview: {}, //Reporte que obtengo apenas hago un POST reporte/combinado, tiene la descripcion de IA... se usa para mostrar el preview del reporte 
         loading: false,
@@ -46,7 +46,7 @@ const useReportsStore = create(
             //console.log('reportPreview', response.data);
             set({reportPreview: response.data, loading: false})
           } catch (error) {
-              set({ error: err.message, loading: false });
+              set({ error: error.message, loading: false });
           }
         },
         editReport: async (data) => {
@@ -55,7 +55,7 @@ const useReportsStore = create(
             const response = await putReport(data);
             set({reportPreview: response.data, loading: false})
           } catch (error) {
-              set({ error: err.message, loading: false });
+              set({ error: error.message, loading: false });
           }
         },
         deleteReport: async (id) => {
@@ -64,7 +64,7 @@ const useReportsStore = create(
             const response = await deleteReport(id);
             set({loading: false});
           } catch (error) {
-              set({ error: err.message, loading: false });
+              set({ error: error.message, loading: false });
           }
         }
       }),

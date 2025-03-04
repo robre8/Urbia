@@ -27,6 +27,7 @@ import CitySelectionDialog from './CitySelectionDialog';
 import { useCities } from './hooks/useCities';
 import { getGeolocationErrorMessage } from '@/lib/utils/errorMessages';
 import InstallPWAButton from './AddPWAButton';
+import useCategoryStore from '@/lib/store/useCategoryStore';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -34,6 +35,13 @@ const wazeIcon = L.icon({
   iconAnchor: [20, 20],
   popupAnchor: [0, -20]
 });
+
+const categoryMapping = {
+  1: 'infraestructura',
+  2: 'seguridad',
+  3: 'salud',
+  4: 'eventosSociales'
+};
 
 export default function MapView({ reports }) {
   const { center, position, accuracy, error, loading, geolocationStatus } =
@@ -50,6 +58,8 @@ export default function MapView({ reports }) {
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);
+
+  const { toggles } = useCategoryStore();
 
   useEffect(() => {
     if (
@@ -114,10 +124,11 @@ export default function MapView({ reports }) {
         )}
 
 {reports.map((report, id) => {
-  if (!report.latitud || !report.longitud) return null;
-  return <ReportMarker key={id} report={report} />;
-})}
-
+          const catKey = categoryMapping[report.categoriaId];
+          if (!toggles[catKey]) return null;
+          if (!report.latitud || !report.longitud) return null;
+          return <ReportMarker key={id} report={report} />;
+        })}
 
       </MapContainer>
 
