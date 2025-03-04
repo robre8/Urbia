@@ -391,7 +391,7 @@ const NewReportForm = () => {
                   <Textarea  disabled={loadingReport}
                     id="descripcion"
                     value={formData.reporte.descripcion}
-                    maxLength="200"
+                    maxLength="400"
                     onChange={(e) =>
                       handleInputChange('descripcion', e.target.value)
                     }
@@ -403,7 +403,7 @@ const NewReportForm = () => {
                   <div className="flex justify-between mt-2">
                     {errors.descripcion && (
                       <span className="text-red-500 text-sm">
-                        Máximo 200 caracteres
+                        Máximo 400 caracteres
                       </span>
                     )}
                     <span
