@@ -9,6 +9,8 @@ import com.nocountry.urbia.repository.ReporteRepository;
 import com.nocountry.urbia.repository.UsuariosRepository;
 import com.nocountry.urbia.service.integration.GeminiService;
 import com.nocountry.urbia.service.integration.S3Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class ReporteService {
 
     @Autowired
     private S3Service s3Service;  // Para la carga de imágenes
+
+    private static final Logger logger = LoggerFactory.getLogger(ReporteService.class);
 
     // Crear reporte y analizar con IA
     public ResponseEntity<ReporteDTO> getReportesIA(MultipartFile audio, MultipartFile imagen, ReporteDTO reporteDTO) {
@@ -189,4 +193,16 @@ public class ReporteService {
         dto.setUsuarioId(reporte.getUsuario().getId());
         return dto;
     }
+
+    public void eliminarTodosLosReportes() {
+        long totalReportes = reporteRepository.count();
+        if (totalReportes > 0) {
+            reporteRepository.deleteAll();
+            logger.info("Se eliminaron {} reportes.", totalReportes);
+        } else {
+            logger.warn("No hay reportes para eliminar.");
+        }
+    }
+
+
 }

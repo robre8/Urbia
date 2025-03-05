@@ -42,18 +42,34 @@ public class ReporteControllerFinal {
     }
 
     // Endpoint para actualizar un reporte
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<ReporteDTO> actualizarReporte(@PathVariable Long id, @RequestBody ReporteDTO reporteDTO) {
         ReporteDTO actualizado = reporteService.actualizarReporte(id, reporteDTO);
         return ResponseEntity.ok(actualizado);
     }
 
+    // Endpoint para eliminar todos los reportes
+    @DeleteMapping("/eliminar-reportes")
+    public ResponseEntity<String> eliminarTodosLosReportes() {
+        try {
+            reporteService.eliminarTodosLosReportes();
+            return ResponseEntity.ok("Todos los reportes han sido eliminados.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Hubo un error al eliminar los reportes: " + e.getMessage());
+        }
+    }
+
+
+
     // Endpoint para eliminar un reporte
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> eliminarReporte(@PathVariable Long id) {
         reporteService.eliminarReporte(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
     // Endpoint para obtener reportes por usuarioId
     @GetMapping("/usuario/{usuarioId}")
