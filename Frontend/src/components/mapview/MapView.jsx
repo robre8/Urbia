@@ -29,6 +29,7 @@ import InstallPWAButton from './AddPWAButton';
 import useCategoryStore from '@/lib/store/useCategoryStore';
 import useMapStore from '@/lib/store/useMapStore';
 import MapClickHandler from './hooks/useMapClick';
+import ReportView from '@/features/reports/ReportView';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -62,6 +63,10 @@ export default function MapView({ reports }) {
   const { selectedCoords, loadStoredCoords } = useMapStore();
   const { toggles } = useCategoryStore();
 
+  const [selectedReport, setSelectedReport] = useState(null); // Estado para manejar el reporte seleccionado
+
+  console.log('reportes', reports);
+
   useEffect(() => {
     loadStoredCoords(); // Cargar coordenadas almacenadas en localStorage al iniciar
   }, [loadStoredCoords]);
@@ -89,8 +94,6 @@ export default function MapView({ reports }) {
 
   const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
 
-/*   useMapClick(); */
-
   return (
     <div className="relative w-full h-screen">
       <MapContainer
@@ -112,7 +115,6 @@ export default function MapView({ reports }) {
         <ZoomControl position="bottomright" />
         <Recenter center={center} zoom={defaultZoom} />
         <MapClickHandler />
-
 
         {!error && position && (
           <>
@@ -139,7 +141,13 @@ export default function MapView({ reports }) {
           const catKey = categoryMapping[report.categoriaId];
           if (!toggles[catKey]) return null;
           if (!report.latitud || !report.longitud) return null;
-          return <ReportMarker key={id} report={report} />;
+          return (
+            <ReportMarker 
+              key={id} 
+              report={report} 
+              onClick={() => setSelectedReport(report)} // Al hacer click en el marcador, guarda el reporte en el estado
+            />
+          );
         })}
       </MapContainer>
 
@@ -181,6 +189,11 @@ export default function MapView({ reports }) {
       )}
 
       <CityNavigation map={map} />
+
+      {/* Sheet para mostrar detalles del reporte al hacer click en un marcador */}
+      {selectedReport && (
+        <ReportView report={selectedReport} onClose={() => setSelectedReport(null)} />
+      )}
     </div>
   );
 }
