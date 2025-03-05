@@ -7,7 +7,7 @@ export function getGeolocationErrorMessage(geolocationStatus, error) {
       geolocationStatus === "ip_error_default" ||
       geolocationStatus === "timeout_default"
     ) {
-      return "No se pudo obtener tu ubicación precisa. Mostrando ubicación aproximada o elige una ciudad.";
+      return "Ay! No pudimos encontrar tu ubicación. Habilítala en el navegador o elige una ciudad para continuar."; //este cambiar
     } else if (geolocationStatus === "unsupported") {
       return "Tu navegador no soporta geolocalización. Usando ubicación por defecto o elige una ciudad.";
     } else if (error) {

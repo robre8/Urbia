@@ -22,12 +22,13 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-// Componente de error integrado en el modal
+// Componente de error integrado en el modal 
+// parte verde
 function ErrorMessage({ message, imageSrc }) {
   return (
-    <div className='flex flex-col items-center bg-green-100 text-green-900 p-3 rounded-md shadow-md mb-4'>
+    <div className='flex flex-col items-center p-3 rounded-md '>
       {imageSrc && <img src={imageSrc} alt='Error' className='mb-2 h-16' />}
-      <p className='text-center text-sm font-medium'>{message}</p>
+      <p className='px-6 text-center text-[20x] font-medium'>{message}</p>
     </div>
   );
 }
@@ -78,10 +79,10 @@ export default function CitySelectionDialog({
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             <Button
-              variant='outline'
+              variant='white'
               role='combobox'
               aria-expanded={popoverOpen}
-              className='flex items-center gap-2 w-full bg-gray-100 text-black rounded-lg px-4 py-3 shadow-md transition-all hover:bg-gray-200 focus:ring-2 focus:ring-gray-400'
+              className='h-[48px] flex items-center gap-2 w-full bg-white text-black rounded-[16px] px-4 py-4 shadow-md'
             >
               <MapPin className='w-5 h-5' />
               {selectedCity || 'Elige una ciudad'}
@@ -163,7 +164,7 @@ export default function CitySelectionDialog({
           </PopoverContent>
         </Popover>
 
-        <Button variant='outline' onClick={onClose} className='mt-4'>
+        <Button onClick={onClose} className='h-[48px] bg-[#222222] rounded-[16px]'>
           Cerrar
         </Button>
       </DialogContent>
