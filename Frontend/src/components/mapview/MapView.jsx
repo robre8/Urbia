@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   MapContainer,
   TileLayer,
   ZoomControl,
   Marker,
-  Popup,
   Circle
 } from 'react-leaflet';
 import L from 'leaflet';
@@ -28,6 +27,8 @@ import { useCities } from './hooks/useCities';
 import { getGeolocationErrorMessage } from '@/lib/utils/errorMessages';
 import InstallPWAButton from './AddPWAButton';
 import useCategoryStore from '@/lib/store/useCategoryStore';
+import useMapStore from '@/lib/store/useMapStore';
+import MapClickHandler from './hooks/useMapClick';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -57,8 +58,13 @@ export default function MapView({ reports }) {
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);
-
+  
+  const { selectedCoords, loadStoredCoords } = useMapStore();
   const { toggles } = useCategoryStore();
+
+  useEffect(() => {
+    loadStoredCoords(); // Cargar coordenadas almacenadas en localStorage al iniciar
+  }, [loadStoredCoords]);
 
   useEffect(() => {
     if (
@@ -83,32 +89,34 @@ export default function MapView({ reports }) {
 
   const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
 
+/*   useMapClick(); */
+
   return (
-    <div className='relative w-full h-screen'>
+    <div className="relative w-full h-screen">
       <MapContainer
         center={center}
         zoom={defaultZoom}
-        className='w-full h-full'
+        className="w-full h-full"
         zoomControl={false}
-        whenReady={event => {
+        whenReady={(event) => {
           setMap(event.target);
         }}
         minZoom={4}
       >
         <TileLayer
-          url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-          attribution='© OpenStreetMap contributors © CARTO'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution="© OpenStreetMap contributors © CARTO"
           maxZoom={20}
         />
 
-        <ZoomControl position='bottomright' />
+        <ZoomControl position="bottomright" />
         <Recenter center={center} zoom={defaultZoom} />
+        <MapClickHandler />
+
 
         {!error && position && (
           <>
-            <Marker position={position} icon={wazeIcon}>
-              <Popup>Tú estás aquí</Popup>
-            </Marker>
+            <Marker position={position} icon={wazeIcon} />
             <Circle
               center={position}
               radius={80}
@@ -122,24 +130,28 @@ export default function MapView({ reports }) {
           </>
         )}
 
-{reports.map((report, id) => {
+        {/* Muestra el marcador donde el usuario hizo click */}
+        {selectedCoords && (
+          <Marker position={selectedCoords} />
+        )}
+
+        {reports.map((report, id) => {
           const catKey = categoryMapping[report.categoriaId];
           if (!toggles[catKey]) return null;
           if (!report.latitud || !report.longitud) return null;
           return <ReportMarker key={id} report={report} />;
         })}
-
       </MapContainer>
 
       <MyLocationButton
         map={map}
         position={position}
         defaultZoom={defaultZoom}
-        className='absolute bottom-10 lg:bottom-32 right-7 z-[9999]'
+        className="absolute bottom-10 lg:bottom-32 right-7 z-[9999]"
       />
 
       {position && (address || loadingAddress || addressError) && (
-        <div className='hidden md:block overflow-hidden absolute bottom-5 left-20 z-[9999]'>
+        <div className="hidden md:block overflow-hidden absolute bottom-5 left-20 z-[9999]">
           <AddressCard
             address={address}
             loadingAddress={loadingAddress}
@@ -148,16 +160,13 @@ export default function MapView({ reports }) {
         </div>
       )}
 
-      <div className='absolute top-5 right-5 z-[9999] flex items-center gap-4 '>
-        {/* ✅ Botón flotante de instalación de la PWA */}
+      <div className="absolute top-5 right-5 z-[9999] flex items-center gap-4">
         <InstallPWAButton />
-        <div className=' hidden lg:flex'>
-
-        {user ? <UserMenu /> : <UserLogin />}
+        <div className="hidden lg:flex">
+          {user ? <UserMenu /> : <UserLogin />}
         </div>
       </div>
 
-      {/* Modal de selección de ciudad */}
       {modalOpen && (
         <CitySelectionDialog
           open={modalOpen}
@@ -165,7 +174,7 @@ export default function MapView({ reports }) {
           cities={cities}
           map={map}
           onCitySelect={handleCitySelect}
-          message=''
+          message=""
           errorMessage={errorMessage}
           errorImage={sadFrog}
         />
