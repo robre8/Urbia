@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger
@@ -64,9 +63,7 @@ function Menu() {
               <div className="text-[26px] p-4 font-[900]">URBIA</div>
             </SheetTitle>
             <hr className="w-full" />
-            <SheetDescription>
-              Selecciona las categorías y revisa tus reportes
-            </SheetDescription>
+
           </SheetHeader>
 
           <div className="p-4 space-y-4 overflow-y-auto">
@@ -80,7 +77,7 @@ function Menu() {
                     <img
                       src={category.icon}
                       alt={category.label}
-                      className="w-8 h-8"
+                      className="w-10 h-10"
                     />
                     <label
                       htmlFor={category.id}

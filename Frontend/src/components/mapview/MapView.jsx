@@ -54,7 +54,6 @@ export default function MapView({ reports }) {
     loadingAddress,
     error: addressError
   } = useReverseGeocode(position);
-
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);

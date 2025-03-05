@@ -8,9 +8,8 @@ function HomePage() {
 
   useEffect(() => {
     // Al montar el componente, buscamos los reports
-    if (reports.length === 0) {
+
       fetchReports();
-    }
   }, [fetchReports]);
 
   return (
