@@ -79,7 +79,7 @@ _Crear una red de ciudadanos informados y conectados, promoviendo seguridad y ac
 - **Base URL**: `https://urbia-back.onrender.com/swagger-ui/index.html`
 
 ## 🤵‍♂️ Canales de comunicación del equipo
-[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com)
+[![Discord](https://img.shields.io/badge/Discord-Comunication-5865F2?logo=discord)](https://discord.com/)
 
 
 ## 🛠 Instalación y Configuración
@@ -114,13 +114,6 @@ mvn spring-boot:run
 |:-:|
 | **Sara Elizabeth Alcántara** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
-
-### 👷‍♂️ Technical Leader 
-
-| ![Avatar](https://avatars.githubusercontent.com/u/135073545?s=96&v=4) |
-|:-:|
-| **Alejandro Luna** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/AlejandroLunaDev) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
 
 ### 🎨 UX/UI
 
