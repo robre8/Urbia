@@ -1,4 +1,5 @@
-import { useState } from "react";
+// Menu.jsx
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -10,12 +11,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
 import { Menu as MenuIcon } from "lucide-react";
+import useReportsStore from "@/lib/store/useReportsStore";
+import { useUserAuth } from "@/lib/store/useUserAuth";
 import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
 import FrogSalud from "../../assets/svgs/FrogSalud.svg";
 import FrogSocial from "../../assets/svgs/FrogSocial.svg";
 import useCategoryStore from "@/lib/store/useCategoryStore";
-import { useUserAuth } from "@/lib/store/useUserAuth";
 import UserMenu from "@/features/auth/MenuUser";
 import UserLogin from "@/features/auth/UserLogin";
 
@@ -30,6 +32,21 @@ function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { toggles, toggleCategory } = useCategoryStore();
   const { user } = useUserAuth();
+  const {
+    fetchReportsByUserId,
+    reportsByUserId,
+    loading,
+    error,
+    deleteReport
+  } = useReportsStore();
+
+  const userId = user?.id || 1;
+
+  useEffect(() => {
+    if (isSheetOpen) {
+      fetchReportsByUserId(userId);
+    }
+  }, [isSheetOpen, userId, fetchReportsByUserId]);
 
   return (
     <div>
@@ -41,11 +58,6 @@ function Menu() {
             <MenuIcon size={22} />
           </button>
         </SheetTrigger>
-
-        {/* 
-          Forcing the menu content to fill available height (h-full) and
-          using flex + flex-col allows us to place an element at the bottom.
-        */}
         <SheetContent className="flex flex-col h-full">
           <SheetHeader>
             <SheetTitle>
@@ -53,44 +65,52 @@ function Menu() {
             </SheetTitle>
             <hr className="w-full" />
             <SheetDescription>
-              <section className="space-y-4 p-4">
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={category.icon}
-                        alt={category.label}
-                        className="w-8 h-8"
-                      />
-                      <label
-                        htmlFor={category.id}
-                        className="text-[16px] font-medium"
-                      >
-                        {category.label}
-                      </label>
-                    </div>
-                    <Switch
-                      id={category.id}
-                      checked={toggles[category.id]}
-                      onCheckedChange={() => toggleCategory(category.id)}
-                    />
-                  </div>
-                ))}
-              </section>
-              <hr />
-              <section>
-                <MyReports closeDrawer={() => setIsSheetOpen(false)} />
-              </section>
+              Selecciona las categorías y revisa tus reportes
             </SheetDescription>
           </SheetHeader>
 
-          {/* 
-            Espacio flexible para que el contenido ocupe el espacio sobrante,
-            de modo que este contenedor quede abajo.
-          */}
+          <div className="p-4 space-y-4 overflow-y-auto">
+            <section className="space-y-4">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={category.icon}
+                      alt={category.label}
+                      className="w-8 h-8"
+                    />
+                    <label
+                      htmlFor={category.id}
+                      className="text-[16px] font-medium"
+                    >
+                      {category.label}
+                    </label>
+                  </div>
+                  <Switch
+                    id={category.id}
+                    checked={toggles[category.id]}
+                    onCheckedChange={() => toggleCategory(category.id)}
+                  />
+                </div>
+              ))}
+            </section>
+
+            <hr />
+
+            <section>
+              <MyReports
+                closeDrawer={() => setIsSheetOpen(false)}
+                reports={reportsByUserId}
+                deleteReport={deleteReport}
+                loading={loading}
+                error={error}
+              />
+            </section>
+          </div>
+
           <div className="mt-auto p-4 md:hidden">
             {user ? <UserMenu /> : <UserLogin />}
           </div>
