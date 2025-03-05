@@ -117,7 +117,7 @@ mvn spring-boot:run
 
 ### 🎨 UX/UI
 
-| ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) |
+| <img src="https://github.com/user-attachments/assets/9f570c89-25e0-4a78-a8a6-4465a9634948" width="100" height="100" /> | 
 |:-:|
 | **Santiago Garcia** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/santigarciaa) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
@@ -131,7 +131,7 @@ mvn spring-boot:run
 
 ### 💻 Backend 
 
-| ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) | ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) |
+| <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> | <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> | 
 |:-:|:-:|
 | **Alberto Gutierrez** | **Ronny Brenes** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/Albert0GR) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/robre8) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
@@ -143,7 +143,7 @@ mvn spring-boot:run
 | **Sara Elizabeth Alcántara** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
 
-## Resumen de Autores ✒️
+## ✒️ Resumen de Autores 
 
 * **Cesar Hernán Ruscica** - *Frontend Developer* - [hernanruscica](https://github.com/hernanruscica)
 * **Alejandro Luna** - *Frontend Developer* - [AlejandroLunaDev](https://github.com/AlejandroLunaDev)
