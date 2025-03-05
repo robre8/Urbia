@@ -110,7 +110,7 @@ mvn spring-boot:run
 
 ### 👷‍♂️ Project Manager 
 
-| ![Avatar](https://avatars.githubusercontent.com/u/107267047?s=96&v=4 'Project Manager') |
+| <img src="https://github.com/user-attachments/assets/17482a9c-bb6c-4e20-8d28-141ef5dae1f3" width="100" height="100" /> | 
 |:-:|
 | **Sara Elizabeth Alcántara** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
@@ -138,7 +138,7 @@ mvn spring-boot:run
 
 ### 🧪 QA Manual 
 
-| ![Avatar](https://avatars.githubusercontent.com/u/107267047?s=96&v=4) |
+| <img src="https://github.com/user-attachments/assets/17482a9c-bb6c-4e20-8d28-141ef5dae1f3" width="100" height="100" /> |
 |:-:|
 | **Sara Elizabeth Alcántara** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
