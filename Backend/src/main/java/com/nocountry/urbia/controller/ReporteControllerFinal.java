@@ -60,8 +60,6 @@ public class ReporteControllerFinal {
         }
     }
 
-
-
     // Endpoint para eliminar un reporte
     @DeleteMapping("id/{id}")
     public ResponseEntity<Void> eliminarReporte(@PathVariable Long id) {
