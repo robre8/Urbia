@@ -54,7 +54,7 @@ export default function MapView() {
   const { toggles } = useCategoryStore();
 
   const { center, position, error, loading, geolocationStatus } =
-    useUserLocation([15.977, -97.696]);
+    useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 

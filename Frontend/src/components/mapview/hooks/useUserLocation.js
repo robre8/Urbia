@@ -45,20 +45,6 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
       } catch (ipinfoErr) {
         console.warn("Error con ipinfo.io:", ipinfoErr);
         ipError = ipinfoErr;
-        // REMOVED ip-api.com fallback
-        // try {
-        //   const ipapiRes = await fetch(`http://ip-api.com/json?key=${IPAPI_API_KEY}`);
-        //   const ipapiData = await ipapiRes.json();
-        //   if (ipapiData.status === 'success' && ipapiData.lat && ipapiData.lon) {
-        //     ipLocationData = { loc: `${ipapiData.lat},${ipapiData.lon}` };
-        //     ipError = null;
-        //   } else {
-        //     throw new Error(`Error from ip-api.com: ${ipapiData.message || 'Unknown error'}`);
-        //   }
-        // } catch (ipapiErr) {
-        //   console.error("Error con ip-api.com:", ipapiErr);
-        //   ipError = ipapiErr;
-        // }
       }
 
       if (isMounted && loading) {
