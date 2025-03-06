@@ -113,7 +113,7 @@ console.log(report);
         /*             attribution="© OpenStreetMap contributors © CARTO" */
                     maxZoom={20}
                   />
-                  <ReportMarker reports={[currentReport]} />
+                  <ReportMarker reports={[currentReport]} size={[30, 30]} />
                 </MapContainer>
               </div>
             )}
