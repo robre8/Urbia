@@ -100,6 +100,7 @@ public class ReporteService {
         Reporte reporte = new Reporte();
         reporte.setUrlAudio(reporteDTO.getUrlAudio());
         reporte.setUrlImagen(reporteDTO.getUrlImagen());
+        reporte.setUrlVideo(reporteDTO.getUrlVideo());
         reporte.setTitulo(reporteDTO.getTitulo());
         reporte.setDescripcion(reporteDTO.getDescripcion());
         // Se asigna la fecha y hora actuales
@@ -184,6 +185,7 @@ public class ReporteService {
         dto.setId(reporte.getId());
         dto.setUrlAudio(reporte.getUrlAudio());
         dto.setUrlImagen(reporte.getUrlImagen());
+        dto.setUrlVideo(reporte.getUrlVideo());
         dto.setTitulo(reporte.getTitulo());
         dto.setDescripcion(reporte.getDescripcion());
         dto.setDescripcionDespuesDeIa(reporte.getDescripcionDespuesDeIa());

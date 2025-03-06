@@ -19,6 +19,10 @@ public class Reporte {
     @Column(name = "url_audio")
     private String urlAudio;
 
+    // URL del  audio
+    @Column(name = "url_video")
+    private String urlVideo;
+
     // Titulo del incidente
     @Column(length = 500)
     private String titulo;
@@ -75,6 +79,14 @@ public class Reporte {
 
     public void setUrlImagen(String urlImagen) {
         this.urlImagen = urlImagen;
+    }
+
+    public String getUrlVideo() {
+        return urlVideo;
+    }
+
+    public void setUrlVideo(String urlVideo) {
+        this.urlVideo = urlVideo;
     }
 
     public String getTitulo() {

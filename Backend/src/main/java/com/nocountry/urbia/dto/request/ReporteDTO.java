@@ -15,6 +15,7 @@ public class ReporteDTO {
     private Long id;
     private String urlAudio;
     private String urlImagen;
+    private String urlVideo;
     private String titulo;
     private String descripcion;
     private String descripcionDespuesDeIa;  // Nuevo campo para la descripción mejorada por IA
