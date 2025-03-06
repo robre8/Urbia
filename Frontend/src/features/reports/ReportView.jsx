@@ -122,7 +122,7 @@ console.log(report);
 
         <div className="mt-2 px-4 flex items-center justify-between text-gray-500 text-sm">
           <UrbiaLikes />
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-1">
             <User className="w-4 h-4" />
             <span>{currentReport.nombreUsuario}</span>
           </div>
