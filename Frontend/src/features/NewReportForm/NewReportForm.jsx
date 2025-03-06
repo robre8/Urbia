@@ -191,14 +191,14 @@ const NewReportForm = () => {
     setFormData({
       audio: '',
       imagen: '',
-      reporte: {        
-        id: parseInt(reportPreview.id) || '',  
+      reporte: {
+        id: parseInt(reportPreview.id) || '',
         titulo: reportPreview.titulo || '',
         descripcion: reportPreview.descripcionDespuesDeIa || '',
         latitud: reportPreview.latitud || -0.3460,
         longitud: reportPreview.longitud ||-0.5838,
         categoriaId: reportPreview.categoriaId || '',
-        usuarioId: reportPreview.usuarioId || user?.id 
+        usuarioId: reportPreview.usuarioId || user?.id
       }
     });
     setPreviewImageFileName(reportPreview.urlImagen || '');
@@ -212,19 +212,18 @@ const NewReportForm = () => {
           longitud: position[1]
         }
       }));
-
-    if (!loadingUser){
+    }
+    if (!loadingUser) {
       setFormData(prev => ({
         ...prev,
         reporte: {
           ...prev.reporte,
-          usuarioId: user?.id 
+          usuarioId: user?.id
         }
       }));
     }
-      //console.log(`latitud: ${position[0]}, longitud: ${position[1]}`);
-    }
-  }, [reportPreview, loadingLocation, loadingUser]);
+  }, [reportPreview, loadingLocation, loadingUser, position, user]);
+  
 
   
  

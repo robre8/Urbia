@@ -1,18 +1,13 @@
-import api from "../axios";
+import api from '../axios';
 
+const deleteReport = async id => {
+  const response = await api.delete(`/api/reporte/id/${id}`);
+  console.log(response);
+  if (response.status >= 200 && response.status < 300) {
+    return { message: 'OK' };
+  } else {
+    return { message: 'ERROR', response };
+  }
+};
 
-const deleteReport = async (id) => {
-    try {
-        const response = await api.delete(`/api/reporte/${id}`);
-        console.log(response);
-        if (response.status == 200) {
-            return { message: "OK" };
-          } else {
-            return { message: "ERROR", response: response };
-          }
-    } catch (error) {
-        throw(error);
-    }  
-}
-
-export default deleteReport
+export default deleteReport;
