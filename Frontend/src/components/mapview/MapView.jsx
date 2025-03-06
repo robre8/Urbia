@@ -4,7 +4,6 @@ import {
   TileLayer,
   ZoomControl,
   Marker,
-  Circle
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -34,10 +33,11 @@ import userIcon from "/frogIco.png";
 import sadFrog from "@/assets/frogError.png";
 
 import "./style/MapView.css";
+import { AnimatedCircle } from "./AnimatedCircle";
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
-  iconSize: [40, 40],
+  iconSize: [30, 30],
   iconAnchor: [20, 20],
   popupAnchor: [0, -20]
 });
@@ -54,7 +54,7 @@ export default function MapView() {
   const { toggles } = useCategoryStore();
 
   const { center, position, error, loading, geolocationStatus } =
-    useUserLocation([15.977, -97.696]);
+    useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 
@@ -117,21 +117,24 @@ export default function MapView() {
         <MapClickHandler />
 
         {/* Marcador ubicación del usuario */}
-        {!error && position && (
-          <>
-            <Marker position={position} icon={wazeIcon} />
-            <Circle
-              center={position}
-              radius={80}
-              pathOptions={{
-                color: "blue",
-                fillColor: "blue",
-                fillOpacity: 0.2,
-                stroke: false
-              }}
-            />
-          </>
-        )}
+
+{!error && position && (
+  <>
+    <Marker position={position} icon={wazeIcon} />
+    <AnimatedCircle
+      center={position}
+      initialRadius={80}
+      maxRadius={120}
+      duration={2000} // Duración en milisegundos del ciclo de expansión
+      pathOptions={{
+        color: "blue",
+        fillColor: "blue",
+        stroke: false
+      }}
+    />
+  </>
+)}
+
 
         {/* Marcador de click en el mapa */}
         {selectedCoords && <Marker position={selectedCoords} />}
