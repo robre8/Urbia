@@ -24,5 +24,6 @@ public class ReporteDTO {
     private Double longitud;
     private Long categoriaId;
     private Long usuarioId;
+    private String nombreUsuario;
 
 }

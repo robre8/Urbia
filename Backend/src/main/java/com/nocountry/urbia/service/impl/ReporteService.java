@@ -194,6 +194,7 @@ public class ReporteService {
         dto.setLongitud(reporte.getLongitud());
         dto.setCategoriaId(reporte.getCategoria().getId());
         dto.setUsuarioId(reporte.getUsuario().getId());
+        dto.setNombreUsuario(reporte.getUsuario().getNombre());
         return dto;
     }
 
