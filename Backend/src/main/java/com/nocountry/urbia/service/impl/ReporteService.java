@@ -82,14 +82,15 @@ public class ReporteService {
             }
         }
 
-        // Actualizar la descripción con los detalles obtenidos por IA
-        String descripcionActual = reporteDTO.getDescripcion();
-        reporteDTO.setDescripcion(descripcionActual + "\nDetalles IA: " + detallesArchivo);
+        // Combinar título y descripción, incluyendo los detalles de IA
+        String descripcionConTitulo = "Título: " + reporteDTO.getTitulo() + "\nDescripción: " + reporteDTO.getDescripcion();
+        reporteDTO.setDescripcion(descripcionConTitulo + "\nDetalles IA: " + detallesArchivo);
 
         // Crear el reporte
         ReporteDTO nuevoReporte = crearReporte(reporteDTO);
         return new ResponseEntity<>(nuevoReporte, HttpStatus.CREATED);
     }
+
 
 
 
