@@ -1,4 +1,3 @@
-// Menu.jsx
 import { useEffect, useState } from "react";
 import {
   Sheet,
@@ -9,16 +8,18 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
+import ReportView from "@/features/reports/ReportView"; // ✅ Importamos el ReportView
 import { Menu as MenuIcon } from "lucide-react";
 import useReportsStore from "@/lib/store/useReportsStore";
 import { useUserAuth } from "@/lib/store/useUserAuth";
+import useCategoryStore from "@/lib/store/useCategoryStore";
+import UserMenu from "@/features/auth/MenuUser";
+import UserLogin from "@/features/auth/UserLogin";
+
 import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
 import FrogSalud from "../../assets/svgs/FrogSalud.svg";
 import FrogSocial from "../../assets/svgs/FrogSocial.svg";
-import useCategoryStore from "@/lib/store/useCategoryStore";
-import UserMenu from "@/features/auth/MenuUser";
-import UserLogin from "@/features/auth/UserLogin";
 
 const categories = [
   { id: "infraestructura", label: "Infraestructura", icon: FrogInfra },
@@ -29,31 +30,22 @@ const categories = [
 
 function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
   const { toggles, toggleCategory } = useCategoryStore();
   const { user } = useUserAuth();
-  const {
-    fetchReportsByUserId,
-    reportsByUserId,
-    loading,
-    error,
-    deleteReport
-  } = useReportsStore();
-
-  const userId = user?.id || 1;
+  const { fetchReportsByUserId, reportsByUserId, loading, error, deleteReport } = useReportsStore();
 
   useEffect(() => {
-    if (isSheetOpen) {
-      fetchReportsByUserId(userId);
+    if (isSheetOpen && user) {
+      fetchReportsByUserId(user.id);
     }
-  }, [isSheetOpen, userId, fetchReportsByUserId]);
+  }, [isSheetOpen, user, fetchReportsByUserId]);
 
   return (
     <div>
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <button
-            className="flex items-center justify-center w-12 h-12 rounded-full border fixed top-5 left-5 border-gray-300 shadow-md bg-white hover:bg-gray-100 transition"
-          >
+          <button className="flex items-center justify-center w-12 h-12 rounded-full border fixed top-5 left-5 border-gray-300 shadow-md bg-white hover:bg-gray-100 transition">
             <MenuIcon size={22} />
           </button>
         </SheetTrigger>
@@ -63,26 +55,16 @@ function Menu() {
               <div className="text-[26px] p-4 font-[900]">URBIA</div>
             </SheetTitle>
             <hr className="w-full" />
-
           </SheetHeader>
 
           <div className="p-4 space-y-4 overflow-y-auto">
+            {/* ✅ Sección de categorías */}
             <section className="space-y-4">
               {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex items-center justify-between"
-                >
+                <div key={category.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <img
-                      src={category.icon}
-                      alt={category.label}
-                      className="w-10 h-10"
-                    />
-                    <label
-                      htmlFor={category.id}
-                      className="text-[16px] font-medium"
-                    >
+                    <img src={category.icon} alt={category.label} className="w-10 h-10" />
+                    <label htmlFor={category.id} className="text-[16px] font-medium">
                       {category.label}
                     </label>
                   </div>
@@ -97,15 +79,19 @@ function Menu() {
 
             <hr />
 
-            <section>
-              <MyReports
-                closeDrawer={() => setIsSheetOpen(false)}
-                reports={reportsByUserId}
-                deleteReport={deleteReport}
-                loading={loading}
-                error={error}
-              />
-            </section>
+            {/* ✅ Renderizar MyReports solo si hay usuario */}
+            {user && (
+              <section>
+                <MyReports
+                  closeDrawer={() => setIsSheetOpen(false)}
+                  reports={reportsByUserId}
+                  deleteReport={deleteReport}
+                  loading={loading}
+                  error={error}
+                  onSelectReport={setSelectedReport} // ✅ Pasamos la función para manejar el clic en un reporte
+                />
+              </section>
+            )}
           </div>
 
           <div className="mt-auto p-4 md:hidden">
@@ -113,6 +99,15 @@ function Menu() {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* ✅ Vista del reporte seleccionado */}
+      {selectedReport && (
+        <ReportView
+          report={selectedReport}
+          onClose={() => setSelectedReport(null)}
+          deleteReport={deleteReport}
+        />
+      )}
     </div>
   );
 }

@@ -26,7 +26,7 @@ function getCategoryIcon(categoryId) {
   }
 }
 
-function MyReports({ closeDrawer, reports, deleteReport, loading, error }) {
+function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelectReport }) {
   const handleDelete = (id) => {
     closeDrawer();
     deleteAlert(id, (deletedId) => {
@@ -50,13 +50,20 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error }) {
           {reports && reports.length > 0 ? (
             <div className={styles.scrollContainer}>
               {reports.map((report) => (
-                <div key={report.id} className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-2">
+                <div 
+                  key={report.id} 
+                  className="flex items-center justify-between py-3 px-2 rounded-lg hover:bg-gray-100"
+                >
+                  {/* ✅ Área clickeable separada, sin incluir ReportActions */}
+                  <div 
+                    className="flex items-center gap-2 flex-1 cursor-pointer" 
+                    onClick={() => onSelectReport(report)}
+                  >
                     <img src={getCategoryIcon(report.categoriaId)} alt="" className="w-8 h-8" />
                     <p>{report.titulo}</p>
                   </div>
 
-                  {/* Usamos el nuevo componente ReportActions */}
+                  {/* ✅ Acciones separadas, sin afectar el clic de apertura */}
                   <ReportActions 
                     onEdit={() => console.log(`Editar reporte ${report.id}`)} 
                     onDelete={() => handleDelete(report.id)} 
@@ -74,3 +81,4 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error }) {
 }
 
 export default MyReports;
+

@@ -23,11 +23,12 @@ const useReportsStore = create(
           set({ loading: true, error: null });
           try {
             const data = await getReports();
-            set({ reports: data, loading: false });
+            set({ reports: Array.isArray(data) ? data : [], loading: false }); // Asegura que siempre sea un array
           } catch (err) {
-            set({ error: err.message, loading: false });
+            set({ error: err.message, loading: false, reports: [] }); // En caso de error, evita que sea null
           }
         },
+        
 
         fetchReportsByUserId: async (userId) => {
           set({ loading: true, error: null });

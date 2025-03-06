@@ -14,7 +14,8 @@ function HomePage() {
 
   return (
     <div className='h-screen w-full'>
-      <MapView reports={reports} />
+ <MapView reports={Array.isArray(reports) ? reports : []} />
+
     </div>
   );
 }
