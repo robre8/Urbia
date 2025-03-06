@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import ReportMarker from "@/components/mapview/ReportMarker";
 import UrbiaLikes from "./UrbiaLikes";
 import ReportActions from "./ReportActions"; // ✅ Importamos el nuevo componente
+import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
 
 const categoryMapping = {
   1: "Infraestructura",
@@ -45,10 +46,12 @@ console.log(report);
   const hasImage =
     currentReport.urlImagen && currentReport.urlImagen.trim().length > 0;
 
-  const handleDelete = () => {
-    deleteReport(currentReport.id);
-    handleOpenChange(false); // Cierra el Sheet tras eliminar
-  };
+    const handleDelete = () => {
+      deleteAlert(currentReport.id, (deletedId) => {
+        deleteReport(deletedId);
+        handleOpenChange(false); // ✅ Cierra el Sheet solo si el usuario confirma la eliminación
+      });
+    };
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
