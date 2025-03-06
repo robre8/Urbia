@@ -40,7 +40,7 @@ export const groupReports = (reports) => {
           reports[i].longitud,
           reports[j].latitud,
           reports[j].longitud
-        ) <= 500
+        ) <= 50
       ) {
         union(i, j);
       }
