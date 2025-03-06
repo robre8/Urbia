@@ -23,7 +23,7 @@ const categoryMapping = {
 export default function ReportView({ report, onClose, deleteReport }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
-
+console.log(report);
   useEffect(() => {
     if (report) {
       setCurrentReport(report);
@@ -117,7 +117,7 @@ export default function ReportView({ report, onClose, deleteReport }) {
           <UrbiaLikes />
           <div className="flex items-center space-x-2">
             <User className="w-4 h-4" />
-            <span>{currentReport.name}</span>
+            <span>{currentReport.nombreUsuario}</span>
           </div>
         </div>
 
