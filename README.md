@@ -131,7 +131,7 @@ mvn spring-boot:run
 
 ### 💻 Backend 
 
-| <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> | <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> | 
+| <img src="https://github.com/user-attachments/assets/182edd84-dda3-449c-8d17-0304fe92b842" width="100" height="100" /> | <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> |
 |:-:|:-:|
 | **Alberto Gutierrez** | **Ronny Brenes** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/Albert0GR) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/robre8) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
