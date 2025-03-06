@@ -44,7 +44,7 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
   defaultValue={reports && reports.length > 0 ? "item-1" : undefined}
 >
   <AccordionItem value="item-1">
-    <AccordionTrigger className="text-[16px]">
+    <AccordionTrigger className="text-[16px] pb-3">
       <div className="flex items-center gap-2">
         <img src={historialIcon} alt="icono del historial" />
         Mis reportes
