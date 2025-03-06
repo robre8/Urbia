@@ -47,11 +47,15 @@ console.log(report);
     currentReport.urlImagen && currentReport.urlImagen.trim().length > 0;
 
     const handleDelete = () => {
-      deleteAlert(currentReport.id, (deletedId) => {
-        deleteReport(deletedId);
-        handleOpenChange(false); // ✅ Cierra el Sheet solo si el usuario confirma la eliminación
-      });
+      handleOpenChange(false); // ✅ Cierra el Sheet antes de mostrar el alert
+    
+      setTimeout(() => {
+        deleteAlert(currentReport.id, (deletedId) => {
+          deleteReport(deletedId);
+        });
+      }, 300); // ✅ Pequeño delay para evitar problemas de renderizado
     };
+    
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>

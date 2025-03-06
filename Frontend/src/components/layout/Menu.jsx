@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import MyReports from "@/features/reports/MyReports";
-import ReportView from "@/features/reports/ReportView"; // ✅ Importamos el ReportView
+import ReportView from "@/features/reports/ReportView";
 import { Menu as MenuIcon } from "lucide-react";
 import useReportsStore from "@/lib/store/useReportsStore";
 import { useUserAuth } from "@/lib/store/useUserAuth";
@@ -40,6 +40,14 @@ function Menu() {
       fetchReportsByUserId(user.id);
     }
   }, [isSheetOpen, user, fetchReportsByUserId]);
+
+  // ✅ Maneja la selección de un reporte y cierra el menú antes de abrirlo
+  const handleSelectReport = (report) => {
+    setIsSheetOpen(false); // ✅ Cierra el menú primero
+    setTimeout(() => {
+      setSelectedReport(report); // ✅ Luego abre la vista del reporte
+    }, 300); // ✅ Delay para evitar renderizados conflictivos
+  };
 
   return (
     <div>
@@ -88,7 +96,7 @@ function Menu() {
                   deleteReport={deleteReport}
                   loading={loading}
                   error={error}
-                  onSelectReport={setSelectedReport} // ✅ Pasamos la función para manejar el clic en un reporte
+                  onSelectReport={handleSelectReport} // ✅ Pasamos la función de selección
                 />
               </section>
             )}
