@@ -108,7 +108,7 @@ export default function MapView({ reports }) {
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          attribution="© OpenStreetMap contributors © CARTO"
+     /*      attribution="© OpenStreetMap contributors © CARTO" */
           maxZoom={20}
         />
 

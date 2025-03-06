@@ -106,7 +106,7 @@ console.log(report);
                 >
                   <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                    attribution="© OpenStreetMap contributors © CARTO"
+        /*             attribution="© OpenStreetMap contributors © CARTO" */
                     maxZoom={20}
                   />
                   <ReportMarker report={currentReport} />
@@ -146,7 +146,7 @@ console.log(report);
               >
                 <TileLayer
                   url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                  attribution="© OpenStreetMap contributors © CARTO"
+           /*        attribution="© OpenStreetMap contributors © CARTO" */
                   maxZoom={20}
                 />
                 <ReportMarker report={currentReport} size={[30, 30]} />
