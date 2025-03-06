@@ -1,35 +1,39 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
   ZoomControl,
   Marker,
   Circle
-} from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+} from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-import ReportMarker from './ReportMarker';
-import Recenter from './Recenter';
-import userIcon from '/frogIco.png';
-import sadFrog from '@/assets/frogError.png';
-import { useUserLocation } from './hooks/useUserLocation';
-import { useReverseGeocode } from './hooks/useReverseGeocode';
-import MyLocationButton from './MyLocationButton';
-import './style/MapView.css';
-import { AddressCard } from '../Adress/AdressCard';
-import UserLogin from '@/features/auth/UserLogin';
-import { useUserAuth } from '@/lib/store/useUserAuth';
-import UserMenu from '@/features/auth/MenuUser';
-import CityNavigation from './CityNavigation';
-import CitySelectionDialog from './CitySelectionDialog';
-import { useCities } from './hooks/useCities';
-import { getGeolocationErrorMessage } from '@/lib/utils/errorMessages';
-import InstallPWAButton from './AddPWAButton';
-import useCategoryStore from '@/lib/store/useCategoryStore';
-import useMapStore from '@/lib/store/useMapStore';
-import MapClickHandler from './hooks/useMapClick';
-import ReportView from '@/features/reports/ReportView';
+import { useUserLocation } from "./hooks/useUserLocation";
+import { useReverseGeocode } from "./hooks/useReverseGeocode";
+import { useUserAuth } from "@/lib/store/useUserAuth";
+import { useCities } from "./hooks/useCities";
+import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
+import useCategoryStore from "@/lib/store/useCategoryStore";
+import useMapStore from "@/lib/store/useMapStore";
+import useReportsStore from "@/lib/store/useReportsStore";
+
+import ReportMarker from "./ReportMarker";
+import Recenter from "./Recenter";
+import MyLocationButton from "./MyLocationButton";
+import MapClickHandler from "./hooks/useMapClick";
+import ReportView from "@/features/reports/ReportView";
+import CitySelectionDialog from "./CitySelectionDialog";
+import CityNavigation from "./CityNavigation";
+import UserMenu from "@/features/auth/MenuUser";
+import UserLogin from "@/features/auth/UserLogin";
+import InstallPWAButton from "./AddPWAButton";
+import { AddressCard } from "../Adress/AdressCard";
+
+import userIcon from "/frogIco.png";
+import sadFrog from "@/assets/frogError.png";
+
+import "./style/MapView.css";
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -39,42 +43,41 @@ const wazeIcon = L.icon({
 });
 
 const categoryMapping = {
-  1: 'infraestructura',
-  2: 'seguridad',
-  3: 'salud',
-  4: 'eventosSociales'
+  1: "infraestructura",
+  2: "seguridad",
+  3: "salud",
+  4: "eventosSociales"
 };
 
-export default function MapView({ reports }) {
+export default function MapView() {
+  const { groupedReports } = useReportsStore();
+  const { toggles } = useCategoryStore();
+
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([15.977, -97.696]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
+
   const { user } = useUserAuth();
-  const {
-    address,
-    loadingAddress,
-    error: addressError
-  } = useReverseGeocode(position);
+  const { address, loadingAddress, error: addressError } =
+    useReverseGeocode(position);
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);
-  
+
   const { selectedCoords, loadStoredCoords } = useMapStore();
-  const { toggles } = useCategoryStore();
 
-  const [selectedReport, setSelectedReport] = useState(null); // Estado para manejar el reporte seleccionado
-
-  console.log('reportes', reports);
+  // Estado para manejar el reporte seleccionado y abrir ReportView
+  const [selectedReport, setSelectedReport] = useState(null);
 
   useEffect(() => {
-    loadStoredCoords(); // Cargar coordenadas almacenadas en localStorage al iniciar
+    loadStoredCoords();
   }, [loadStoredCoords]);
 
   useEffect(() => {
     if (
       !loading &&
-      ['browser_denied', 'ip_error_default', 'timeout_default'].includes(
+      ["browser_denied", "ip_error_default", "timeout_default"].includes(
         geolocationStatus
       ) &&
       !modalHasBeenOpened.current
@@ -84,8 +87,8 @@ export default function MapView({ reports }) {
     }
   }, [loading, geolocationStatus]);
 
-  const handleCitySelect = cityName => {
-    const city = cities.find(c => c.name === cityName);
+  const handleCitySelect = (cityName) => {
+    const city = cities.find((c) => c.name === cityName);
     if (city && map) {
       map.setView([city.lat, city.lng], defaultZoom);
       setModalOpen(false);
@@ -101,14 +104,11 @@ export default function MapView({ reports }) {
         zoom={defaultZoom}
         className="w-full h-full"
         zoomControl={false}
-        whenReady={(event) => {
-          setMap(event.target);
-        }}
+        whenReady={(event) => setMap(event.target)}
         minZoom={4}
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-     /*      attribution="© OpenStreetMap contributors © CARTO" */
           maxZoom={20}
         />
 
@@ -116,6 +116,7 @@ export default function MapView({ reports }) {
         <Recenter center={center} zoom={defaultZoom} />
         <MapClickHandler />
 
+        {/* Marcador ubicación del usuario */}
         {!error && position && (
           <>
             <Marker position={position} icon={wazeIcon} />
@@ -123,8 +124,8 @@ export default function MapView({ reports }) {
               center={position}
               radius={80}
               pathOptions={{
-                color: 'blue',
-                fillColor: 'blue',
+                color: "blue",
+                fillColor: "blue",
                 fillOpacity: 0.2,
                 stroke: false
               }}
@@ -132,20 +133,21 @@ export default function MapView({ reports }) {
           </>
         )}
 
-        {/* Muestra el marcador donde el usuario hizo click */}
-        {selectedCoords && (
-          <Marker position={selectedCoords} />
-        )}
+        {/* Marcador de click en el mapa */}
+        {selectedCoords && <Marker position={selectedCoords} />}
 
-        {reports.map((report, id) => {
-          const catKey = categoryMapping[report.categoriaId];
+        {/* Render de reportes agrupados */}
+        {Object.values(groupedReports).map((group, index) => {
+          if (!Array.isArray(group) || group.length === 0) return null;
+          const catKey = categoryMapping[group[0]?.categoriaId];
           if (!toggles[catKey]) return null;
-          if (!report.latitud || !report.longitud) return null;
+
           return (
-            <ReportMarker 
-              key={id} 
-              report={report} 
-              onClick={() => setSelectedReport(report)} // Al hacer click en el marcador, guarda el reporte en el estado
+            <ReportMarker
+              key={index}
+              reports={group}
+              // Al hacer clic en un reporte, se abre el detalle
+              onReportSelect={(report) => setSelectedReport(report)}
             />
           );
         })}
@@ -190,9 +192,12 @@ export default function MapView({ reports }) {
 
       <CityNavigation map={map} />
 
-      {/* Sheet para mostrar detalles del reporte al hacer click en un marcador */}
+      {/* ReportView se abre cuando seleccionamos un reporte */}
       {selectedReport && (
-        <ReportView report={selectedReport} onClose={() => setSelectedReport(null)} />
+        <ReportView
+          report={selectedReport}
+          onClose={() => setSelectedReport(null)}
+        />
       )}
     </div>
   );
