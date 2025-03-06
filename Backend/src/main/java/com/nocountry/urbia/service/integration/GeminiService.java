@@ -27,7 +27,12 @@ public class GeminiService {
         String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + geminiApiKey;
 
         // Construir el prompt para mejorar la redacción
-        String prompt = "Mejora la redacción del siguiente reporte LIMITATE A 60 palabras: " + descripcion;
+        String prompt = "Crea un reporte legible y conciso (máximo 300 caracteres) que resuma los " +
+                "hechos de forma integrada y clara, identificando el tema predominante y no incluyas datos " +
+                "no relacionados.(no se deben mostrar los datos no relacionados) " +
+                "Asegúrate de incluir las palabras clave necesarias para ubicar y resolver el problema." +
+                " importante :El reporte tambien debe estar escrito de manera continua y no especifiques de que entrada" +
+                "proviene cada dato " + descripcion;
 
         // Construir el JSON de la solicitud
         JSONObject part = new JSONObject();

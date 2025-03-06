@@ -9,6 +9,8 @@ import com.nocountry.urbia.repository.ReporteRepository;
 import com.nocountry.urbia.repository.UsuariosRepository;
 import com.nocountry.urbia.service.integration.GeminiService;
 import com.nocountry.urbia.service.integration.S3Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class ReporteService {
 
     @Autowired
     private S3Service s3Service;  // Para la carga de imágenes
+
+    private static final Logger logger = LoggerFactory.getLogger(ReporteService.class);
 
     // Crear reporte y analizar con IA
     public ResponseEntity<ReporteDTO> getReportesIA(MultipartFile audio, MultipartFile imagen, ReporteDTO reporteDTO) {
@@ -78,9 +82,9 @@ public class ReporteService {
             }
         }
 
-        // Actualizar la descripción con los detalles obtenidos por IA
-        String descripcionActual = reporteDTO.getDescripcion();
-        reporteDTO.setDescripcion(descripcionActual + "\nDetalles IA: " + detallesArchivo);
+        // Combinar título y descripción, incluyendo los detalles de IA
+        String descripcionConTitulo = "Título: " + reporteDTO.getTitulo() + "\nDescripción: " + reporteDTO.getDescripcion();
+        reporteDTO.setDescripcion(descripcionConTitulo + "\nDetalles IA: " + detallesArchivo);
 
         // Crear el reporte
         ReporteDTO nuevoReporte = crearReporte(reporteDTO);
@@ -90,11 +94,13 @@ public class ReporteService {
 
 
 
+
     // Crear reporte
     public ReporteDTO crearReporte(ReporteDTO reporteDTO) {
         Reporte reporte = new Reporte();
         reporte.setUrlAudio(reporteDTO.getUrlAudio());
         reporte.setUrlImagen(reporteDTO.getUrlImagen());
+        reporte.setUrlVideo(reporteDTO.getUrlVideo());
         reporte.setTitulo(reporteDTO.getTitulo());
         reporte.setDescripcion(reporteDTO.getDescripcion());
         // Se asigna la fecha y hora actuales
@@ -179,6 +185,7 @@ public class ReporteService {
         dto.setId(reporte.getId());
         dto.setUrlAudio(reporte.getUrlAudio());
         dto.setUrlImagen(reporte.getUrlImagen());
+        dto.setUrlVideo(reporte.getUrlVideo());
         dto.setTitulo(reporte.getTitulo());
         dto.setDescripcion(reporte.getDescripcion());
         dto.setDescripcionDespuesDeIa(reporte.getDescripcionDespuesDeIa());
@@ -187,6 +194,19 @@ public class ReporteService {
         dto.setLongitud(reporte.getLongitud());
         dto.setCategoriaId(reporte.getCategoria().getId());
         dto.setUsuarioId(reporte.getUsuario().getId());
+        dto.setNombreUsuario(reporte.getUsuario().getNombre());
         return dto;
     }
+
+    public void eliminarTodosLosReportes() {
+        long totalReportes = reporteRepository.count();
+        if (totalReportes > 0) {
+            reporteRepository.deleteAll();
+            logger.info("Se eliminaron {} reportes.", totalReportes);
+        } else {
+            logger.warn("No hay reportes para eliminar.");
+        }
+    }
+
+
 }
