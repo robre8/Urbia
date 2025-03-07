@@ -1,57 +1,84 @@
 import { Label } from '@/components/ui/label';
 import { LuCamera, LuImagePlus } from 'react-icons/lu';
 import noImageSvg from '@/assets/svgs/no-image-svgrepo-com.svg';
+import { useState } from 'react';
 
 export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm, imageError }) {
-  return (
-    <div className="grid gap-3">
-      <Label htmlFor="imagen">Imagen</Label>
-      <img
-        src={previewImage || noImageSvg}
-        className={`w-full h-20 bg-slate-200 ${previewImage ? 'object-cover' : ''}`}
-        alt="Vista previa"
-      />
-      
-      {imageError && (
-        <p className="text-red-500 text-sm">{imageError}</p>
-      )}
-      
-      {!isConfirm && (
-        <div className="flex gap-6">
-          <input
-            disabled={disabled}
-            type="file"
-            id="imagen"
-            accept="image/*"
-            capture="environment"
-            onChange={e => onFileChange('imagen', e.target.files[0])}
-            className="hidden"
-          />
-          <label
-            htmlFor="imagen"
-            className="bg-lime-300 rounded-[16px] hover:bg-lime-200 px-2 py-2 flex flex-col items-center justify-center w-[120px] h-[93px] gap-2 cursor-pointer"
-          >
-            <LuCamera className="h-6" />
-            <span>Tomar foto</span>
-          </label>
+  const [isLoading, setIsLoading] = useState(false);
 
-          <input
-            disabled={disabled}
-            type="file"
-            id="imagen02"
-            accept="image/png, image/jpeg, image/webp, image/heic, image/heif"
-            onChange={e => onFileChange('imagen', e.target.files[0])}
-            className="hidden"
-          />
-          <label
-            htmlFor="imagen02"
-            className="bg-lime-300 rounded-[16px] hover:bg-lime-200 px-2 py-2 flex flex-col items-center justify-center w-[120px] h-[93px] gap-2 cursor-pointer"
-          >
-            <LuImagePlus className="h-6" />
-            <span>Subir foto</span>
-          </label>
-        </div>
-      )}
+  const handleFileChange = async (fieldName, file) => {
+    if (!file) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        onFileChange(fieldName, null, 'La imagen no debe exceder 5MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        onFileChange(fieldName, null, 'El archivo debe ser una imagen');
+        return;
+      }
+      
+      // Process the file normally
+      onFileChange(fieldName, file);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      onFileChange(fieldName, null, 'Error al procesar la imagen');
+    } finally {
+      setIsLoading(false);    }
+  };
+
+  return (
+    <div className="grid w-full items-center gap-1.5">
+      <Label htmlFor="picture">Imagen</Label>
+      <div className="relative">
+        <input
+          className="hidden"
+          id="picture"
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleFileChange('picture', e.target.files[0])}
+          disabled={disabled || isLoading}
+        />
+        <label
+          htmlFor="picture"
+          className={`group relative flex aspect-video w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-input ${
+            imageError ? 'border-destructive' : ''
+          }`}
+        >
+          {previewImage ? (
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <img src={noImageSvg} alt="No image" className="h-16 w-16" />
+              <span className="text-sm text-muted-foreground">
+                Haga clic para subir una imagen
+              </span>
+            </div>
+          )}
+          {!isConfirm && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 opacity-0 transition-opacity group-hover:opacity-100">
+              {previewImage ? (
+                <LuCamera className="h-8 w-8" />
+              ) : (
+                <LuImagePlus className="h-8 w-8" />
+              )}
+            </div>
+          )}
+        </label>
+        {imageError && (
+          <p className="mt-1 text-sm text-destructive">{imageError}</p>
+        )}
+      </div>
     </div>
   );
 }
