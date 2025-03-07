@@ -65,7 +65,7 @@ function Menu() {
             <hr className="w-full" />
           </SheetHeader>
 
-          <div className="p-4 space-y-4 overflow-y-auto">
+          <div className="px-4 space-y-4 overflow-y-auto">
             {/* ✅ Sección de categorías */}
             <section className="space-y-4">
               {categories.map((category) => (
@@ -85,7 +85,7 @@ function Menu() {
               ))}
             </section>
 
-            <hr />
+            <hr className="w-full"/>
 
             {/* ✅ Renderizar MyReports solo si hay usuario */}
             {user && (
