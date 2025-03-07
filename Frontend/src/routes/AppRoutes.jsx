@@ -1,8 +1,8 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import HomePage from '@/features/home/pages/HomePage';
 import Menu from '@/components/layout/Menu';
-import NewReportForm from '@/features/NewReportForm/NewReportForm';
 import CleanReportForm from '@/features/reports/form/CleanReportForm';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function AppRoutes() {
   return (
@@ -11,6 +11,7 @@ export default function AppRoutes() {
       <Menu />
       {/* <NewReportForm /> */}
       <CleanReportForm />
+      <Toaster />
 
     </div>
       <Routes>

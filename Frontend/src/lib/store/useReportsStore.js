@@ -52,9 +52,14 @@ const useReportsStore = create(
         },
 
         clearStorage: () => {
-          localStorage.removeItem("reports-storage");
-          set({ reports: [], reportsByUserId: [], groupedReports: {} });
-          window.location.reload();
+          set({
+            reports: [],
+            reportsByUserId: [],
+            groupedReports: {},
+            reportPreview: null, // Make sure to clear the preview
+            loading: false,
+            error: null
+          });
         },
 
         clearReportPreview: () => {
@@ -64,16 +69,37 @@ const useReportsStore = create(
         sendReport: async (data) => {
           set({ loading: true, error: null });
           try {
+            // Verificar que data sea una instancia de FormData
+            if (!(data instanceof FormData)) {
+              throw new Error("Los datos deben ser una instancia de FormData");
+            }
+            
+            // Verificar que el reporte esté incluido
+            if (!data.get('reporte')) {
+              throw new Error("El reporte es requerido");
+            }
+            
             const response = await postReport(data);
-            const newReports = [...get().reports, response.data];
-            set({
-              reportPreview: response.data,
-              reports: newReports,
-              groupedReports: groupReports(newReports),
-              loading: false
-            });
+            
+            if (response && response.data) {
+              const newReports = [...get().reports, response.data];
+              set({
+                reportPreview: response.data,
+                reports: newReports,
+                groupedReports: groupReports(newReports),
+                loading: false
+              });
+              return response.data;
+            } else {
+              throw new Error("Respuesta inválida del servidor");
+            }
           } catch (error) {
-            set({ error: error.message, loading: false });
+            console.error("Error en sendReport:", error);
+            set({ 
+              error: error.message || "Error al enviar el reporte", 
+              loading: false 
+            });
+            throw error; // Re-lanzar para manejo en el componente
           }
         },
 
@@ -123,26 +149,13 @@ const useReportsStore = create(
       {
         name: "reports-storage",
         version: STORAGE_VERSION,
-        migrate: (persisted, version) => {
-          if (version < STORAGE_VERSION) {
-            return {
-              reports: [],
-              groupedReports: {},
-              reportsByUserId: [],
-              reportPreview: {},
-              loading: false,
-              error: null
-            };
-          }
-          return persisted;
-        },
         partialize: (state) => ({
           reports: state.reports,
           groupedReports: state.groupedReports,
           reportsByUserId: state.reportsByUserId,
-          reportPreview: state.reportPreview,
-          loading: state.loading,
-          error: state.error
+          // Don't persist the form data and preview
+          loading: false,
+          error: null
         })
       }
     )
