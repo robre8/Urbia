@@ -139,33 +139,20 @@ export default function CleanReportForm() {
   // Check how the form submission is handling the image file
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Make sure we have the user's coordinates or selected coordinates
-    const coords = selectedCoords || position;
-    if (!coords) {
-      toast.error("No se pudo obtener la ubicación");
-      return;
-    }
-    
-    // Create a new FormData object to properly handle file uploads
-    const formDataToSend = new FormData();
-    
+    // In your handleSubmit function
     // Add report data as JSON
-    const reportData = {
-      ...formData.reporte,
-      latitud: coords[0],
-      longitud: coords[1],
-      usuarioId: user?.id || ''
-    };
-    
-    formDataToSend.append('reporte', JSON.stringify(reportData));
+    const formDataToSend = new FormData();
+    formDataToSend.append(
+      'reporte', 
+new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
+    );
     
     // Add image file if it exists
     if (imageFile) {
-      formDataToSend.append('imagen', imageFile);
+      // Make sure we're sending the file with the correct content type
+      formDataToSend.append('imagen', imageFile, imageFile.name);
       console.log('Image file added to form data:', imageFile);
     }
-    
     // Add audio blob if it exists
     if (audioBlob) {
       const audioFile = new File([audioBlob], 'audio.webm', { type: 'audio/webm' });

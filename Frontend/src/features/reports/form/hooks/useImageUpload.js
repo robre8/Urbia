@@ -18,7 +18,7 @@ export function useImageUpload() {
       
       setImageError('');
       setPreviewImage(URL.createObjectURL(file));
-      setImageFile(file);
+      setImageFile(file); // Store the file object directly
     }
   };
 
