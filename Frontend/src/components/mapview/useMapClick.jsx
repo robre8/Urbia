@@ -1,7 +1,7 @@
 import { useMapEvents } from 'react-leaflet';
 import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
-import { ReportLocationToast } from '../ReportLocationToast';
+import { ReportLocationToast } from './ReportLocationToast';
 
 export default function MapClickHandler() {
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);

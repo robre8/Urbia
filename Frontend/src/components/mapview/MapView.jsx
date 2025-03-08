@@ -21,7 +21,7 @@ import useReportsStore from "@/lib/store/useReportsStore";
 import ReportMarker from "./ReportMarker";
 import Recenter from "./Recenter";
 import MyLocationButton from "./MyLocationButton";
-import MapClickHandler from "./hooks/useMapClick";
+import MapClickHandler from "./useMapClick";
 import ReportView from "@/features/reports/ReportView";
 import CitySelectionDialog from "./CitySelectionDialog";
 import CityNavigation from "./CityNavigation";
@@ -37,11 +37,21 @@ import sadFrog from "@/assets/frogError.png";
 import "./style/MapView.css";
 import { AnimatedCircle } from "./AnimatedCircle";
 
+import ButtonAddNewReport from "@/features/NewReportForm/ButtonAddNewReport";
+
 const wazeIcon = L.icon({
   iconUrl: userIcon,
   iconSize: [30, 30],
   iconAnchor: [20, 20],
   popupAnchor: [0, -20]
+});
+
+// Create a new icon for the click marker using the same frog icon
+const clickMarkerIcon = L.icon({
+  iconUrl: userIcon,
+  iconSize: [35, 35],
+  iconAnchor: [17, 35],
+  popupAnchor: [0, -35]
 });
 
 const categoryMapping = {
@@ -150,8 +160,8 @@ export default function MapView() {
           </>
         )}
 
-        {/* Marcador de click en el mapa */}
-        {selectedCoords && <Marker position={selectedCoords} />}
+        {/* Marcador de click en el mapa - Updated to use the frog icon */}
+        {selectedCoords && <Marker position={selectedCoords} icon={clickMarkerIcon} />}
 
         {/* Render de reportes agrupados */}
         {Object.values(groupedReports).map((group, index) => {
@@ -176,6 +186,9 @@ export default function MapView() {
         defaultZoom={defaultZoom}
         className="absolute bottom-10 lg:bottom-32 right-7 z-[9999]"
       />
+
+      {/* Add the ButtonAddNewReport component here */}
+      {user && <ButtonAddNewReport />}
 
       {position && (address || loadingAddress || addressError) && (
         <div className="hidden md:block overflow-hidden absolute bottom-5 left-20 z-[9999]">

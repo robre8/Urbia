@@ -7,13 +7,12 @@ import { Toaster } from '@/components/ui/sonner';
 export default function AppRoutes() {
   return (
     <BrowserRouter>
-    <div className='absolute z-[9999]'>
-      <Menu />
-      {/* <NewReportForm /> */}
-      <CleanReportForm />
-      <Toaster />
-
-    </div>
+      <div className='absolute z-[9999]'>
+        <Menu />
+        {/* Keep the form component, but it won't show a button anymore */}
+        <CleanReportForm />
+        <Toaster />
+      </div>
       <Routes>
         <Route path='/' element={<HomePage />} />
         {/* Otras rutas si las hay */}

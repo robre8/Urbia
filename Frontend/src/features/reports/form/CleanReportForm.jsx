@@ -12,7 +12,6 @@ import {
   SheetTrigger
 } from '@/components/ui/sheet';
 import ConfirmReport from '@/features/NewReportForm/ConfirmReport';
-import ButtonAddNewReport from '@/features/NewReportForm/ButtonAddNewReport';
 
 // Import our custom components and hooks
 import { ImageUploader } from './components/ImageUploader';
@@ -201,14 +200,8 @@ export default function CleanReportForm() {
         setOpenParent={setOpen}
         setIsConfirm={setIsConfirm}
       />
-      <SheetTrigger
-        className={`fixed bottom-48 lg:bottom-40 right-7 ${!user ? 'hidden' : ''}`}
-        onClick={() => setOpen(true)}
-      >
-        <ButtonAddNewReport />
-      </SheetTrigger>
-      
-      {/* Hidden trigger for programmatic opening from map click toast */}
+      {/* Remove the SheetTrigger with the floating button */}
+      {/* Keep the hidden trigger for programmatic opening from map click toast */}
       <SheetTrigger 
         id="open-report-form" 
         className="hidden" 

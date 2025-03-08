@@ -1,12 +1,17 @@
 import { useMapEvents } from 'react-leaflet';
 import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
+import { useUserAuth } from '@/lib/store/useUserAuth';
 
 export default function MapClickHandler() {
+  const { user } = useUserAuth();
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);
 
   useMapEvents({
     click(e) {
+      // Skip if not logged in
+      if (!user) return;
+      
       // Filtramos si el evento es un doble clic
       if (e.originalEvent.detail === 2) return; // ⬅️ Evita capturar doble clic
 
@@ -25,7 +30,7 @@ export default function MapClickHandler() {
           },
           style: {
             backgroundColor: "#9bee5e",
-            color: "#FFFFFF",
+            color: "#000000",
             fontWeight: "500",
             borderRadius: "4px",
             padding: "8px 16px"
@@ -37,8 +42,8 @@ export default function MapClickHandler() {
             setSelectedCoords(null);
           },
           style: {
-            backgroundColor: "#9bee5e",
-            color: "#333333",
+            backgroundColor: "#222222",
+            color: "#FFFFFF",
             fontWeight: "500",
             borderRadius: "4px",
             padding: "8px 16px"
@@ -46,7 +51,7 @@ export default function MapClickHandler() {
         },
         duration: 10000,
         position: "bottom-center",
-        className: "bg-white rounded-xl shadow-lg p-4 max-w-md mx-auto"
+        className: "p-4 bg-white rounded-xl shadow-lg max-w-md mx-auto"
       });
     }
   });
