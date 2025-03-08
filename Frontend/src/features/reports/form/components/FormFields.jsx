@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AudioRecorder } from './AudioRecorder';
+import { useEffect } from 'react';
 
 export function FormFields({ 
   formData, 
@@ -20,14 +21,32 @@ export function FormFields({
   onStopRecording,
   hasAudio
 }) {
+  // Log cuando cambia la categoría para depuración
+  useEffect(() => {
+    console.log("Categoría seleccionada:", formData.reporte.categoriaId);
+  }, [formData.reporte.categoriaId]);
+
+  const handleCategoryChange = (value) => {
+    // Asegurarse de que el valor es un número antes de enviarlo
+    const categoryId = parseInt(value, 10);
+    console.log("Categoría seleccionada (antes de cambio):", value);
+    console.log("Categoría convertida a número:", categoryId);
+    
+    // Verificar que la categoría existe en la lista de categorías
+    const categoryExists = categories.some(cat => cat.id === categoryId);
+    console.log("¿La categoría existe en la lista?", categoryExists);
+    
+    onChange('categoriaId', categoryId);
+  };
+
   return (
     <div className="grid gap-3 py-2">
       <div className="grid gap-1.5">
         <Label htmlFor="categoria" className="text-sm">Categoría *</Label>
         <Select
           disabled={disabled}
-          value={formData.reporte.categoriaId}
-          onValueChange={value => onChange('categoriaId', value)}
+          value={formData.reporte.categoriaId?.toString() || ""}
+          onValueChange={handleCategoryChange}
           className={`text-sm ${errors.categoriaId ? 'border-red-500' : ''}`}
         >
           <SelectTrigger className="h-8">
@@ -41,10 +60,10 @@ export function FormFields({
             ) : categories.length === 0 ? (
               <SelectItem disabled className="text-sm">No hay categorías</SelectItem>
             ) : (
-              categories.map((cat, i) => (
+              categories.map((cat) => (
                 <SelectItem
-                  key={cat.id ?? i}
-                  value={cat.id?.toString() || i.toString()}
+                  key={cat.id}
+                  value={cat.id.toString()}
                   className="text-sm"
                 >
                   {cat.nombre || 'Sin nombre'}

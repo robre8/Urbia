@@ -6,6 +6,18 @@ export function useFormValidation(initialForm) {
   const [charCount, setCharCount] = useState({ titulo: 0, descripcion: 0 });
 
   const handleInputChange = (field, value, type = 'reporte') => {
+    // Asegurarse de que categoriaId siempre sea un número
+    if (field === 'categoriaId' && type === 'reporte') {
+      const numValue = typeof value === 'string' ? parseInt(value, 10) : value;
+      console.log(`Cambiando categoriaId a: ${numValue} (tipo: ${typeof numValue})`);
+      
+      setFormData(prev => ({
+        ...prev,
+        reporte: { ...prev.reporte, [field]: numValue }
+      }));
+      return;
+    }
+    
     if (type === 'reporte') {
       setFormData(prev => ({
         ...prev,

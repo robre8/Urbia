@@ -27,11 +27,25 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
       setShowCamera(false);
     } else {
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        // Modificamos las opciones para usar la cámara trasera en móviles
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: { exact: "environment" } // Usar cámara trasera
+          } 
+        });
         setStream(mediaStream);
         setShowCamera(true);
       } catch (err) {
         console.error("Error accessing camera:", err);
+        // Si falla con la cámara trasera, intentamos con cualquier cámara disponible
+        try {
+          console.log("Intentando con cualquier cámara disponible");
+          const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          setStream(mediaStream);
+          setShowCamera(true);
+        } catch (fallbackErr) {
+          console.error("Error accessing any camera:", fallbackErr);
+        }
       }
     }
   };

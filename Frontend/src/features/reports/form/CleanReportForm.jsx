@@ -4,6 +4,7 @@ import useReportsStore from '@/lib/store/useReportsStore';
 import useMapStore from '@/lib/store/useMapStore'; // Add this import
 import { useUserAuth } from '@/lib/store/useUserAuth';
 import { useUserLocation } from '@/components/mapview/hooks/useUserLocation';
+import { useReverseGeocode } from '@/components/mapview/hooks/useReverseGeocode'; // Importamos el hook
 import {
   Sheet,
   SheetContent,
@@ -21,6 +22,7 @@ import { useAudioRecording } from './hooks/useAudioRecording';
 import { useFormValidation } from './hooks/useFormValidation';
 import { useImageUpload } from './hooks/useImageUpload';
 import { toast } from "sonner";
+import { MapPin } from 'lucide-react'; // Importamos el icono para la dirección
 
 const INITIAL_FORM = {
   audio: '',
@@ -42,12 +44,14 @@ export default function CleanReportForm() {
   const { user } = useUserAuth();
   const { position } = useUserLocation();
   const { selectedCoords } = useMapStore(); // Get selected coordinates from map store
-
+  
+  // Usamos el hook para obtener la dirección basada en las coordenadas seleccionadas
+  const coords = selectedCoords || position;
+  const { address, loadingAddress } = useReverseGeocode(coords);
   // UI state
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
-
   // Custom hooks
   const {
     formData,
@@ -58,7 +62,6 @@ export default function CleanReportForm() {
     handleInputChange,
     resetForm
   } = useFormValidation(INITIAL_FORM);
-
   const {
     recording,
     recordingTime,
@@ -139,6 +142,8 @@ export default function CleanReportForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!isValid) return;
+    
     // Make sure we have the user's coordinates or selected coordinates
     const coords = selectedCoords || position;
     if (!coords) {
@@ -149,13 +154,16 @@ export default function CleanReportForm() {
     // Create a new FormData object to properly handle file uploads
     const formDataToSend = new FormData();
     
-    // Add report data as JSON
+    // Add report data as JSON with categoriaId as number
     const reportData = {
       ...formData.reporte,
+      categoriaId: parseInt(formData.reporte.categoriaId, 10),
       latitud: coords[0],
       longitud: coords[1],
       usuarioId: user?.id || ''
     };
+    
+    console.log("Enviando reporte con datos:", reportData);
     
     // Add report data as a Blob with application/json content type
     formDataToSend.append(
@@ -224,6 +232,19 @@ export default function CleanReportForm() {
               isConfirm={isConfirm}
               imageError={imageError}
             />
+            
+            {/* Mostramos la dirección antes del componente FormFields */}
+            <div className="flex items-center gap-2 px-1 py-2 bg-gray-50 rounded-md text-sm border">
+              <MapPin size={16} className="text-gray-500" />
+              {loadingAddress ? (
+                <span className="text-gray-500">Obteniendo dirección...</span>
+              ) : address ? (
+                <span className="text-gray-700">{address}</span>
+              ) : (
+                <span className="text-gray-500">Ubicación sin dirección disponible</span>
+              )}
+            </div>
+            
             {/* Form Fields Component with Audio Recorder integrated */}
             <FormFields
               formData={formData}
