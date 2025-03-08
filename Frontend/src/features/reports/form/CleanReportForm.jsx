@@ -153,7 +153,6 @@ export default function CleanReportForm() {
     
     // Create a new FormData object to properly handle file uploads
     const formDataToSend = new FormData();
-    
     // Add report data as JSON with categoriaId as number
     const reportData = {
       ...formData.reporte,
@@ -163,6 +162,9 @@ export default function CleanReportForm() {
       usuarioId: user?.id || ''
     };
     
+    // Verificar que la categoría se está enviando correctamente
+    console.log("Categoría seleccionada (ID):", formData.reporte.categoriaId);
+    console.log("Categoría convertida a número:", reportData.categoriaId);
     console.log("Enviando reporte con datos:", reportData);
     
     // Add report data as a Blob with application/json content type
