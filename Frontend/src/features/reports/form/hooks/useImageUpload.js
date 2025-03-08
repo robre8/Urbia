@@ -9,6 +9,15 @@ export function useImageUpload() {
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   const handleFileChange = (field, file) => {
+    // Si file es null, significa que estamos eliminando la imagen
+    if (file === null) {
+      console.log("Imagen eliminada");
+      setPreviewImage('');
+      setImageFile(null);
+      setImageError('');
+      return;
+    }
+    
     if (file) {
       // Validar tamaño del archivo
       if (file.size > MAX_FILE_SIZE) {

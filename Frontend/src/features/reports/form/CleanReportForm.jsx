@@ -22,7 +22,6 @@ import { useAudioRecording } from './hooks/useAudioRecording';
 import { useFormValidation } from './hooks/useFormValidation';
 import { useImageUpload } from './hooks/useImageUpload';
 import { toast } from "sonner";
-import { MapPin } from 'lucide-react'; // Importamos el icono para la dirección
 
 const INITIAL_FORM = {
   audio: '',
@@ -236,8 +235,7 @@ export default function CleanReportForm() {
             />
             
             {/* Mostramos la dirección antes del componente FormFields */}
-            <div className="flex items-center gap-2 px-1 py-2 bg-gray-50 rounded-md text-sm border">
-              <MapPin size={16} className="text-gray-500" />
+            <div className="flex items-center gap-2 px-1 py-1 bg-gray-50 rounded-md text-[10px] border">
               {loadingAddress ? (
                 <span className="text-gray-500">Obteniendo dirección...</span>
               ) : address ? (

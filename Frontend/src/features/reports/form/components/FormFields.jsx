@@ -40,7 +40,7 @@ export function FormFields({
   };
 
   return (
-    <div className="grid gap-3 py-2">
+    <div className="grid gap-2 py-1">
       <div className="grid gap-1.5">
         <Label htmlFor="categoria" className="text-sm">Categoría *</Label>
         <Select
@@ -107,7 +107,7 @@ export function FormFields({
             value={formData.reporte.descripcion}
             maxLength="200"
             onChange={e => onChange('descripcion', e.target.value)}
-            className={`resize-none h-36 pb-8 text-sm ${errors.descripcion ? 'border-red-500' : ''}`}
+            className={`resize-none h-[110px] pb-8 text-sm ${errors.descripcion ? 'border-red-500' : ''}`}
             placeholder="Descripción del reporte"
           />
           <div className="absolute bottom-6 right-2">
