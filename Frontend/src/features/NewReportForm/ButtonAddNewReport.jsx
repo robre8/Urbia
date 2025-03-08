@@ -22,8 +22,14 @@ const ButtonAddNewReport = ({ onClick }) => {
       {
         duration: 5000,
         position: "bottom-center",
-        className: "p-4 bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto",
-        style: { width: "90vw", maxWidth: "600px" },
+        className: "p-4 bg-white rounded-xl shadow-lg mx-auto",
+        style: { 
+          width: "min(90vw, 600px)",
+          maxWidth: "600px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          margin: "0 auto"
+        },
       }
     );
     

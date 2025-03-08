@@ -120,7 +120,11 @@ export default function MapView() {
                 borderRadius: '12px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 padding: '16px',
-                maxWidth: '400px'
+                width: 'min(90vw, 600px)',
+                maxWidth: '600px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                margin: '0 auto'
               }
             }}
           />

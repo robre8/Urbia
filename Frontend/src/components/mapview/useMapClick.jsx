@@ -16,7 +16,6 @@ export default function MapClickHandler() {
       
       // Store coordinates in the map store
       setSelectedCoords(coords);
-      
       // Show toast with ReportLocationToast component
       toast(
         <ReportLocationToast 
@@ -26,7 +25,14 @@ export default function MapClickHandler() {
         {
           duration: 10000,
           position: "bottom-center",
-          className: "p-0 bg-white rounded-xl shadow-lg max-w-md mx-auto",
+          className: "p-0 bg-white rounded-xl shadow-lg mx-auto", 
+          style: {
+            width: "min(90vw, 600px)",
+            maxWidth: "600px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            margin: "0 auto"
+          },
           closeButton: false
         }
       );
