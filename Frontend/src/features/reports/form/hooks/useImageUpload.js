@@ -18,7 +18,10 @@ export function useImageUpload() {
       
       setImageError('');
       setPreviewImage(URL.createObjectURL(file));
-      setImageFile(file); // Store the file object directly
+      setImageFile(file);
+      
+      // Add debug logging
+      console.log("Image file set in hook:", file.name, file.type, file.size);
     }
   };
 

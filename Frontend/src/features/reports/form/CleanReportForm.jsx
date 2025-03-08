@@ -144,15 +144,17 @@ export default function CleanReportForm() {
     const formDataToSend = new FormData();
     formDataToSend.append(
       'reporte', 
-new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
+      new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
     );
     
     // Add image file if it exists
     if (imageFile) {
       // Make sure we're sending the file with the correct content type
-      formDataToSend.append('imagen', imageFile, imageFile.name);
-      console.log('Image file added to form data:', imageFile);
+      // Use 'imagen' as the field name expected by the backend
+      formDataToSend.append('imagen', imageFile);
+      console.log('Image file added to form data:', imageFile.name, imageFile.type, imageFile.size);
     }
+    
     // Add audio blob if it exists
     if (audioBlob) {
       const audioFile = new File([audioBlob], 'audio.webm', { type: 'audio/webm' });

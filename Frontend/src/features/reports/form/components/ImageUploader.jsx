@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm, imageError }) {
-  const [isLoading, setIsLoading] = useState(false);
+// Removed unused state variable
   const [isDragging, setIsDragging] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [stream, setStream] = useState(null);
@@ -82,44 +82,17 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
     fileInputRef.current.click();
   };
   // Handle file change (from input or drop)
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    setIsLoading(true);
-    
-    try {
-      // Check file size (limit to 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        onFileChange({ target: { files: [] } });
-        setLocalPreviewImage(null);
-        return;
-      }
+  // In the ImageUploader component
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
       
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        onFileChange({ target: { files: [] } });
-        setLocalPreviewImage(null);
-        return;
-      }
-      
-      // Create a local preview URL
-      const localPreviewUrl = URL.createObjectURL(file);
-      setLocalPreviewImage(localPreviewUrl);
-      
-      // Process the file normally
-      onFileChange(e);
+      // Pass the actual file object to the parent component
+      onFileChange('imagen', file);
       
       // Log for debugging
-      console.log("File processed:", file.name, "Preview URL:", localPreviewUrl);
-    } catch (error) {
-      console.error('Error processing image:', error);
-      setLocalPreviewImage(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  // Handle drag events
+      console.log("File selected:", file.name, file.type, file.size);
+    };
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -241,7 +214,7 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        disabled={disabled || isLoading}
+        disabled={disabled}
         className="hidden"
       />
       
