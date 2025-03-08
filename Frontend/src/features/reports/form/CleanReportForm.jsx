@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import useCategoryStore from '@/lib/store/useCategoryStore';
 import useReportsStore from '@/lib/store/useReportsStore';
+import useMapStore from '@/lib/store/useMapStore'; // Add this import
 import { useUserAuth } from '@/lib/store/useUserAuth';
 import { useUserLocation } from '@/components/mapview/hooks/useUserLocation';
 import {
@@ -8,14 +9,12 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetTrigger
 } from '@/components/ui/sheet';
 import ConfirmReport from '@/features/NewReportForm/ConfirmReport';
 import ButtonAddNewReport from '@/features/NewReportForm/ButtonAddNewReport';
 
 // Import our custom components and hooks
-import { AudioRecorder } from './components/AudioRecorder';
 import { ImageUploader } from './components/ImageUploader';
 import { FormFields } from './components/FormFields';
 import { FormButtons } from './components/FormButtons';
@@ -43,6 +42,7 @@ export default function CleanReportForm() {
   const { loading: loadingReport, reportPreview, sendReport, editReport, clearReportPreview } = useReportsStore();
   const { user } = useUserAuth();
   const { position } = useUserLocation();
+  const { selectedCoords } = useMapStore(); // Get selected coordinates from map store
 
   // UI state
   const [open, setOpen] = useState(false);
@@ -113,9 +113,9 @@ export default function CleanReportForm() {
       handleReset();
     }
   }, [open]);
-  // Update form data when report preview or position changes
+  // Update form data when report preview, selected coordinates, or position changes
   useEffect(() => {
-    if (reportPreview || position || user) {
+    if (reportPreview || selectedCoords || position || user) {
       setFormData(prev => ({
         ...prev,
         reporte: {
@@ -123,14 +123,19 @@ export default function CleanReportForm() {
           id: reportPreview?.id || '',
           titulo: reportPreview?.titulo || '',
           descripcion: reportPreview?.descripcionDespuesDeIa || '',
-          latitud: reportPreview?.latitud || (position ? position[0] : 0),
-          longitud: reportPreview?.longitud || (position ? position[1] : 0),
+          // Use selected coordinates from map click if available, otherwise use user position
+          latitud: reportPreview?.latitud || 
+                  (selectedCoords ? selectedCoords[0] : 
+                  (position ? position[0] : 0)),
+          longitud: reportPreview?.longitud || 
+                   (selectedCoords ? selectedCoords[1] : 
+                   (position ? position[1] : 0)),
           categoriaId: reportPreview?.categoriaId || '',
           usuarioId: reportPreview?.usuarioId || (user ? user.id : '')
         }
       }));
     }
-  }, [reportPreview, position, user, setFormData]);
+  }, [reportPreview, selectedCoords, position, user, setFormData]);
   const handleSubmit = async e => {
     e.preventDefault();
     if (!isValid || imageError) {
@@ -159,6 +164,7 @@ export default function CleanReportForm() {
         
         console.log('Se envia a sendReport.', formData);
         await sendReport(formDataToSend);
+        toast.success("Reporte creado exitosamente"); // Add success toast here
         setOpenConfirm(true);
         setIsConfirm(true);
       } else {
@@ -190,15 +196,22 @@ export default function CleanReportForm() {
       >
         <ButtonAddNewReport />
       </SheetTrigger>
-      <SheetContent className="overflow-y-auto px-4 flex flex-col gap-2">
-        <form onSubmit={handleSubmit}>
-          <SheetHeader className="space-y-2">
-            <SheetTitle className="text-2xl font-bold text-gray-900 p-4">
+      
+      {/* Hidden trigger for programmatic opening from map click toast */}
+      <SheetTrigger 
+        id="open-report-form" 
+        className="hidden" 
+        onClick={() => setOpen(true)}
+      />
+      
+      <SheetContent className="px-3 py-2 flex flex-col h-full max-h-screen overflow-hidden">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
+          <SheetHeader className="py-1">
+            <SheetTitle className="text-lg font-bold text-gray-900">
               Reportar incidente
             </SheetTitle>
-            <SheetDescription />
           </SheetHeader>
-          <div className="grid gap-8 py-4">
+          <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
             {/* Image Uploader Component */}
             <ImageUploader
               previewImage={previewImage}
@@ -207,7 +220,7 @@ export default function CleanReportForm() {
               isConfirm={isConfirm}
               imageError={imageError}
             />
-            {/* Form Fields Component */}
+            {/* Form Fields Component with Audio Recorder integrated */}
             <FormFields
               formData={formData}
               onChange={handleInputChange}
@@ -217,20 +230,14 @@ export default function CleanReportForm() {
               loadingCategories={loadingCategories}
               categoryError={categoryError}
               disabled={loadingReport}
+              // Pass audio recorder props
+              isRecording={recording}
+              recordingTime={recordingTime}
+              onStartRecording={startRecording}
+              onStopRecording={stopRecording}
+              hasAudio={!!audioBlob}
             />
-            {/* Audio Recorder Component (only show if not in confirm mode) */}
-            {!isConfirm && (
-              <div className="relative h-10">
-                <AudioRecorder
-                  isRecording={recording}
-                  recordingTime={recordingTime}
-                  onStart={startRecording}
-                  onStop={stopRecording}
-                  hasAudio={!!audioBlob}
-                  disabled={loadingReport}
-                />
-              </div>
-            )}
+            {/* Remove standalone AudioRecorder */}
           </div>
           {/* Form Buttons Component */}
           <FormButtons
@@ -239,6 +246,7 @@ export default function CleanReportForm() {
             loading={loadingReport}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
+            className="mt-1 py-1"
           />
         </form>
       </SheetContent>

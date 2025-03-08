@@ -15,23 +15,23 @@ export function AudioRecorder({ isRecording, recordingTime, onStart, onStop, has
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <Button
-        type="button" // Explicitly set type to button to prevent form submission
+        type="button"
         onClick={handleRecordClick}
         disabled={disabled}
-        className={`rounded-full p-2 ${
+        className={`rounded-full p-1 h-7 w-7 flex items-center justify-center ${
           isRecording
             ? 'bg-red-500 hover:bg-red-600'
             : hasAudio
             ? 'bg-green-500 hover:bg-green-600'
-            : 'bg-slate-200 hover:bg-slate-300'
+            : 'bg-lime-300 hover:bg-lime-400'
         }`}
       >
-        <LuMic className={`h-5 w-5 ${isRecording ? 'text-white' : ''}`} />
+        <LuMic className={`h-4 w-4 ${isRecording ? 'text-white' : 'text-black'}`} />
       </Button>
-      {isRecording && <span>{recordingTime}s</span>}
-      {hasAudio && !isRecording && <span>Audio grabado</span>}
+      {isRecording && <span className="text-xs">{recordingTime}s</span>}
+      {hasAudio && !isRecording && <span className="text-xs">Audio grabado</span>}
     </div>
   );
 }

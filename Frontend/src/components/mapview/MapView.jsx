@@ -7,6 +7,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { Toaster } from "sonner";
 
 import { useUserLocation } from "./hooks/useUserLocation";
 import { useReverseGeocode } from "./hooks/useReverseGeocode";
@@ -28,6 +29,7 @@ import UserMenu from "@/features/auth/MenuUser";
 import UserLogin from "@/features/auth/UserLogin";
 import InstallPWAButton from "./AddPWAButton";
 import { AddressCard } from "../Adress/AdressCard";
+import CleanReportForm from "@/features/reports/form/CleanReportForm";
 
 import userIcon from "/frogIco.png";
 import sadFrog from "@/assets/frogError.png";
@@ -99,6 +101,8 @@ export default function MapView() {
 
   return (
     <div className="relative w-full h-screen">
+      <Toaster position="bottom-center" />
+      
       <MapContainer
         center={center}
         zoom={defaultZoom}
@@ -117,24 +121,22 @@ export default function MapView() {
         <MapClickHandler />
 
         {/* Marcador ubicación del usuario */}
-
-{!error && position && (
-  <>
-    <Marker position={position} icon={wazeIcon} />
-    <AnimatedCircle
-      center={position}
-      initialRadius={80}
-      maxRadius={120}
-      duration={2000} // Duración en milisegundos del ciclo de expansión
-      pathOptions={{
-        color: "blue",
-        fillColor: "blue",
-        stroke: false
-      }}
-    />
-  </>
-)}
-
+        {!error && position && (
+          <>
+            <Marker position={position} icon={wazeIcon} />
+            <AnimatedCircle
+              center={position}
+              initialRadius={80}
+              maxRadius={120}
+              duration={2000} // Duración en milisegundos del ciclo de expansión
+              pathOptions={{
+                color: "blue",
+                fillColor: "blue",
+                stroke: false
+              }}
+            />
+          </>
+        )}
 
         {/* Marcador de click en el mapa */}
         {selectedCoords && <Marker position={selectedCoords} />}
@@ -195,6 +197,13 @@ export default function MapView() {
 
       <CityNavigation map={map} />
 
+      {/* Hidden button to trigger the report form */}
+      <button 
+        id="open-report-form" 
+        className="hidden" 
+        aria-hidden="true"
+      />
+
       {/* ReportView se abre cuando seleccionamos un reporte */}
       {selectedReport && (
         <ReportView
@@ -202,6 +211,9 @@ export default function MapView() {
           onClose={() => setSelectedReport(null)}
         />
       )}
+      
+      {/* Clean Report Form */}
+      <CleanReportForm />
     </div>
   );
 }
