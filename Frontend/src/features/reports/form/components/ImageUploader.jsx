@@ -82,17 +82,19 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
     fileInputRef.current.click();
   };
   // Handle file change (from input or drop)
-  // In the ImageUploader component
-    const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      // Pass the actual file object to the parent component
-      onFileChange('imagen', file);
-      
-      // Log for debugging
-      console.log("File selected:", file.name, file.type, file.size);
-    };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Pass the actual file object to the parent component
+    onFileChange('imagen', file);
+    
+    // Create a local preview for immediate display
+    setLocalPreviewImage(URL.createObjectURL(file));
+    
+    // Log for debugging
+    console.log("File selected in ImageUploader:", file.name, file.type, file.size);
+  };
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();

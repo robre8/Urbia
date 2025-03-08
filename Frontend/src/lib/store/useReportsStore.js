@@ -103,21 +103,36 @@ const useReportsStore = create(
           }
         },
 
-        editReport: async (data) => {
+        editReport: async (id, data) => {
           set({ loading: true, error: null });
           try {
-            const response = await putReport(data);
+            // Verificar que data sea una instancia de FormData
+            if (!(data instanceof FormData)) {
+              throw new Error("Los datos deben ser una instancia de FormData");
+            }
+            
+            const response = await putReport(id, data);
+            
+            // Update the reports list with the updated report
             const updatedReports = get().reports.map((report) =>
-              report.id === data.id ? response.data : report
+              report.id === id ? response.data : report
             );
+            
             set({
               reportPreview: response.data,
               reports: updatedReports,
               groupedReports: groupReports(updatedReports),
               loading: false
             });
+            
+            return response.data;
           } catch (error) {
-            set({ error: error.message, loading: false });
+            console.error("Error en editReport:", error);
+            set({ 
+              error: error.message || "Error al actualizar el reporte", 
+              loading: false 
+            });
+            throw error; // Re-lanzar para manejo en el componente
           }
         },
 
