@@ -101,7 +101,19 @@ export default function MapView() {
 
   return (
     <div className="relative w-full h-screen">
-      <Toaster position="bottom-center" />
+      <Toaster 
+            position="bottom-center"
+            toastOptions={{
+              style: {
+                background: 'white',
+                color: 'black',
+                borderRadius: '12px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                padding: '16px',
+                maxWidth: '400px'
+              }
+            }}
+          />
       
       <MapContainer
         center={center}

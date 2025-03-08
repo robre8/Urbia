@@ -136,49 +136,55 @@ export default function CleanReportForm() {
       }));
     }
   }, [reportPreview, selectedCoords, position, user, setFormData]);
-  const handleSubmit = async e => {
+  // Check how the form submission is handling the image file
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValid || imageError) {
-      toast.error("Por favor, corrige los errores del formulario");
+    
+    // Make sure we have the user's coordinates or selected coordinates
+    const coords = selectedCoords || position;
+    if (!coords) {
+      toast.error("No se pudo obtener la ubicación");
       return;
     }
-  
+    
+    // Create a new FormData object to properly handle file uploads
+    const formDataToSend = new FormData();
+    
+    // Add report data as JSON
+    const reportData = {
+      ...formData.reporte,
+      latitud: coords[0],
+      longitud: coords[1],
+      usuarioId: user?.id || ''
+    };
+    
+    formDataToSend.append('reporte', JSON.stringify(reportData));
+    
+    // Add image file if it exists
+    if (imageFile) {
+      formDataToSend.append('imagen', imageFile);
+      console.log('Image file added to form data:', imageFile);
+    }
+    
+    // Add audio blob if it exists
+    if (audioBlob) {
+      const audioFile = new File([audioBlob], 'audio.webm', { type: 'audio/webm' });
+      formDataToSend.append('audio', audioFile);
+    }
+    
     try {
-      // Create FormData exactly like in the working NewReportForm
-      const formDataToSend = new FormData();
-      formDataToSend.append(
-        'reporte',
-        new Blob([JSON.stringify(formData.reporte)], { type: 'application/json' })
-      );
-      
-      if (!isConfirm) {
-        // Append files directly without additional parameters
-        if (audioBlob) {
-          formDataToSend.append("audio", audioBlob);
-        }
-        
-        if (imageFile) {
-          // Just append the file without specifying filename
-          formDataToSend.append("imagen", imageFile);
-        }
-        
-        console.log('Se envia a sendReport.', formData);
-        await sendReport(formDataToSend);
-        toast.success("Reporte creado exitosamente"); // Add success toast here
-        setOpenConfirm(true);
-        setIsConfirm(true);
-      } else {
-        await editReport(formData.reporte);
-        clearReportPreview();
-        setIsConfirm(false);
-        setOpen(false);
-        handleReset();
-        
+      // Use editReport if we're in edit mode (isConfirm), otherwise use sendReport
+      if (isConfirm && formData.reporte.id) {
+        await editReport(formData.reporte.id, formDataToSend);
         toast.success("Reporte actualizado correctamente");
+        setOpen(false);
+      } else {
+        await sendReport(formDataToSend);
+        setOpenConfirm(true);
       }
     } catch (error) {
-      console.error("Error al enviar el reporte:", error);
-      toast.error("No se pudo enviar el reporte. Intenta de nuevo más tarde.");
+      console.error('Error sending report:', error);
+      toast.error("Error al enviar el reporte");
     }
   };
   // Update component props to match the new structure

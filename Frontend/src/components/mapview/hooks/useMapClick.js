@@ -22,12 +22,26 @@ export default function MapClickHandler() {
           label: "Crear reporte",
           onClick: () => {
             document.getElementById("open-report-form")?.click();
+          },
+          style: {
+            backgroundColor: "#9bee5e",
+            color: "#FFFFFF",
+            fontWeight: "500",
+            borderRadius: "4px",
+            padding: "8px 16px"
           }
         },
         cancel: {
           label: "Cancelar",
           onClick: () => {
             setSelectedCoords(null);
+          },
+          style: {
+            backgroundColor: "#9bee5e",
+            color: "#333333",
+            fontWeight: "500",
+            borderRadius: "4px",
+            padding: "8px 16px"
           }
         },
         duration: 10000,
