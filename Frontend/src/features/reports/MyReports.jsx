@@ -3,7 +3,10 @@ import historialIcon from "../../assets/history-line.svg";
 import iconMap from "../../assets/map-pin-2-line.svg";
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
 import styles from "./styles/MyReports.module.css";
-import { useState } from "react"; // Add this import
+import { useState } from "react";
+import { toast } from "sonner";
+import frogError from "@/assets/frogError.png";
+import { useUserLocation } from "@/components/mapview/hooks/useUserLocation";
 
 import frogReportInfra from "../../assets/svgs/FrogReportInfra.svg";
 import frogReportPoli from "../../assets/svgs/FrogReportPoli.svg";
@@ -35,6 +38,48 @@ const truncateText = (text, maxLength = 25) => {
 
 function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelectReport }) {
   const [hoveredReportId, setHoveredReportId] = useState(null);
+  const { position, accuracy } = useUserLocation();
+  
+  const hasAccurateLocation = () => {
+    return position && accuracy && accuracy < 50;
+  };
+  
+  const handleCreateReport = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (hasAccurateLocation()) {
+      const formTrigger = document.getElementById("open-report-form");
+      if (formTrigger) {
+        formTrigger.click();
+      }
+      closeDrawer();
+    } else {
+      toast(
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+          <div className="flex-shrink-0 w-32 flex justify-center">
+            <img src={frogError} alt="Frog" className="h-28 w-auto object-contain" />
+          </div>
+          <div className="text-center sm:text-left">
+            Para crear un reporte, primero<strong> haz click</strong> en algún punto del mapa y confirma la ubicación.
+          </div>
+        </div>,
+        {
+          duration: 5000,
+          position: "bottom-center",
+          className: "p-4 bg-white rounded-xl shadow-lg mx-auto",
+          style: { 
+            width: "min(90vw, 600px)",
+            maxWidth: "600px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            margin: "0 auto"
+          },
+        }
+      );
+      closeDrawer();
+    }
+  };
   
   const handleDelete = (id) => {
     closeDrawer();
@@ -95,7 +140,15 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
           ))}
         </div>
       ) : (
-        <p className="text-center">Aún no has creado ningún reporte</p>
+        <div className="text-center py-4 px-2">
+          <p className="mb-3">Aún no has creado ningún reporte</p>
+          <button 
+            onClick={handleCreateReport} 
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+          >
+            Crear mi primer reporte
+          </button>
+        </div>
       )}
     </AccordionContent>
   </AccordionItem>
