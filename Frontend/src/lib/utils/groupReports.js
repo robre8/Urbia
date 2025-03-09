@@ -55,6 +55,5 @@ export const groupReports = (reports) => {
     groups[root].push(reports[i]);
   }
 
-  console.log("✅ Reportes agrupados:", groups);
   return groups;
 };

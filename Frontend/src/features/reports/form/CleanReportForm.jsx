@@ -208,6 +208,8 @@ export default function CleanReportForm() {
         setOpen={setOpenConfirm}
         setOpenParent={setOpen}
         setIsConfirm={setIsConfirm}
+        address={address}
+        loadingAddress={loadingAddress}
       />
       {/* Remove the SheetTrigger with the floating button */}
       {/* Keep the hidden trigger for programmatic opening from map click toast */}
@@ -217,7 +219,7 @@ export default function CleanReportForm() {
         onClick={() => setOpen(true)}
       />
       
-      <SheetContent className="px-3 py-2 flex flex-col h-full max-h-screen overflow-hidden">
+      <SheetContent className="px-3 py-2 flex flex-col h-full w-full max-h-screen overflow-hidden">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <SheetHeader className="py-1">
             <SheetTitle className="text-lg font-bold text-gray-900">

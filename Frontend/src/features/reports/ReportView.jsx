@@ -24,7 +24,6 @@ const categoryMapping = {
 export default function ReportView({ report, onClose, deleteReport }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
-console.log(report);
   useEffect(() => {
     if (report) {
       setCurrentReport(report);
@@ -47,13 +46,20 @@ console.log(report);
     currentReport.urlImagen && currentReport.urlImagen.trim().length > 0;
 
     const handleDelete = () => {
-      handleOpenChange(false); // ✅ Cierra el Sheet antes de mostrar el alert
-    
+      // Primero cerramos el Sheet
+      handleOpenChange(false);
+      
+      // Luego, después de un pequeño delay, mostramos el alert de confirmación
       setTimeout(() => {
+        // Simplificamos la lógica para que sea similar a MyReports.jsx
         deleteAlert(currentReport.id, (deletedId) => {
-          deleteReport(deletedId);
+          if (typeof deleteReport === 'function') {
+            deleteReport(deletedId);
+          } else {
+            console.error('deleteReport no es una función');
+          }
         });
-      }, 300); // ✅ Pequeño delay para evitar problemas de renderizado
+      }, 300);
     };
     
 
@@ -130,7 +136,7 @@ console.log(report);
 
         <div className="mt-4 px-4">
           <h3 className="text-lg font-semibold">Descripción del incidente</h3>
-          <p className="text-sm text-gray-600 mt-1 whitespace-pre-line">
+          <p className="text-sm text-gray-600 mt-1 whitespace-pre-line max-h-[270px] overflow-auto">
             {currentReport.descripcionDespuesDeIa}
           </p>
         </div>

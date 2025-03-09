@@ -58,7 +58,7 @@ export default function UrbiaLikes() {
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block z-[9999]">
       <button
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
