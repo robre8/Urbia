@@ -3,6 +3,8 @@ import { Marker, Popup } from "react-leaflet";
 import PropTypes from "prop-types";
 import L from "leaflet";
 import { useState } from "react";
+// We can remove the Lucide import since we won't be using it
+// import { Image as ImageIcon } from "lucide-react";
 
 import infraIcon from "@/assets/svgs/FrogPinInfra.svg";
 import seguridadIcon from "@/assets/svgs/FrogPinPoli.svg";
@@ -103,17 +105,24 @@ export default function ReportMarker({
                     setShowPopup(false);
                   }}
                 >
-                  {r.urlImagen && (
+                  {r.urlImagen ? (
                     <img
                       src={r.urlImagen}
                       alt="Imagen del reporte"
                       className="w-12 h-12 object-cover mr-2 rounded-full"
                     />
+                  ) : (
+                    <div className="w-12 h-12 mr-2 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={categoryIcons[r.categoriaId] || infraIcon} 
+                        alt="Icono de categoría"
+                        className="w-10 h-10 object-contain" 
+                      />
+                    </div>
                   )}
                   <div>
-
-                  <h1 className="text-sm font-semibold">{r.titulo}</h1>
-                  <small className="text-[10px]">{categoryMapping[r.categoriaId]}</small>
+                    <h1 className="text-sm font-semibold">{r.titulo}</h1>
+                    <small className="text-[10px]">{categoryMapping[r.categoriaId]}</small>
                   </div>
                 </li>
               ))}
