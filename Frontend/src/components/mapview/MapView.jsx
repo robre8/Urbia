@@ -16,6 +16,7 @@ import { useCities } from "./hooks/useCities";
 import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
 import useMapStore from "@/lib/store/useMapStore";
 import useReportsStore from "@/lib/store/useReportsStore";
+import { useWebSocketReports } from "./hooks/useWebSocketReports"; // Add this import
 
 import ReportMarker from "./ReportMarker";
 import Recenter from "./Recenter";
@@ -57,6 +58,9 @@ const clickMarkerIcon = L.icon({
 
 export default function MapView() {
   const { groupedReports } = useReportsStore();
+  
+  // Initialize WebSocket connection for real-time updates
+  useWebSocketReports();
 
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([-34.6037, -58.3816]);
