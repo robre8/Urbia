@@ -14,7 +14,6 @@ import { useReverseGeocode } from "./hooks/useReverseGeocode";
 import { useUserAuth } from "@/lib/store/useUserAuth";
 import { useCities } from "./hooks/useCities";
 import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
-import useCategoryStore from "@/lib/store/useCategoryStore";
 import useMapStore from "@/lib/store/useMapStore";
 import useReportsStore from "@/lib/store/useReportsStore";
 
@@ -54,16 +53,10 @@ const clickMarkerIcon = L.icon({
   popupAnchor: [0, -35]
 });
 
-const categoryMapping = {
-  1: "infraestructura",
-  2: "seguridad",
-  3: "salud",
-  4: "eventosSociales"
-};
+
 
 export default function MapView() {
   const { groupedReports } = useReportsStore();
-  const { toggles } = useCategoryStore();
 
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([-34.6037, -58.3816]);
@@ -170,9 +163,8 @@ export default function MapView() {
         {/* Render de reportes agrupados */}
         {Object.values(groupedReports).map((group, index) => {
           if (!Array.isArray(group) || group.length === 0) return null;
-          const catKey = categoryMapping[group[0]?.categoriaId];
-          if (!toggles[catKey]) return null;
-
+          
+          // No need to filter here as the ReportMarker component will handle filtering
           return (
             <ReportMarker
               key={index}

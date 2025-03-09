@@ -2,9 +2,8 @@
 import { Marker, Popup } from "react-leaflet";
 import PropTypes from "prop-types";
 import L from "leaflet";
-import { useState } from "react";
-// We can remove the Lucide import since we won't be using it
-// import { Image as ImageIcon } from "lucide-react";
+import { useState, useMemo } from "react";
+import useCategoryStore from "@/lib/store/useCategoryStore";
 
 import infraIcon from "@/assets/svgs/FrogPinInfra.svg";
 import seguridadIcon from "@/assets/svgs/FrogPinPoli.svg";
@@ -18,6 +17,14 @@ const categoryIcons = {
   2: infraIcon,         // ID 2 = Infraestructura
   3: seguridadIcon,     // ID 3 = Seguridad
   4: eventosIcon,       // ID 4 = Eventos Sociales
+};
+
+// Category ID to toggle key mapping
+const categoryToToggleKey = {
+  1: "salud",
+  2: "infraestructura",
+  3: "seguridad",
+  4: "eventosSociales",
 };
 
 // Updated category mapping to match backend category IDs
@@ -34,16 +41,29 @@ export default function ReportMarker({
   onReportSelect
 }) {
   const [showPopup, setShowPopup] = useState(false);
-  if (!Array.isArray(reports) || reports.length === 0) return null;
+  const { toggles } = useCategoryStore();
+  
+  // Filter reports based on active category toggles
+  const filteredReports = useMemo(() => {
+    return reports.filter(report => {
+      const toggleKey = categoryToToggleKey[report.categoriaId];
+      return toggleKey && toggles[toggleKey];
+    });
+  }, [reports, toggles]);
+  
+  // If no reports are visible after filtering, don't render anything
+  if (!Array.isArray(filteredReports) || filteredReports.length === 0) return null;
 
-  const isCluster = reports.length > 1;
+  const isCluster = filteredReports.length > 1;
 
   // Si es clúster => usamos un size mayor, si no => usamos el size por defecto
   const [width, height] = isCluster ? [60, 60] : size;
 
+  // If it's not a cluster, use the specific category icon
+  // If it is a cluster, use the cluster icon
   const iconUrl = isCluster
     ? clusterIcon
-    : categoryIcons[reports[0]?.categoriaId] || infraIcon;
+    : categoryIcons[filteredReports[0]?.categoriaId] || infraIcon;
 
   const iconHtml = isCluster
     ? `<div style="position: relative; width: ${width}px; height: ${height}px; overflow: hidden;">
@@ -58,7 +78,7 @@ export default function ReportMarker({
            padding: 2px 6px;
            font-size: 12px;
          ">
-           ${reports.length}
+           ${filteredReports.length}
          </span>
        </div>`
     : `<div style="width: ${width}px; height: ${height}px; overflow: hidden;">
@@ -78,13 +98,13 @@ export default function ReportMarker({
     ? { click: () => setShowPopup(true) }
     : {
         click: () => {
-          if (onReportSelect) onReportSelect(reports[0]);
+          if (onReportSelect) onReportSelect(filteredReports[0]);
         },
       };
 
   return (
     <Marker
-      position={[reports[0].latitud, reports[0].longitud]}
+      position={[filteredReports[0].latitud, filteredReports[0].longitud]}
       icon={customMarker}
       eventHandlers={eventHandlers}
     >
@@ -96,7 +116,7 @@ export default function ReportMarker({
             </h3>
             
             <ul className="list-none p-0 m-0 max-h-52 overflow-y-auto">
-              {reports.map((r) => (
+              {filteredReports.map((r) => (
                 <li
                   key={r.id}
                   className="mb-2 flex items-center cursor-pointer"
