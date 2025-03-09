@@ -3,6 +3,9 @@ import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
 import { ReportLocationToast } from './ReportLocationToast';
 
+// Track if a toast is currently active
+let isToastActive = false;
+
 export default function MapClickHandler() {
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);
 
@@ -11,19 +14,35 @@ export default function MapClickHandler() {
       // Filtramos si el evento es un doble clic
       if (e.originalEvent.detail === 2) return; // ⬅️ Evita capturar doble clic
 
+      // If a toast is already active, don't show another one
+      if (isToastActive) {
+        console.log('Toast already active, ignoring map click');
+        return;
+      }
+
       const coords = [e.latlng.lat, e.latlng.lng];
       console.log('📍 Coordenadas seleccionadas:', coords);
       
       // Store coordinates in the map store
       setSelectedCoords(coords);
+      
+      // Set toast as active
+      isToastActive = true;
+      
       // Show toast with ReportLocationToast component
       toast(
         <ReportLocationToast 
-          onCreateReport={() => document.getElementById("open-report-form")?.click()}
-          onCancel={() => setSelectedCoords(null)}
+          onCreateReport={() => {
+            isToastActive = false;
+            document.getElementById("open-report-form")?.click();
+          }}
+          onCancel={() => {
+            isToastActive = false;
+            setSelectedCoords(null);
+          }}
         />,
         {
-          duration: 10000,
+          duration: 8000,
           position: "bottom-center",
           className: "p-0 bg-white rounded-xl shadow-lg mx-auto", 
           style: {
@@ -33,7 +52,11 @@ export default function MapClickHandler() {
             transform: "translateX(-50%)",
             margin: "0 auto"
           },
-          closeButton: false
+          closeButton: false,
+          onDismiss: () => {
+            // Reset the toast active state when dismissed
+            isToastActive = false;
+          }
         }
       );
     }

@@ -78,9 +78,9 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
                   onMouseLeave={() => setHoveredReportId(null)}
                 >
                   <p className="max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap">
-                    {report.titulo}
+                    {truncateText(report.titulo)}
                   </p>
-                  {hoveredReportId === report.id && report.titulo.length > 25 && (
+                  {hoveredReportId === report.id && (
                     <div className="absolute left-0 bottom-full mb-2 bg-black text-white px-3 py-1.5 rounded text-sm z-50 whitespace-normal max-w-[250px]">
                       {report.titulo}
                     </div>
