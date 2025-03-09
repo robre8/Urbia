@@ -3,13 +3,14 @@ import historialIcon from "../../assets/history-line.svg";
 import iconMap from "../../assets/map-pin-2-line.svg";
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
 import styles from "./styles/MyReports.module.css";
+import { useState } from "react"; // Add this import
 
 import frogReportInfra from "../../assets/svgs/FrogReportInfra.svg";
 import frogReportPoli from "../../assets/svgs/FrogReportPoli.svg";
 import frogReportSalud from "../../assets/svgs/FrogReportSalud.svg";
 import frogReportSocial from "../../assets/svgs/FrogReportSocial.svg";
 
-import ReportActions from "./ReportActions"; // Importamos el nuevo componente
+import ReportActions from "./ReportActions";
 
 function getCategoryIcon(categoryId) {
   switch (categoryId) {
@@ -26,7 +27,15 @@ function getCategoryIcon(categoryId) {
   }
 }
 
+// Helper function to truncate text
+const truncateText = (text, maxLength = 25) => {
+  if (text.length <= maxLength) return text;
+  return `${text.substring(0, maxLength)}...`;
+};
+
 function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelectReport }) {
+  const [hoveredReportId, setHoveredReportId] = useState(null);
+  
   const handleDelete = (id) => {
     closeDrawer();
     deleteAlert(id, (deletedId) => {
@@ -63,7 +72,20 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
                 onClick={() => onSelectReport(report)}
               >
                 <img src={getCategoryIcon(report.categoriaId)} alt="" className="w-8 h-8" />
-                <p>{report.titulo}</p>
+                <div 
+                  className="relative"
+                  onMouseEnter={() => setHoveredReportId(report.id)}
+                  onMouseLeave={() => setHoveredReportId(null)}
+                >
+                  <p className="max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {report.titulo}
+                  </p>
+                  {hoveredReportId === report.id && report.titulo.length > 25 && (
+                    <div className="absolute left-0 bottom-full mb-2 bg-black text-white px-3 py-1.5 rounded text-sm z-50 whitespace-normal max-w-[250px]">
+                      {report.titulo}
+                    </div>
+                  )}
+                </div>
               </div>
               <ReportActions 
                 onEdit={() => console.log(`Editar reporte ${report.id}`)} 
@@ -78,7 +100,6 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
     </AccordionContent>
   </AccordionItem>
 </Accordion>
-
   );
 }
 
