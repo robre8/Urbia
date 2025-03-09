@@ -2,12 +2,20 @@ import { useMapEvents } from 'react-leaflet';
 import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
 import { ReportLocationToast } from './ReportLocationToast';
+import { useEffect } from 'react';
 
 // Track if a toast is currently active
 let isToastActive = false;
 
 export default function MapClickHandler() {
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);
+
+  // Add cleanup effect to ensure isToastActive is reset if component unmounts
+  useEffect(() => {
+    return () => {
+      isToastActive = false;
+    };
+  }, []);
 
   useMapEvents({
     click(e) {
@@ -29,14 +37,22 @@ export default function MapClickHandler() {
       // Set toast as active
       isToastActive = true;
       
+      // Create a timeout to reset isToastActive after toast duration
+      const toastTimeout = setTimeout(() => {
+        isToastActive = false;
+        console.log('Toast timeout reached, resetting active state');
+      }, 8500); // Slightly longer than toast duration to ensure it completes
+      
       // Show toast with ReportLocationToast component
       toast(
         <ReportLocationToast 
           onCreateReport={() => {
+            clearTimeout(toastTimeout); // Clear the timeout
             isToastActive = false;
             document.getElementById("open-report-form")?.click();
           }}
           onCancel={() => {
+            clearTimeout(toastTimeout); // Clear the timeout
             isToastActive = false;
             setSelectedCoords(null);
           }}
@@ -55,7 +71,9 @@ export default function MapClickHandler() {
           closeButton: false,
           onDismiss: () => {
             // Reset the toast active state when dismissed
+            clearTimeout(toastTimeout); // Clear the timeout
             isToastActive = false;
+            console.log('Toast dismissed, resetting active state');
           }
         }
       );
