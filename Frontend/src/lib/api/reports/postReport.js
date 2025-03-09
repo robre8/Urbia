@@ -9,7 +9,7 @@ const postReport = async (formData) => {
   };
 
   try {
-   const response = await api.post("/api/reporte/combinado", formData, config);   
+    const response = await api.post("/api/reporte/combinado", formData, config);   
     if (response.status == 201) {
       return { message: "OK", data: response.data };
     } else {

@@ -3,7 +3,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AudioRecorder } from './AudioRecorder';
-import { useEffect } from 'react';
 
 export function FormFields({ 
   formData, 
@@ -14,31 +13,26 @@ export function FormFields({
   loadingCategories, 
   categoryError, 
   disabled,
-  // Add audio recorder props
+  // Audio recorder props
   isRecording,
   recordingTime,
   onStartRecording,
   onStopRecording,
   hasAudio
 }) {
-  // Log cuando cambia la categoría para depuración
-  useEffect(() => {
-    console.log("Categoría seleccionada:", formData.reporte.categoriaId);
-  }, [formData.reporte.categoriaId]);
+
 
   const handleCategoryChange = (value) => {
-    // Asegurarse de que el valor es un número antes de enviarlo
+    // Convert to number
     const categoryId = parseInt(value, 10);
-    console.log("Categoría seleccionada (antes de cambio):", value);
-    console.log("Categoría convertida a número:", categoryId);
     
-    // Verificar que la categoría existe en la lista de categorías
-    const categoryExists = categories.some(cat => cat.id === categoryId);
-    console.log("¿La categoría existe en la lista?", categoryExists);
+
     
+    // Pass the ID directly to the parent component
     onChange('categoriaId', categoryId);
   };
 
+  // Rest of the component remains the same
   return (
     <div className="grid gap-2 py-1">
       <div className="grid gap-1.5">
@@ -77,6 +71,7 @@ export function FormFields({
         )}
       </div>
 
+      {/* Rest of the form fields remain unchanged */}
       <div className="grid gap-1.5">
         <Label htmlFor="titulo" className="text-sm">Título *</Label>
         <Input

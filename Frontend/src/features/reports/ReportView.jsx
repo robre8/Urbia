@@ -14,11 +14,12 @@ import UrbiaLikes from "./UrbiaLikes";
 import ReportActions from "./ReportActions"; // ✅ Importamos el nuevo componente
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
 
+// Updated category mapping to match backend category IDs
 const categoryMapping = {
-  1: "Infraestructura",
-  2: "Seguridad",
-  3: "Salud",
-  4: "Eventos Sociales",
+  1: "Salud",               // ID 1 = Salud
+  2: "Infraestructura",     // ID 2 = Infraestructura
+  3: "Seguridad",           // ID 3 = Seguridad
+  4: "Eventos Sociales",    // ID 4 = Eventos Sociales
 };
 
 export default function ReportView({ report, onClose, deleteReport }) {

@@ -10,18 +10,20 @@ import saludIcon from "@/assets/svgs/FrogPinSalud.svg";
 import eventosIcon from "@/assets/svgs/FrogPinSocial.svg";
 import clusterIcon from "@/assets/svgs/FrogPinGrupo.svg";
 
+// Updated icon mapping to match backend category IDs
 const categoryIcons = {
-  1: infraIcon,
-  2: seguridadIcon,
-  3: saludIcon,
-  4: eventosIcon,
+  1: saludIcon,         // ID 1 = Salud
+  2: infraIcon,         // ID 2 = Infraestructura
+  3: seguridadIcon,     // ID 3 = Seguridad
+  4: eventosIcon,       // ID 4 = Eventos Sociales
 };
 
+// Updated category mapping to match backend category IDs
 const categoryMapping = {
-  1: "Infraestructura",
-  2: "Seguridad",
-  3: "Salud",
-  4: "Eventos Sociales",
+  1: "Salud",               // ID 1 = Salud
+  2: "Infraestructura",     // ID 2 = Infraestructura
+  3: "Seguridad",           // ID 3 = Seguridad
+  4: "Eventos Sociales",    // ID 4 = Eventos Sociales
 };
 
 export default function ReportMarker({

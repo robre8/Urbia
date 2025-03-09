@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 const CATEGORY_DEFAULT = { id: 99, nombre: 'default' };
 
 // Add address and loadingAddress to props
-const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address, loadingAddress }) => {
+const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address}) => {
   const { categories } = useCategoryStore();
   const { reportPreview, clearReportPreview } = useReportsStore();   
   const [currentCategory, setCurrentCategory] = useState({});
@@ -32,13 +32,7 @@ const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address, lo
   // Remove the useReverseGeocode hook call since we're getting address from props
   // const { address, loadingAddress, error } = useReverseGeocode(coordinates);
   
-  // Add debug logging to see what's happening
-  useEffect(() => {
-    if (reportPreview) {
-      console.log("Coordinates for geocoding:", coordinates);
-      console.log("Address result:", { address, loadingAddress });
-    }
-  }, [reportPreview, coordinates, address, loadingAddress]);
+
   
   const handleConfirm = (e) => {
     e.preventDefault();
