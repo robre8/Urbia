@@ -10,13 +10,12 @@ import "leaflet/dist/leaflet.css";
 import { Toaster } from "sonner";
 
 import { useUserLocation } from "./hooks/useUserLocation";
-import { useReverseGeocode } from "./hooks/useReverseGeocode";
+// Keep the useReverseGeocode import as it might be used elsewhere
 import { useUserAuth } from "@/lib/store/useUserAuth";
 import { useCities } from "./hooks/useCities";
 import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
 import useMapStore from "@/lib/store/useMapStore";
 import useReportsStore from "@/lib/store/useReportsStore";
-import { useWebSocketReports } from "./hooks/useWebSocketReports"; // Add this import
 
 import ReportMarker from "./ReportMarker";
 import Recenter from "./Recenter";
@@ -28,7 +27,8 @@ import CityNavigation from "./CityNavigation";
 import UserMenu from "@/features/auth/MenuUser";
 import UserLogin from "@/features/auth/UserLogin";
 import InstallPWAButton from "./AddPWAButton";
-import { AddressCard } from "../Adress/AdressCard";
+// Remove the AddressCard import
+// import { AddressCard } from "../Adress/AdressCard";
 import CleanReportForm from "@/features/reports/form/CleanReportForm";
 
 import userIcon from "/frogIco.png";
@@ -57,19 +57,14 @@ const clickMarkerIcon = L.icon({
 
 
 export default function MapView() {
-  const { groupedReports } = useReportsStore();
+  const { groupedReports, deleteReport } = useReportsStore(); // Add deleteReport here
   
-  // Initialize WebSocket connection for real-time updates
-  useWebSocketReports();
-
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
   const [map, setMap] = useState(null);
 
   const { user } = useUserAuth();
-  const { address, loadingAddress, error: addressError } =
-    useReverseGeocode(position);
   const { cities } = useCities();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHasBeenOpened = useRef(false);
@@ -105,6 +100,19 @@ export default function MapView() {
   };
 
   const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
+
+  // Function to handle report selection and center the map
+  const handleReportSelect = (report) => {
+    setSelectedReport(report);
+    
+    // Use flyTo for a smoother animation when centering on the report
+    if (map && report) {
+      map.flyTo([report.latitud, report.longitud], defaultZoom, {
+        duration: 1.5, // Animation duration in seconds
+        easeLinearity: 0.25 // Makes the animation more natural
+      });
+    }
+  };
 
   return (
     <div className="relative w-full h-screen">
@@ -168,13 +176,12 @@ export default function MapView() {
         {Object.values(groupedReports).map((group, index) => {
           if (!Array.isArray(group) || group.length === 0) return null;
           
-          // No need to filter here as the ReportMarker component will handle filtering
           return (
             <ReportMarker
               key={index}
               reports={group}
-              // Al hacer clic en un reporte, se abre el detalle
-              onReportSelect={(report) => setSelectedReport(report)}
+              // Update to use the new handler function
+              onReportSelect={handleReportSelect}
             />
           );
         })}
@@ -190,7 +197,8 @@ export default function MapView() {
       {/* Add the ButtonAddNewReport component here */}
       {user && <ButtonAddNewReport />}
 
-      {position && (address || loadingAddress || addressError) && (
+      {/* Remove the AddressCard component */}
+      {/* {position && (address || loadingAddress || addressError) && (
         <div className="hidden md:block overflow-hidden absolute bottom-5 left-20 z-[9999]">
           <AddressCard
             address={address}
@@ -198,7 +206,7 @@ export default function MapView() {
             addressError={addressError}
           />
         </div>
-      )}
+      )} */}
 
       <div className="absolute top-5 right-5 z-[9999] flex items-center gap-4">
         <InstallPWAButton />
@@ -234,6 +242,7 @@ export default function MapView() {
         <ReportView
           report={selectedReport}
           onClose={() => setSelectedReport(null)}
+          deleteReport={deleteReport} // Pass the deleteReport function here
         />
       )}
       

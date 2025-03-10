@@ -24,7 +24,6 @@ export function useReverseGeocode(position) {
           }
         );
         
-        console.log("Status de la respuesta:", res.status);
         
         if (!res.ok) {
           console.error(`HTTP error! status: ${res.status}`);
@@ -35,7 +34,6 @@ export function useReverseGeocode(position) {
         }
 
         const data = await res.json();
-        console.log("Datos recibidos:", data);
         
         if (data.results && data.results.length > 0) {
           // OpenCage proporciona resultados formateados

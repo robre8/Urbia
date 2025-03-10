@@ -41,6 +41,15 @@ const useReportsStore = create(
           }
         },
 
+        // Add the new method here, inside the store object
+        updateReportsDirectly: (updatedReports) => {
+          set({
+            reports: updatedReports,
+            groupedReports: groupReports(updatedReports),
+            loading: false
+          });
+        },
+
         fetchReportsByUserId: async (userId) => {
           set({ loading: true, error: null });
           try {
