@@ -32,6 +32,7 @@ import InstallPWAButton from "./AddPWAButton";
 import CleanReportForm from "@/features/reports/form/CleanReportForm";
 
 import userIcon from "/frogIco.png";
+import reportIcon from "@/assets/gift/frogico.gif"
 import sadFrog from "@/assets/frogError.png";
 
 import "./style/MapView.css";
@@ -48,7 +49,7 @@ const wazeIcon = L.icon({
 
 // Create a new icon for the click marker using the same frog icon
 const clickMarkerIcon = L.icon({
-  iconUrl: userIcon,
+  iconUrl: reportIcon,
   iconSize: [35, 35],
   iconAnchor: [17, 35],
   popupAnchor: [0, -35]
