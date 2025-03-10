@@ -1,9 +1,17 @@
 import api from "../axios";
 
-const putReport = async (formData) => {
-  
+const putReport = async (id, formData) => {
+  // Use multipart/form-data for PUT requests just like POST
+  const config = {
+    headers: { 
+      "Content-Type": "multipart/form-data",      
+    },
+    timeout: 30000  
+  };
+
   try {
-   const response = await api.put(`/api/reporte/${formData.id}`, formData);   
+    // Send the formData directly to a combined endpoint
+    const response = await api.put(`/api/reporte/${id}`, formData, config);   
     if (response.status == 201) {
       return { message: "OK", data: response.data };
     } else {
@@ -11,7 +19,7 @@ const putReport = async (formData) => {
     }
   } catch (error) {
     console.error("Error al enviar el reporte:", error);
-     throw error;
+    throw error;
   }
 };
 

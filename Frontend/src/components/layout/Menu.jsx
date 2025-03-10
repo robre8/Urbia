@@ -13,8 +13,8 @@ import { Menu as MenuIcon } from "lucide-react";
 import useReportsStore from "@/lib/store/useReportsStore";
 import { useUserAuth } from "@/lib/store/useUserAuth";
 import useCategoryStore from "@/lib/store/useCategoryStore";
-import UserMenu from "@/features/auth/MenuUser";
 import UserLogin from "@/features/auth/UserLogin";
+import MenuUser from "@/features/auth/MenuUser";
 
 import FrogInfra from "../../assets/svgs/FrogInfra.svg";
 import FrogPoli from "../../assets/svgs/FrogPoli.svg";
@@ -31,6 +31,7 @@ const categories = [
 function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { toggles, toggleCategory } = useCategoryStore();
   const { user } = useUserAuth();
   const { fetchReportsByUserId, reportsByUserId, loading, error, deleteReport } = useReportsStore();
@@ -47,6 +48,17 @@ function Menu() {
     setTimeout(() => {
       setSelectedReport(report); // ✅ Luego abre la vista del reporte
     }, 300); // ✅ Delay para evitar renderizados conflictivos
+  };
+
+  // Function to handle login button click
+  const handleLoginClick = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setIsSheetOpen(false); // Close the menu first
+    
+    // Set a timeout to show the login modal after the menu has closed
+    setTimeout(() => {
+      setShowLoginModal(true);
+    }, 300);
   };
 
   return (
@@ -102,18 +114,41 @@ function Menu() {
             )}
           </div>
 
-          <div className="mt-auto p-4 md:hidden">
-            {user ? <UserMenu /> : <UserLogin />}
-          </div>
+          {/* Botón de iniciar sesión en la parte inferior - solo para mobile */}
+          {/* Bottom section - Login button or MenuUser component */}
+          {!user ? (
+            <div className="mt-auto p-4 md:hidden">
+              <button 
+                onClick={handleLoginClick}
+                className="bg-[#9bee5e] hover:bg-[#C8F79f] text-black w-full h-[48px] rounded-2xl font-medium"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+          ) : user && (
+            <div className="mt-auto p-4 md:hidden">
+              <MenuUser />
+            </div>
+          )}
         </SheetContent>
       </Sheet>
 
-      {/* ✅ Vista del reporte seleccionado */}
+      {/* Vista de reporte seleccionado */}
       {selectedReport && (
         <ReportView
           report={selectedReport}
           onClose={() => setSelectedReport(null)}
-          deleteReport={deleteReport}
+        />
+      )}
+
+      {/* Render UserLogin component with controlled state - only when showLoginModal is true */}
+      {!user && showLoginModal && (
+        <UserLogin 
+          isOpen={showLoginModal} 
+          onOpenChange={(open) => {
+            if (!open) setShowLoginModal(false);
+          }}
+          isMobileMenu={true}
         />
       )}
     </div>
