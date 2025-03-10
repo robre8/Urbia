@@ -23,7 +23,6 @@ const useCategoryStore = create(set => ({
   },
 
   fetchCategories: async () => {
-    console.log('🛠 Ejecutando fetchCategories en Zustand...');
     set({ loading: true, error: null });
 
     try {
@@ -32,8 +31,8 @@ const useCategoryStore = create(set => ({
       // Sort categories to ensure consistent order
       const sortedCategories = [...categories].sort((a, b) => a.id - b.id);
       
-      // Log the categories for debugging
-      console.log('Categories received from API (sorted):', sortedCategories);
+
+   
       
       set({ categories: sortedCategories, loading: false });
     } catch (error) {

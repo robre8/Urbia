@@ -32,8 +32,6 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
 
     async function fetchIPLocationFallback() {
       if (!isMounted || !loading) return;
-
-      console.log("Intentando geolocalización por IP como fallback...");
       let ipLocationData = null;
       let ipError = null;
 
@@ -55,7 +53,6 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
           setAccuracy(5000);
           setLoading(false);
           setGeolocationStatus('ip_fallback');
-          console.log("Ubicación obtenida por IP fallback.");
         } else {
           setLoading(false);
           setGeolocationStatus('ip_error_default');
@@ -98,7 +95,6 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
         setAccuracy(fusedAccuracy);
         setLoading(false);
         setGeolocationStatus('browser_success');
-        console.log(`Ubicación inicial del navegador obtenida (precisión: ${fusedAccuracy}m).`);
       }
 
       if (browserAccuracy > 500 && attemptsRef.current < 2) {
@@ -129,7 +125,6 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
               setAccuracy(fusedAccuracy);
               setLoading(false);
               setGeolocationStatus('google_api_success_fused');
-              console.log(`Ubicación refinada con Google API y fusionada (precisión fusionada: ${fusedAccuracy}m, Browser Acc: ${browserAccuracy}m, Google Acc: ${googleAccuracy}m).`);
             }
           } else {
             console.warn("Google API no devolvió ubicación válida para refinar.");
