@@ -46,23 +46,21 @@ export default function ReportView({ report, onClose, deleteReport }) {
   const hasImage =
     currentReport.urlImagen && currentReport.urlImagen.trim().length > 0;
 
-    const handleDelete = () => {
-      // Primero cerramos el Sheet
-      handleOpenChange(false);
-      
-      // Luego, después de un pequeño delay, mostramos el alert de confirmación
-      setTimeout(() => {
-        // Simplificamos la lógica para que sea similar a MyReports.jsx
-        deleteAlert(currentReport.id, (deletedId) => {
-          if (typeof deleteReport === 'function') {
-            deleteReport(deletedId);
-          } else {
-            console.error('deleteReport no es una función');
-          }
-        });
-      }, 300);
-    };
+  const handleDelete = () => {
+    // First close the sheet
+    handleOpenChange(false);
     
+    // Show delete confirmation after sheet closes
+    setTimeout(() => {
+      deleteAlert(currentReport.id, (deletedId) => {
+        if (typeof deleteReport === 'function') {
+          deleteReport(deletedId);
+          // Ensure onClose is called after deletion
+          onClose();
+        }
+      });
+    }, 300);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>

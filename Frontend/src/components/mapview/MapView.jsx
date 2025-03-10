@@ -57,7 +57,7 @@ const clickMarkerIcon = L.icon({
 
 
 export default function MapView() {
-  const { groupedReports } = useReportsStore();
+  const { groupedReports, deleteReport } = useReportsStore(); // Add deleteReport here
   
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([-34.6037, -58.3816]);
@@ -242,6 +242,7 @@ export default function MapView() {
         <ReportView
           report={selectedReport}
           onClose={() => setSelectedReport(null)}
+          deleteReport={deleteReport} // Pass the deleteReport function here
         />
       )}
       
