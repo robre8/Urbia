@@ -122,6 +122,10 @@ const useReportsStore = create(
             
             const response = await putReport(id, data);
             
+            if (response.message !== "OK" || !response.data) {
+              throw new Error("Error al actualizar el reporte");
+            }
+            
             // Update the reports list with the updated report
             const updatedReports = get().reports.map((report) =>
               report.id === id ? response.data : report

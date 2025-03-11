@@ -42,8 +42,11 @@ const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address}) =
     setIsConfirm(false);
   };
   
+  // Update the handleGoBack function to set isConfirm to true
   const handleGoBack = () => {
     setOpen(false);
+    // Set isConfirm to true to indicate we're in edit mode
+    setIsConfirm(true);
   };
 
   useEffect(() => {
@@ -168,7 +171,7 @@ const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address}) =
               className="hover:bg-gray-500 w-full rounded-[10px]"
               onClick={handleGoBack}
             >
-              Volver
+              Editar
             </Button>
           </div>
         
