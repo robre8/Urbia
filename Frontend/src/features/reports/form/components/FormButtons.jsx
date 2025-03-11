@@ -30,7 +30,7 @@ export function FormButtons({ isValid, isConfirm, loading, onSubmit, onCancel })
         className="w-full rounded-[10px] hover:bg-gray-500"
         onClick={onCancel}
       >
-        {isConfirm ? 'Cancerlar' : 'Cancelar'}
+        {isConfirm ? 'Cancelar' : 'Cancelar'}
       </Button>
     </div>
   );

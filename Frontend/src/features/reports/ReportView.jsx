@@ -14,6 +14,7 @@ import ReportMarker from "@/components/mapview/ReportMarker";
 import UrbiaLikes from "./UrbiaLikes";
 import ReportActions from "./ReportActions"; // ✅ Importamos el nuevo componente
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
+import useReportsStore from "@/lib/store/useReportsStore"; // Add this import
 
 // Updated category mapping to match backend category IDs
 const categoryMapping = {
@@ -26,8 +27,9 @@ const categoryMapping = {
 export default function ReportView({ report, onClose, deleteReport }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
-  // Add state for image preview modal
   const [showImagePreview, setShowImagePreview] = useState(false);
+  
+  // Get the setReportPreview function from the store
   
   useEffect(() => {
     if (report) {
@@ -66,6 +68,41 @@ export default function ReportView({ report, onClose, deleteReport }) {
     }, 300);
   };
 
+  const handleEdit = () => {
+    // First close the sheet
+    handleOpenChange(false);
+    
+    // Set the report in the store for editing
+    setTimeout(() => {
+      // Make a clean copy of the current report to avoid reference issues
+      const reportForEdit = {
+        ...currentReport,
+        // Ensure these fields are properly set for editing
+        id: currentReport.id,
+        titulo: currentReport.titulo,
+        descripcion: currentReport.descripcionDespuesDeIa || currentReport.descripcion,
+        categoriaId: currentReport.categoriaId,
+        latitud: currentReport.latitud,
+        longitud: currentReport.longitud,
+        usuarioId: currentReport.usuarioId
+      };
+      
+      // Update the store with the current report
+      useReportsStore.setState({ 
+        reportPreview: reportForEdit,
+        isEditMode: true,  // Add a flag in the store to indicate edit mode
+        editSource: 'reportView', // Add this to indicate the edit is from ReportView
+        preserveReportId: currentReport.id  // Add this to track which report is being edited
+      });
+      
+      // Open the report form
+      const formTrigger = document.getElementById("open-report-form");
+      if (formTrigger) {
+        formTrigger.click();
+      }
+    }, 300);
+  };
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={handleOpenChange}>
@@ -84,7 +121,7 @@ export default function ReportView({ report, onClose, deleteReport }) {
               <SheetTitle className="text-lg font-semibold">Incidente</SheetTitle>
             {/* ✅ Botón de acciones (Editar/Eliminar) */}
             <ReportActions
-              onEdit={() => console.log(`Editar reporte ${currentReport.id}`)}
+              onEdit={handleEdit} // Connect to our new handleEdit function
               onDelete={handleDelete}
             />
               </div>

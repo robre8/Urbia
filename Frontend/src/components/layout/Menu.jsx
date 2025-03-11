@@ -32,15 +32,25 @@ function Menu() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [lastFetchTime, setLastFetchTime] = useState(0);
   const { toggles, toggleCategory } = useCategoryStore();
   const { user } = useUserAuth();
   const { fetchReportsByUserId, reportsByUserId, loading, error, deleteReport } = useReportsStore();
 
   useEffect(() => {
-    if (isSheetOpen && user) {
+    // Only fetch reports if:
+    // 1. The menu is open
+    // 2. User is logged in
+    // 3. Either we have no reports yet OR it's been at least 5 minutes since last fetch
+    const shouldFetch = isSheetOpen && 
+                        user && 
+                        (reportsByUserId.length === 0 || Date.now() - lastFetchTime > 300000);
+    
+    if (shouldFetch) {
       fetchReportsByUserId(user.id);
+      setLastFetchTime(Date.now());
     }
-  }, [isSheetOpen, user, fetchReportsByUserId]);
+  }, [isSheetOpen, user, fetchReportsByUserId, reportsByUserId.length, lastFetchTime]);
 
   // ✅ Maneja la selección de un reporte y cierra el menú antes de abrirlo
   const handleSelectReport = (report) => {

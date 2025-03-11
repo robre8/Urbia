@@ -86,8 +86,11 @@ export default function CleanReportForm() {
     useImageUpload();
   // Load categories on mount
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    // Only fetch categories if they're not already loaded
+    if (categories.length === 0) {
+      fetchCategories();
+    }
+  }, [fetchCategories, categories.length]);
   // Clear form when component mounts
   useEffect(() => {
     handleReset();
@@ -102,21 +105,37 @@ export default function CleanReportForm() {
     clearReportPreview();
     setOpen(false);
   };
-  // Modify the handleCancel function to delete the report when in edit mode
+  // Modify the handleCancel function to handle different cancel scenarios
   const handleCancel = () => {
-    // If we're in edit mode and have a report ID, delete the report
+    // Get the source of edit from the store
+    const editSource = useReportsStore.getState().editSource || 'unknown';
+    
+    // If we're in edit mode and have a report ID
     if (isConfirm && reportPreview?.id) {
-      // Remove the confirmation dialog and directly delete the report
-      deleteReport(reportPreview.id)
-        .then(() => {
-          toast.success('Reporte eliminado correctamente');
-          setOpen(false);
-          setIsConfirm(false);
-        })
-        .catch((error) => {
-          console.error('Error deleting report:', error);
-          toast.error('Error al eliminar el reporte');
+      // If editing from creation, delete the report
+      if (editSource === 'creation') {
+        deleteReport(reportPreview.id)
+          .then(() => {
+            toast.success('Reporte eliminado correctamente');
+            setOpen(false);
+            setIsConfirm(false);
+          })
+          .catch((error) => {
+            console.error('Error deleting report:', error);
+            toast.error('Error al eliminar el reporte');
+          });
+      } else {
+        // For edits from MyReports or ReportView: Cancel should just close the form without deleting
+        setOpen(false);
+        setIsConfirm(false);
+        // Clear the preview and reset edit mode
+        useReportsStore.setState({ 
+          reportPreview: null,
+          isEditMode: false,
+          editSource: null,
+          originalCoordinates: null
         });
+      }
     } else {
       // For new reports, just reset everything
       handleReset();
@@ -130,8 +149,18 @@ export default function CleanReportForm() {
       setIsConfirm(false);
     }
   }, [open]);
+
   // Update form data when report preview, selected coordinates, or position changes
   useEffect(() => {
+    // Check if we're in edit mode from the store
+    const isEditMode = useReportsStore.getState().isEditMode;
+    
+    if (isEditMode && reportPreview) {
+      setIsConfirm(true);
+      // Reset the flag after we've used it
+      useReportsStore.setState({ isEditMode: false });
+    }
+    
     if (reportPreview || selectedCoords || position || user) {
       setFormData(prev => ({
         ...prev,
@@ -160,13 +189,6 @@ export default function CleanReportForm() {
 
     if (!isValid) return;
 
-    // Make sure we have the user's coordinates or selected coordinates
-    const coords = selectedCoords || position;
-    if (!coords) {
-      toast.error('No se pudo obtener la ubicación');
-      return;
-    }
-
     // Create a new FormData object to properly handle file uploads
     const formDataToSend = new FormData();
     
@@ -174,8 +196,10 @@ export default function CleanReportForm() {
     const reportData = {
       ...formData.reporte,
       categoriaId: parseInt(formData.reporte.categoriaId, 10),
-      latitud: coords[0],
-      longitud: coords[1],
+      // When in edit mode, use the form data coordinates directly
+      // This ensures we use the original coordinates that were preserved
+      latitud: formData.reporte.latitud,
+      longitud: formData.reporte.longitud,
       usuarioId: user?.id || ''
     };
 
@@ -223,16 +247,32 @@ export default function CleanReportForm() {
         const updatedReport = await editReport(formData.reporte.id, formDataToSend);
         console.log('Report updated successfully:', updatedReport);
         toast.success('Reporte actualizado correctamente');
+        
+        // Don't open the confirmation dialog for edits
         setOpen(false);
         setIsConfirm(false);
-        // Make sure to completely clear the report preview and reset form
-        clearReportPreview();
+        
+        // Instead of clearing everything, we should update the report in the list
+        // Get the preserved report ID from the store
+        
+        // Only clear the preview, but don't remove the report from the list
+        useReportsStore.setState({ 
+          reportPreview: null,
+          isEditMode: false,
+          preserveReportId: null
+        });
+        
+        // Reset form state but don't clear everything
         resetForm();
         resetImage();
         resetRecording();
+        
+        // IMPORTANT: Don't set openConfirm to true for edits
+        // This is likely causing the error in ConfirmReport
       } else {
         const result = await sendReport(formDataToSend);
         console.log('Report created successfully:', result);
+        // Only open confirmation for new reports
         setOpenConfirm(true);
       }
     } catch (error) {

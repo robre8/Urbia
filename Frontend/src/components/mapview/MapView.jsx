@@ -27,7 +27,7 @@ import InstallPWAButton from './AddPWAButton';
 import CleanReportForm from '@/features/reports/form/CleanReportForm';
 
 import userIcon from '/frogIco.png';
-import reportIcon from '@/assets/gift/frogico.gif';
+import reportIcon from '@/assets/nenufarIco.png';
 import sadFrog from '@/assets/frogError.png';
 
 import './style/MapView.css';
