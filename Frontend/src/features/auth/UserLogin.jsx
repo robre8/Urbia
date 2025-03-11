@@ -14,10 +14,12 @@ import { Input } from "@/components/ui/input";
 import loginImg from "@/assets/Image.png";
 import urbiLogin from "@/assets/svgs/urbiLogin.svg"
 import Google from "@/assets/svgs/Google.svg"
+import RegisterImg from "@/assets/ImageRegis.png"
 
 export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }) {
   const { user, login } = useUserAuth();
   const [isMobile, setIsMobile] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
 
   // Verificar si estamos en móvil o desktop
   useEffect(() => {
@@ -65,17 +67,25 @@ export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="w-[900px] max-w-full h-[480px] z-[10000] flex rounded-2xl shadow-lg overflow-hidden p-0">
+      <DialogContent className="w-[900px] max-w-full h-auto z-[10000] flex rounded-2xl shadow-lg overflow-hidden p-0">
         <div className="w-1/2 hidden md:block">
-          <img src={loginImg} alt="Login" className="w-full h-full object-cover" />
+          <img src={isLogin ? loginImg : RegisterImg} alt={isLogin ? "Login image" : "Register image"} className="w-full h-full object-cover" />
         </div>
         <DialogHeader className="w-full md:w-1/2">
           <div className="flex flex-col items-center justify-center pt-7 py-4">
             <img src={urbiLogin} alt="Urbi" className="w-[48px] h-[48px]" />
-            <DialogTitle className="font-extrabold text-[24px]">Bienvenido otra vez!</DialogTitle>
+            <DialogTitle className="font-extrabold text-[24px]">
+            {isLogin ? "Bienvenido otra vez!" : "Únete a Urbia"}
+            </DialogTitle>
           </div>
-          <DialogDescription className="flex flex-col items-center justify-center">
+          <DialogDescription className=" flex flex-col items-center justify-center px-6">
             <section className="w-full px-4 md:px-0">
+              {!isLogin && (
+                <div>
+                  <Label htmlFor="name" className="text-[#222222]">Nombre</Label>
+                  <Input type="text" id="name" placeholder="Nombre completo" className="w-full md:w-[370px] mt-2 mb-2" />
+                </div>
+              )}
               <Label htmlFor="email" className="text-[#222222]">Email</Label>
               <Input type="email" id="email" placeholder="Email" className="w-full md:w-[370px] mt-2 mb-2" />
               <Label htmlFor="password" className="text-[#222222]">Contraseña</Label>
@@ -87,19 +97,27 @@ export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }
                 onClick={handleLogin} 
                 className="bg-[#9bee5e] hover:bg-[#C8F79f] text-black w-full md:w-[370px] h-[48px] rounded-[16px] z-[9999]"
               >
-                Iniciar sesión
+                {isLogin ? "Iniciar sesión" : "Registrase"} 
               </Button>
               <div className="py-2">
-                <p className="text-center">O</p>
-              </div>
-              <Button 
-                className="w-full md:w-[370px] flex items-center justify-center border gap-2 border-gray-300 bg-white text-black hover:bg-gray-100 h-[48px] rounded-[16px]"
-              >
-                <img src={Google} alt="Google logo" className="w-[24px] h-[24px]" />
-                Continuar con Google
-              </Button>
-              <div className="text-sm text-center mt-4 text-gray-600">
-                ¿Aún no tienes cuenta? <a href="#" className="text-[#7E3AF2] font-medium">Regístrate</a>
+              <p className="text-center">O</p>
+                </div>
+                <Button 
+                  className="w-full md:w-[370px] flex items-center justify-center border gap-2 border-gray-300 bg-white text-black hover:bg-gray-100 h-[48px] rounded-[16px]"
+                >
+                  <img src={Google} alt="Google logo" className="w-[24px] h-[24px]" />
+                  {isLogin ? "Continuar con Google" : "Registrarse con Google"}
+                </Button>
+                <div className="text-sm text-center mt-4 text-gray-600">
+                <p className="text-sm text-center mt-3 text-gray-600">
+                {isLogin ? "¿Aún no tienes cuenta?" : "¿Ya tienes una cuenta?"}{" "}
+                <button 
+                  onClick={() => setIsLogin(!isLogin)} 
+                  className="text-[#7E3AF2] font-medium"
+                >
+                  {isLogin ? "Regístrate" : "Inicia sesión"}
+                </button>
+              </p>
               </div>
             </section>
           </DialogDescription>
