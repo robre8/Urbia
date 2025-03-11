@@ -9,6 +9,7 @@ import { getReportsByUserId } from "../api/reports/getReportsById";
 import { groupReports } from "../utils/groupReports";
 
 const STORAGE_VERSION = 3;
+const CACHE_DURATION = 300000;
 
 const useReportsStore = create(
   devtools(
@@ -22,22 +23,33 @@ const useReportsStore = create(
         error: null,
 
         fetchReports: async () => {
-          set({ loading: true, error: null });
-          try {
-            const data = await getReports();
-            const reportsArray = Array.isArray(data) ? data : [];
-            set({
-              reports: reportsArray,
-              groupedReports: groupReports(reportsArray),
-              loading: false
-            });
-          } catch (err) {
-            set({
-              error: err.message,
-              loading: false,
-              reports: [],
-              groupedReports: {}
-            });
+          // Check if we need to fetch or if cache is still valid
+          const now = Date.now();
+          const lastFetch = get().lastFetchTime.allReports;
+          
+          // Only fetch if no reports or cache expired
+          if (get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
+            set({ loading: true, error: null });
+            try {
+              const data = await getReports();
+              const reportsArray = Array.isArray(data) ? data : [];
+              set({
+                reports: reportsArray,
+                groupedReports: groupReports(reportsArray),
+                loading: false,
+                lastFetchTime: {
+                  ...get().lastFetchTime,
+                  allReports: now
+                }
+              });
+            } catch (err) {
+              set({
+                error: err.message,
+                loading: false,
+                reports: [],
+                groupedReports: {}
+              });
+            }
           }
         },
 
@@ -121,6 +133,10 @@ const useReportsStore = create(
             }
             
             const response = await putReport(id, data);
+            
+            if (response.message !== "OK" || !response.data) {
+              throw new Error("Error al actualizar el reporte");
+            }
             
             // Update the reports list with the updated report
             const updatedReports = get().reports.map((report) =>

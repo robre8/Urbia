@@ -1,4 +1,3 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import historialIcon from "../../assets/history-line.svg";
 import iconMap from "../../assets/map-pin-2-line.svg";
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
@@ -7,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import frogError from "@/assets/frogError.png";
 import { useUserLocation } from "@/components/mapview/hooks/useUserLocation";
+import useReportsStore from "@/lib/store/useReportsStore"; // Add this import
 
 import frogReportInfra from "../../assets/svgs/FrogReportInfra.svg";
 import frogReportPoli from "../../assets/svgs/FrogReportPoli.svg";
@@ -18,11 +18,11 @@ import ReportActions from "./ReportActions";
 function getCategoryIcon(categoryId) {
   switch (categoryId) {
     case 1:
-      return frogReportInfra;
-    case 2:
-      return frogReportPoli;
-    case 3:
       return frogReportSalud;
+      case 2:
+      return frogReportInfra;
+      case 3:
+      return frogReportPoli;
     case 4:
       return frogReportSocial;
     default:
@@ -88,26 +88,58 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
     });
   };
 
+  const handleEdit = (report) => {
+    // Close the drawer
+    closeDrawer();
+    
+    // Set the report in the store for editing with all necessary flags
+    useReportsStore.setState({ 
+      reportPreview: report,
+      isEditMode: true,
+      editSource: 'myReports', // Add this line to indicate edit is from MyReports
+      // Store original coordinates to ensure they don't change
+      originalCoordinates: {
+        latitud: report.latitud,
+        longitud: report.longitud
+      }
+    });
+    
+    // Open the report form
+    const formTrigger = document.getElementById("open-report-form");
+    if (formTrigger) {
+      formTrigger.click();
+    }
+    
+    // Set isConfirm to true to show "Guardar cambios" button
+    setTimeout(() => {
+      const event = new CustomEvent('set-edit-mode', { detail: true });
+      document.dispatchEvent(event);
+    }, 300);
+  };
+  
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-<Accordion
-  type="single"
-  collapsible
-  defaultValue={reports && reports.length > 0 ? "item-1" : undefined}
->
-  <AccordionItem value="item-1">
-    <AccordionTrigger className="text-[16px] pb-3">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col">
+      <div className="flex items-center gap-2 text-[16px] font-medium pb-3">
         <img src={historialIcon} alt="icono del historial" />
         Mis reportes
       </div>
-    </AccordionTrigger>
-    <AccordionContent>
+      
       {reports && reports.length > 0 ? (
-        <div className={styles.scrollContainer}>
-          {reports.map((report) => (
+        <div className={`${styles.scrollContainer} pt-5`}>
+          {/* Sort reports by category ID and then by title alphabetically */}
+          {[...reports]
+            .sort((a, b) => {
+              // First sort by category
+              if (a.categoriaId !== b.categoriaId) {
+                return a.categoriaId - b.categoriaId;
+              }
+              // Then sort alphabetically by title
+              return a.titulo.localeCompare(b.titulo);
+            })
+            .map((report) => (
             <div 
               key={report.id} 
               className="flex items-center justify-between py-3 px-2 rounded-lg hover:bg-gray-100"
@@ -126,14 +158,19 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
                     {truncateText(report.titulo)}
                   </p>
                   {hoveredReportId === report.id && (
-                    <div className="absolute left-0 bottom-full mb-2 bg-black text-white px-3 py-1.5 rounded text-sm z-50 whitespace-normal max-w-[250px]">
+                    <div className="absolute bottom-0 left-0 right-0 mx-auto bg-black text-white px-3 py-1.5 rounded text-sm whitespace-normal z-[9999]" 
+                      style={{
+                        width: 'calc(100% - 16px)',
+                        transform: 'translateY(100%)',
+                        marginBottom: '8px'
+                      }}>
                       {report.titulo}
                     </div>
                   )}
                 </div>
               </div>
               <ReportActions 
-                onEdit={() => console.log(`Editar reporte ${report.id}`)} 
+                onEdit={() => handleEdit(report)}
                 onDelete={() => handleDelete(report.id)} 
               />
             </div>
@@ -150,9 +187,7 @@ function MyReports({ closeDrawer, reports, deleteReport, loading, error, onSelec
           </button>
         </div>
       )}
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
+    </div>
   );
 }
 

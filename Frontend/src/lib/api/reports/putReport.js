@@ -12,7 +12,7 @@ const putReport = async (id, formData) => {
   try {
     // Send the formData directly to a combined endpoint
     const response = await api.put(`/api/reporte/${id}`, formData, config);   
-    if (response.status == 201) {
+    if (response.status === 200) {  // Changed from 201 to 200 to match Swagger docs
       return { message: "OK", data: response.data };
     } else {
       return { message: "ERROR", data: response };

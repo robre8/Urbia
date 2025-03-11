@@ -20,7 +20,7 @@ export function FormButtons({ isValid, isConfirm, loading, onSubmit, onCancel })
             <span>Generar reporte</span>
           </>
         ) : (
-          <span>Guardar cambios</span>
+          <span>Guardar Cambios</span>
         )}
       </Button>
 
@@ -30,7 +30,7 @@ export function FormButtons({ isValid, isConfirm, loading, onSubmit, onCancel })
         className="w-full rounded-[10px] hover:bg-gray-500"
         onClick={onCancel}
       >
-        Cancelar
+        {isConfirm ? 'Cancelar' : 'Cancelar'}
       </Button>
     </div>
   );

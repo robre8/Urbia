@@ -3,7 +3,7 @@ import { LuCamera, LuImagePlus, LuX } from 'react-icons/lu';
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
-export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm, imageError }) {
+export function ImageUploader({ previewImage, onFileChange, disabled, imageError }) {
   const [isDragging, setIsDragging] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [stream, setStream] = useState(null);
@@ -228,7 +228,7 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
                     clearImage();
                   }}
                   className="absolute w-6 h-6 bg-gray-300 right-0 top-0 rounded-full bg-transparent p-1 text-white"
-                  disabled={disabled || isConfirm}
+                  disabled={disabled} // Remove isConfirm from here to allow clearing in edit mode
                 >
                   <LuX className="h-4 w-4 text-black hover:text-white" />
                 </Button>
@@ -250,11 +250,7 @@ export function ImageUploader({ previewImage, onFileChange, disabled, isConfirm,
                       type="file"
                       className="sr-only"
                       accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          onFileChange('imagen', e.target.files[0]);
-                        }
-                      }}
+                      onChange={handleFileChange}  // Use the handleFileChange function here
                       ref={fileInputRef}
                       disabled={disabled}
                     />

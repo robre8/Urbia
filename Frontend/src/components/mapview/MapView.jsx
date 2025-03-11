@@ -1,43 +1,39 @@
-import { useEffect, useState, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  ZoomControl,
-  Marker,
-} from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { Toaster } from "sonner";
+import { useEffect, useState, useRef } from 'react';
+import { MapContainer, TileLayer, ZoomControl, Marker } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { Toaster } from 'sonner';
 
-import { useUserLocation } from "./hooks/useUserLocation";
+import { useUserLocation } from './hooks/useUserLocation';
 // Keep the useReverseGeocode import as it might be used elsewhere
-import { useUserAuth } from "@/lib/store/useUserAuth";
-import { useCities } from "./hooks/useCities";
-import { getGeolocationErrorMessage } from "@/lib/utils/errorMessages";
-import useMapStore from "@/lib/store/useMapStore";
-import useReportsStore from "@/lib/store/useReportsStore";
+import { useUserAuth } from '@/lib/store/useUserAuth';
+import { useCities } from './hooks/useCities';
+import { getGeolocationErrorMessage } from '@/lib/utils/errorMessages';
+import useMapStore from '@/lib/store/useMapStore';
+import useReportsStore from '@/lib/store/useReportsStore';
 
-import ReportMarker from "./ReportMarker";
-import Recenter from "./Recenter";
-import MyLocationButton from "./MyLocationButton";
-import MapClickHandler from "./useMapClick";
-import ReportView from "@/features/reports/ReportView";
-import CitySelectionDialog from "./CitySelectionDialog";
-import CityNavigation from "./CityNavigation";
-import UserMenu from "@/features/auth/MenuUser";
-import UserLogin from "@/features/auth/UserLogin";
-import InstallPWAButton from "./AddPWAButton";
+import ReportMarker from './ReportMarker';
+import Recenter from './Recenter';
+import MyLocationButton from './MyLocationButton';
+import MapClickHandler from './useMapClick';
+import ReportView from '@/features/reports/ReportView';
+import CitySelectionDialog from './CitySelectionDialog';
+import CityNavigation from './CityNavigation';
+import UserMenu from '@/features/auth/MenuUser';
+import UserLogin from '@/features/auth/UserLogin';
+import InstallPWAButton from './AddPWAButton';
 // Remove the AddressCard import
 // import { AddressCard } from "../Adress/AdressCard";
-import CleanReportForm from "@/features/reports/form/CleanReportForm";
+import CleanReportForm from '@/features/reports/form/CleanReportForm';
 
-import userIcon from "/frogIco.png";
-import sadFrog from "@/assets/frogError.png";
+import userIcon from '/frogIco.png';
+import reportIcon from '@/assets/nenufarIco.png';
+import sadFrog from '@/assets/frogError.png';
 
-import "./style/MapView.css";
-import { AnimatedCircle } from "./AnimatedCircle";
+import './style/MapView.css';
+import { AnimatedCircle } from './AnimatedCircle';
 
-import ButtonAddNewReport from "@/features/NewReportForm/ButtonAddNewReport";
+import ButtonAddNewReport from '@/features/reports/form/components/ButtonAddNewReport';
 
 const wazeIcon = L.icon({
   iconUrl: userIcon,
@@ -48,17 +44,15 @@ const wazeIcon = L.icon({
 
 // Create a new icon for the click marker using the same frog icon
 const clickMarkerIcon = L.icon({
-  iconUrl: userIcon,
+  iconUrl: reportIcon,
   iconSize: [35, 35],
   iconAnchor: [17, 35],
   popupAnchor: [0, -35]
 });
 
-
-
 export default function MapView() {
   const { groupedReports, deleteReport } = useReportsStore(); // Add deleteReport here
-  
+
   const { center, position, error, loading, geolocationStatus } =
     useUserLocation([-34.6037, -58.3816]);
   const defaultZoom = 18;
@@ -81,7 +75,7 @@ export default function MapView() {
   useEffect(() => {
     if (
       !loading &&
-      ["browser_denied", "ip_error_default", "timeout_default"].includes(
+      ['browser_denied', 'ip_error_default', 'timeout_default'].includes(
         geolocationStatus
       ) &&
       !modalHasBeenOpened.current
@@ -91,8 +85,8 @@ export default function MapView() {
     }
   }, [loading, geolocationStatus]);
 
-  const handleCitySelect = (cityName) => {
-    const city = cities.find((c) => c.name === cityName);
+  const handleCitySelect = cityName => {
+    const city = cities.find(c => c.name === cityName);
     if (city && map) {
       map.setView([city.lat, city.lng], defaultZoom);
       setModalOpen(false);
@@ -102,9 +96,9 @@ export default function MapView() {
   const errorMessage = getGeolocationErrorMessage(geolocationStatus, error);
 
   // Function to handle report selection and center the map
-  const handleReportSelect = (report) => {
+  const handleReportSelect = report => {
     setSelectedReport(report);
-    
+
     // Use flyTo for a smoother animation when centering on the report
     if (map && report) {
       map.flyTo([report.latitud, report.longitud], defaultZoom, {
@@ -115,39 +109,39 @@ export default function MapView() {
   };
 
   return (
-    <div className="relative w-full h-screen">
-      <Toaster 
-            position="bottom-center"
-            toastOptions={{
-              style: {
-                background: 'white',
-                color: 'black',
-                borderRadius: '12px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                padding: '16px',
-                width: 'min(90vw, 600px)',
-                maxWidth: '600px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                margin: '0 auto'
-              }
-            }}
-          />
-      
+    <div className='relative w-full h-screen'>
+      <Toaster
+        position='bottom-center'
+        toastOptions={{
+          style: {
+            background: 'white',
+            color: 'black',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            padding: '16px',
+            width: 'min(90vw, 600px)',
+            maxWidth: '600px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            margin: '0 auto'
+          }
+        }}
+      />
+
       <MapContainer
         center={center}
         zoom={defaultZoom}
-        className="w-full h-full"
+        className='w-full h-full'
         zoomControl={false}
-        whenReady={(event) => setMap(event.target)}
+        whenReady={event => setMap(event.target)}
         minZoom={4}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
           maxZoom={20}
         />
 
-        <ZoomControl position="bottomright" />
+        <ZoomControl position='bottomright' />
         <Recenter center={center} zoom={defaultZoom} />
         <MapClickHandler />
 
@@ -161,8 +155,8 @@ export default function MapView() {
               maxRadius={120}
               duration={2000} // Duración en milisegundos del ciclo de expansión
               pathOptions={{
-                color: "blue",
-                fillColor: "blue",
+                color: 'blue',
+                fillColor: 'blue',
                 stroke: false
               }}
             />
@@ -170,12 +164,14 @@ export default function MapView() {
         )}
 
         {/* Marcador de click en el mapa - Updated to use the frog icon */}
-        {selectedCoords && <Marker position={selectedCoords} icon={clickMarkerIcon} />}
+        {selectedCoords && (
+          <Marker position={selectedCoords} icon={clickMarkerIcon} />
+        )}
 
         {/* Render de reportes agrupados */}
         {Object.values(groupedReports).map((group, index) => {
           if (!Array.isArray(group) || group.length === 0) return null;
-          
+
           return (
             <ReportMarker
               key={index}
@@ -191,7 +187,7 @@ export default function MapView() {
         map={map}
         position={position}
         defaultZoom={defaultZoom}
-        className="absolute bottom-10 lg:bottom-32 right-7 z-[9999]"
+        className='absolute bottom-10 lg:bottom-32 right-7 z-[9999]'
       />
 
       {/* Add the ButtonAddNewReport component here */}
@@ -208,9 +204,9 @@ export default function MapView() {
         </div>
       )} */}
 
-      <div className="absolute top-5 right-5 z-[9999] flex items-center gap-4">
+      <div className='absolute top-5 right-5 z-[9999] flex items-center gap-4'>
         <InstallPWAButton />
-        <div className="hidden lg:flex">
+        <div className='hidden lg:flex'>
           {user ? <UserMenu /> : <UserLogin />}
         </div>
       </div>
@@ -222,7 +218,7 @@ export default function MapView() {
           cities={cities}
           map={map}
           onCitySelect={handleCitySelect}
-          message=""
+          message=''
           errorMessage={errorMessage}
           errorImage={sadFrog}
         />
@@ -231,11 +227,7 @@ export default function MapView() {
       <CityNavigation map={map} />
 
       {/* Hidden button to trigger the report form */}
-      <button 
-        id="open-report-form" 
-        className="hidden" 
-        aria-hidden="true"
-      />
+      <button id='open-report-form' className='hidden' aria-hidden='true' />
 
       {/* ReportView se abre cuando seleccionamos un reporte */}
       {selectedReport && (
@@ -245,7 +237,7 @@ export default function MapView() {
           deleteReport={deleteReport} // Pass the deleteReport function here
         />
       )}
-      
+
       {/* Clean Report Form */}
       <CleanReportForm />
     </div>
