@@ -1,4 +1,5 @@
 // lib/store/useReportsStore.js
+// Add proper initialization for lastFetchTime
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { getReports } from "../api/reports/getReports";
@@ -21,11 +22,16 @@ const useReportsStore = create(
         reportPreview: {},
         loading: false,
         error: null,
+        // Initialize lastFetchTime with proper structure
+        lastFetchTime: {
+          allReports: 0,
+          userReports: 0
+        },
 
         fetchReports: async () => {
           // Check if we need to fetch or if cache is still valid
           const now = Date.now();
-          const lastFetch = get().lastFetchTime.allReports;
+          const lastFetch = get().lastFetchTime?.allReports || 0;
           
           // Only fetch if no reports or cache expired
           if (get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
@@ -43,6 +49,7 @@ const useReportsStore = create(
                 }
               });
             } catch (err) {
+              console.error("Error fetching reports:", err);
               set({
                 error: err.message,
                 loading: false,
@@ -188,15 +195,26 @@ const useReportsStore = create(
       }),
       {
         name: "reports-storage",
+        getStorage: () => localStorage,
         version: STORAGE_VERSION,
-        partialize: (state) => ({
-          reports: state.reports,
-          groupedReports: state.groupedReports,
-          reportsByUserId: state.reportsByUserId,
-          // Don't persist the form data and preview
-          loading: false,
-          error: null
-        })
+        migrate: (persistedState, version) => {
+          if (version < STORAGE_VERSION) {
+            // Reset state on version change
+            return {
+              reports: [],
+              groupedReports: {},
+              reportsByUserId: [],
+              reportPreview: {},
+              loading: false,
+              error: null,
+              lastFetchTime: {
+                allReports: 0,
+                userReports: 0
+              }
+            };
+          }
+          return persistedState;
+        }
       }
     )
   )
