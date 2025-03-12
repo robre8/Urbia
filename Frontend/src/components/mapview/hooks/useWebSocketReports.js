@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react';
 import useReportsStore from '@/lib/store/useReportsStore';
 
 export function useWebSocketReports() {
-  const reportsStore = useReportsStore();
+  const { fetchReports } = useReportsStore();
   const pollingIntervalRef = useRef(null);
   const isMountedRef = useRef(true);
+  const lastFetchTimeRef = useRef(0);
   
   useEffect(() => {
     // Set mounted flag
@@ -14,8 +15,13 @@ export function useWebSocketReports() {
     const fetchReportsSafely = async () => {
       if (isMountedRef.current) {
         try {
-          // Force refresh by bypassing cache
-          await reportsStore.fetchReports(true);
+          // Add timestamp to avoid caching issues in production
+          const timestamp = Date.now();
+          if (timestamp - lastFetchTimeRef.current > 1000) { // Prevent too frequent requests
+            await fetchReports(true);
+            lastFetchTimeRef.current = timestamp;
+            console.log('Reports fetched at:', new Date().toISOString());
+          }
         } catch (error) {
           console.error('Error fetching reports:', error);
         }
@@ -25,10 +31,19 @@ export function useWebSocketReports() {
     // Initial fetch immediately
     fetchReportsSafely();
     
-    // Set up polling with a much shorter interval for more responsive updates
+    // Set up polling with a more reliable approach
     pollingIntervalRef.current = setInterval(() => {
       fetchReportsSafely();
-    }, 3000); // Poll every 3 seconds for more real-time updates
+    }, 5000);
+    
+    // Add event listener for visibility changes to refresh when tab becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchReportsSafely();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Cleanup function
     return () => {
@@ -38,8 +53,10 @@ export function useWebSocketReports() {
         clearInterval(pollingIntervalRef.current);
         pollingIntervalRef.current = null;
       }
+      
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []); // Empty dependency array to run only once on mount
+  }, []); // Empty dependency array to run only once
 
   return {};
 }

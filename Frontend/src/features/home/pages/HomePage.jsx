@@ -8,17 +8,18 @@ function HomePage() {
   const { reports, fetchReports } = useReportsStore();
   
   // Initialize WebSocket connection at the HomePage level
-  useWebSocketReports();  // Remove the destructuring of refreshReports
+  useWebSocketReports();
 
   useEffect(() => {
     console.log('HomePage mounted, fetching initial reports...');
-    fetchReports().then(() => {  // Remove the 'true' parameter
+    // Usar true para forzar la actualización y evitar problemas de caché
+    fetchReports(true).then(() => {
       console.log('Initial reports fetched successfully');
+    }).catch(error => {
+      console.error('Error fetching initial reports:', error);
     });
     
-    // Remove the focus event listener that calls refreshReports
-    
-  }, [fetchReports]);  // Remove refreshReports from dependencies
+  }, [fetchReports]);
 
   return (
     <div className='h-screen w-full'>
