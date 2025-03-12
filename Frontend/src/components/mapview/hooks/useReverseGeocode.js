@@ -4,55 +4,57 @@ import { useState, useEffect } from "react";
 export function useReverseGeocode(position) {
   const [address, setAddress] = useState(null);
   const [loadingAddress, setLoadingAddress] = useState(false);
-  // Volvemos a añadir el estado de error para mantener compatibilidad
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!position) return; // Hasta que no haya coordenadas, no hacemos nada
+    if (!position) return; // Don't do anything until we have coordinates
     const [lat, lon] = position;
 
     async function fetchAddress() {
       setLoadingAddress(true);
       try {
-        // Usando OpenCage como alternativa (necesitas registrarte para obtener una API key gratuita)
-        // Regístrate en: https://opencagedata.com/
-        const API_KEY =import.meta.env.VITE_GEOREVERSE_API_KEY; // Reemplaza con tu API key de OpenCage
+        // Check if API key exists
+        const API_KEY = import.meta.env.VITE_GEOREVERSE_API_KEY;
+        
+        if (!API_KEY) {
+          console.warn("Missing geocoding API key");
+          setAddress(`Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`);
+          setError("Missing API key");
+          setLoadingAddress(false);
+          return;
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         const res = await fetch(
           `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${API_KEY}&language=es&pretty=1`,
           {
-            signal: AbortSignal.timeout(5000)
+            signal: controller.signal
           }
         );
         
+        clearTimeout(timeoutId);
         
         if (!res.ok) {
           console.error(`HTTP error! status: ${res.status}`);
-          // Establecemos el error pero no lo mostramos
           setError(`HTTP error! status: ${res.status}`);
           setAddress(`Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`);
+          setLoadingAddress(false);
           return;
         }
 
         const data = await res.json();
         
         if (data.results && data.results.length > 0) {
-          // OpenCage proporciona resultados formateados
           const result = data.results[0];
-          
-          // Extraer componentes específicos de la dirección
           const { road, house_number, suburb, neighbourhood, city_district } = result.components || {};
-          
-          // Usar el barrio (suburb) o vecindario si está disponible
           const area = suburb || neighbourhood || city_district || "";
-          
-          // Formatear solo con calle, número y barrio
           setAddress(`${road || ""}${house_number ? ` ${house_number}` : ""}${area ? `, ${area}` : ""}`);
-          
-          // Limpiamos cualquier error previo
           setError(null);
         } else {
-          console.log("No se encontró dirección en la respuesta");
-          setError("No se encontró dirección en la respuesta");
+          console.log("No address found in response");
+          setError("No address found in response");
           setAddress(`Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`);
         }
       } catch (err) {
@@ -67,6 +69,5 @@ export function useReverseGeocode(position) {
     fetchAddress();
   }, [position]);
 
-  // Devolvemos el error real para mantener la compatibilidad con el código existente
   return { address, loadingAddress, error };
 }

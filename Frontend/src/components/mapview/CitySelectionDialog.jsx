@@ -24,11 +24,14 @@ import { useState } from 'react';
 
 // Componente de error integrado en el modal 
 // parte verde
+// Update the ErrorMessage component inside CitySelectionDialog
 function ErrorMessage({ message, imageSrc }) {
   return (
-    <div className='flex flex-col items-center p-3 rounded-md '>
+    <div className='flex flex-col items-center p-3 rounded-md'>
       {imageSrc && <img src={imageSrc} alt='Error' className='mb-2 h-16' />}
-      <p className='px-6 text-center text-[20x] font-medium'>{message}</p>
+      <p className='px-6 text-center text-md font-medium'>
+        {message || "Ay! No pudimos encontrar tu ubicación. Habilítala en el navegador o elige una ciudad para continuar."}
+      </p>
     </div>
   );
 }
@@ -82,7 +85,7 @@ export default function CitySelectionDialog({
               variant='white'
               role='combobox'
               aria-expanded={popoverOpen}
-              className='h-[48px] flex items-center gap-2 w-full bg-white text-black rounded-[16px] px-4 py-4 shadow-md'
+              className='h-[38px] flex items-center gap-2 w-full bg-white text-black rounded-[16px] px-4 py-4 shadow-md'
             >
               <MapPin className='w-5 h-5' />
               {selectedCity || 'Elige una ciudad'}
@@ -164,7 +167,7 @@ export default function CitySelectionDialog({
           </PopoverContent>
         </Popover>
 
-        <Button onClick={onClose} className='h-[48px] bg-[#222222] rounded-[16px]'>
+        <Button onClick={onClose} className='h-[38px] bg-[#222222] rounded-[16px]'>
           Cerrar
         </Button>
       </DialogContent>
