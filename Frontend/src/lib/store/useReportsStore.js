@@ -28,13 +28,14 @@ const useReportsStore = create(
           userReports: 0
         },
 
-        fetchReports: async () => {
+        // Update the fetchReports method to accept a forceRefresh parameter
+        fetchReports: async (forceRefresh = false) => {
           // Check if we need to fetch or if cache is still valid
           const now = Date.now();
           const lastFetch = get().lastFetchTime?.allReports || 0;
           
-          // Only fetch if no reports or cache expired
-          if (get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
+          // Only fetch if no reports or cache expired or forceRefresh is true
+          if (forceRefresh || get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
             set({ loading: true, error: null });
             try {
               const data = await getReports();
@@ -52,9 +53,7 @@ const useReportsStore = create(
               console.error("Error fetching reports:", err);
               set({
                 error: err.message,
-                loading: false,
-                reports: [],
-                groupedReports: {}
+                loading: false
               });
             }
           }

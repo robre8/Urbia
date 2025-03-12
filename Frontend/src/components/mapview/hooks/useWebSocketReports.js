@@ -14,27 +14,25 @@ export function useWebSocketReports() {
     const fetchReportsSafely = async () => {
       if (isMountedRef.current) {
         try {
-          await reportsStore.fetchReports();
+          // Force refresh by bypassing cache
+          await reportsStore.fetchReports(true);
         } catch (error) {
           console.error('Error fetching reports:', error);
         }
       }
     };
     
-    // Initial fetch with delay
-    const initialFetchTimeout = setTimeout(() => {
-      fetchReportsSafely();
-    }, 2000);
+    // Initial fetch immediately
+    fetchReportsSafely();
     
-    // Set up polling with a reasonable interval
+    // Set up polling with a much shorter interval for more responsive updates
     pollingIntervalRef.current = setInterval(() => {
       fetchReportsSafely();
-    }, 30000); // Poll every 30 seconds to reduce load
+    }, 3000); // Poll every 3 seconds for more real-time updates
     
     // Cleanup function
     return () => {
       isMountedRef.current = false;
-      clearTimeout(initialFetchTimeout);
       
       if (pollingIntervalRef.current) {
         clearInterval(pollingIntervalRef.current);
@@ -43,6 +41,5 @@ export function useWebSocketReports() {
     };
   }, []); // Empty dependency array to run only once on mount
 
-  // Don't return anything that could cause re-renders
   return {};
 }

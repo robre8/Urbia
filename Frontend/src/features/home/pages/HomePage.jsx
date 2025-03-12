@@ -8,18 +8,21 @@ function HomePage() {
   const { reports, fetchReports } = useReportsStore();
   
   // Initialize WebSocket connection at the HomePage level
-  useWebSocketReports();
+  useWebSocketReports();  // Remove the destructuring of refreshReports
 
   useEffect(() => {
     console.log('HomePage mounted, fetching initial reports...');
-    fetchReports().then(() => {
+    fetchReports().then(() => {  // Remove the 'true' parameter
       console.log('Initial reports fetched successfully');
     });
-  }, [fetchReports]);
+    
+    // Remove the focus event listener that calls refreshReports
+    
+  }, [fetchReports]);  // Remove refreshReports from dependencies
 
   return (
     <div className='h-screen w-full'>
-      <MapView reports={Array.isArray(reports) ? reports : []} />
+      <MapView reports={Array.isArray(reports) ? reports : []} />  
     </div>
   );
 }
