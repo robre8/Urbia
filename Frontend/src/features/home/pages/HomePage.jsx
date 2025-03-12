@@ -1,13 +1,13 @@
-// features/home/pages/HomePage.jsx
 import { useEffect } from 'react';
-import useReportsStore from '../../../lib/store/useReportsStore';
-import MapView from '@/components/mapview/MapView';
+import useReportsStore from '@/lib/store/useReportsStore';
 import { useWebSocketReports } from '@/components/mapview/hooks/useWebSocketReports';
+import MapView from '@/components/mapview/MapView';
 
 function HomePage() {
   const { reports, fetchReports } = useReportsStore();
   
   // Initialize WebSocket connection at the HomePage level
+  // Just use the hook without destructuring the pause/resume methods
   useWebSocketReports();
 
   useEffect(() => {

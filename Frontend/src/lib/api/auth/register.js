@@ -1,9 +1,10 @@
 import api from "../axios";
 
-export const login = async (email, password) => {
+export const register = async (nombre, email, password) => {
   try {
     // Make sure we're sending the data in the format the API expects
-    const response = await api.post("/api/auth/login", {
+    const response = await api.post("/api/auth/register", {
+      nombre,
       email,
       password,
     });
@@ -14,15 +15,15 @@ export const login = async (email, password) => {
       api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
     }
     
-    console.log("✅ Datos recibidos:", response.data);
+    console.log("✅ Usuario registrado:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error en la API:", error);
+    console.error("❌ Error en el registro:", error);
     
     // Extract error message from response
     const errorMessage = error.response?.data?.error || 
                          error.response?.data?.message || 
-                         "Error al iniciar sesión";
+                         "Error al registrar usuario";
     
     throw new Error(errorMessage);
   }

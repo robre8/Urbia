@@ -3,6 +3,7 @@ import HomePage from '@/features/home/pages/HomePage';
 import Menu from '@/components/layout/Menu';
 import CleanReportForm from '@/features/reports/form/CleanReportForm';
 import { Toaster } from '@/components/ui/sonner';
+import OAuthCallback from '@/features/auth/OAuthCallback';
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
         <Toaster />
       </div>
       <Routes>
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
         <Route path='/' element={<HomePage />} />
         {/* Otras rutas si las hay */}
       </Routes>
