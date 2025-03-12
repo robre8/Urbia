@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import loginImg from "@/assets/Image.png";
 import urbiLogin from "@/assets/svgs/urbiLogin.svg"
-import Google from "@/assets/svgs/Google.svg"
 import RegisterImg from "@/assets/ImageRegis.png"
 
 export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }) {
@@ -67,7 +66,7 @@ export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="w-[900px] max-w-full h-auto z-[10000] flex rounded-2xl shadow-lg overflow-hidden p-0">
+      <DialogContent className="w-[900px] max-w-full h-auto z-[10000] flex items-center rounded-2xl shadow-lg overflow-hidden p-0">
         <div className="w-1/2 hidden md:block">
           <img src={isLogin ? loginImg : RegisterImg} alt={isLogin ? "Login image" : "Register image"} className="w-full h-full object-cover" />
         </div>
@@ -102,12 +101,12 @@ export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }
               <div className="py-2">
               <p className="text-center">O</p>
                 </div>
-                <Button 
+{/*                 <Button 
                   className="w-full md:w-[370px] flex items-center justify-center border gap-2 border-gray-300 bg-white text-black hover:bg-gray-100 h-[48px] rounded-[16px]"
                 >
                   <img src={Google} alt="Google logo" className="w-[24px] h-[24px]" />
                   {isLogin ? "Continuar con Google" : "Registrarse con Google"}
-                </Button>
+                </Button> */}
                 <div className="text-sm text-center mt-4 text-gray-600">
                 <p className="text-sm text-center mt-3 text-gray-600">
                 {isLogin ? "¿Aún no tienes cuenta?" : "¿Ya tienes una cuenta?"}{" "}

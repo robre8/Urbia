@@ -40,6 +40,7 @@ export default function MapClickHandler() {
       // Create a timeout to reset isToastActive after toast duration
       const toastTimeout = setTimeout(() => {
         isToastActive = false;
+        setSelectedCoords(null); // Add this line to remove marker when timeout occurs
         console.log('Toast timeout reached, resetting active state');
       }, 8500); // Slightly longer than toast duration to ensure it completes
       
@@ -73,6 +74,7 @@ export default function MapClickHandler() {
             // Reset the toast active state when dismissed
             clearTimeout(toastTimeout); // Clear the timeout
             isToastActive = false;
+            setSelectedCoords(null); // Also remove marker when toast is dismissed
             console.log('Toast dismissed, resetting active state');
           }
         }
