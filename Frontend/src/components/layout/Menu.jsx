@@ -154,16 +154,14 @@ function Menu() {
         />
       )}
 
-      {/* Render UserLogin component with controlled state - only when showLoginModal is true */}
-      {!user && showLoginModal && (
-        <UserLogin 
-          isOpen={showLoginModal} 
-          onOpenChange={(open) => {
-            if (!open) setShowLoginModal(false);
-          }}
-          isMobileMenu={true}
-        />
-      )}
+      {/* Render UserLogin component with controlled state */}
+      <UserLogin 
+        isOpen={showLoginModal} 
+        onOpenChange={(open) => {
+          if (!open) setShowLoginModal(false);
+        }}
+        isMobileMenu={true}
+      />
     </div>
   );
 }

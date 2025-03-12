@@ -17,7 +17,7 @@ import RegisterImg from "@/assets/ImageRegis.png"
 import { toast } from "sonner";
 
 export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }) {
-  const { user, login, register, loginWithGoogle } = useUserAuth();
+  const { user, login, register } = useUserAuth();
   const [isMobile, setIsMobile] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -91,14 +91,14 @@ export default function UserLogin({ isOpen, onOpenChange, isMobileMenu = false }
   };
 
   // Add handler for Google login
-  const handleGoogleLogin = (e) => {
+/*   const handleGoogleLogin = (e) => {
     e.preventDefault();
     loginWithGoogle();
-  };
+  }; */
 
   // Update the Google button in your return statement
   return (
-    <Dialog>
+    <Dialog open={standalone ? undefined : isOpen} onOpenChange={onOpenChange}>
       {standalone && (
         <DialogTrigger asChild>
           <Button className="bg-[#9bee5e] hover:bg-[#C8F79f] text-black w-[162px] h-[48px] rounded-2xl z-[9999] hidden md:block">
