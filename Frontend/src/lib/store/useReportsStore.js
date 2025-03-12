@@ -1,4 +1,5 @@
 // lib/store/useReportsStore.js
+// Add proper initialization for lastFetchTime
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { getReports } from "../api/reports/getReports";
@@ -21,14 +22,20 @@ const useReportsStore = create(
         reportPreview: {},
         loading: false,
         error: null,
+        // Initialize lastFetchTime with proper structure
+        lastFetchTime: {
+          allReports: 0,
+          userReports: 0
+        },
 
-        fetchReports: async () => {
+        // Update the fetchReports method to accept a forceRefresh parameter
+        fetchReports: async (forceRefresh = false) => {
           // Check if we need to fetch or if cache is still valid
           const now = Date.now();
-          const lastFetch = get().lastFetchTime.allReports;
+          const lastFetch = get().lastFetchTime?.allReports || 0;
           
-          // Only fetch if no reports or cache expired
-          if (get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
+          // Only fetch if no reports or cache expired or forceRefresh is true
+          if (forceRefresh || get().reports.length === 0 || now - lastFetch > CACHE_DURATION) {
             set({ loading: true, error: null });
             try {
               const data = await getReports();
@@ -43,11 +50,10 @@ const useReportsStore = create(
                 }
               });
             } catch (err) {
+              console.error("Error fetching reports:", err);
               set({
                 error: err.message,
-                loading: false,
-                reports: [],
-                groupedReports: {}
+                loading: false
               });
             }
           }
@@ -188,15 +194,26 @@ const useReportsStore = create(
       }),
       {
         name: "reports-storage",
+        getStorage: () => localStorage,
         version: STORAGE_VERSION,
-        partialize: (state) => ({
-          reports: state.reports,
-          groupedReports: state.groupedReports,
-          reportsByUserId: state.reportsByUserId,
-          // Don't persist the form data and preview
-          loading: false,
-          error: null
-        })
+        migrate: (persistedState, version) => {
+          if (version < STORAGE_VERSION) {
+            // Reset state on version change
+            return {
+              reports: [],
+              groupedReports: {},
+              reportsByUserId: [],
+              reportPreview: {},
+              loading: false,
+              error: null,
+              lastFetchTime: {
+                allReports: 0,
+                userReports: 0
+              }
+            };
+          }
+          return persistedState;
+        }
       }
     )
   )

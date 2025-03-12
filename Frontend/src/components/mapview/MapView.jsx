@@ -151,9 +151,9 @@ export default function MapView() {
             <Marker position={position} icon={wazeIcon} />
             <AnimatedCircle
               center={position}
-              initialRadius={80}
-              maxRadius={120}
-              duration={2000} // Duración en milisegundos del ciclo de expansión
+              initialRadius={40}
+              maxRadius={80}
+              duration={4000} // Duración en milisegundos del ciclo de expansión
               pathOptions={{
                 color: 'blue',
                 fillColor: 'blue',

@@ -37,20 +37,23 @@ function Menu() {
   const { user } = useUserAuth();
   const { fetchReportsByUserId, reportsByUserId, loading, error, deleteReport } = useReportsStore();
 
+  // Fix the infinite update loop by adding proper dependency checks
   useEffect(() => {
     // Only fetch reports if:
     // 1. The menu is open
     // 2. User is logged in
     // 3. Either we have no reports yet OR it's been at least 5 minutes since last fetch
-    const shouldFetch = isSheetOpen && 
-                        user && 
-                        (reportsByUserId.length === 0 || Date.now() - lastFetchTime > 300000);
+    if (!isSheetOpen || !user) return;
+    
+    const shouldFetch = reportsByUserId.length === 0 || 
+                        (Date.now() - lastFetchTime > 300000);
     
     if (shouldFetch) {
+      console.log('Fetching user reports...');
       fetchReportsByUserId(user.id);
       setLastFetchTime(Date.now());
     }
-  }, [isSheetOpen, user, fetchReportsByUserId, reportsByUserId.length, lastFetchTime]);
+  }, [isSheetOpen, user]);  // Remove reportsByUserId from dependencies to prevent loops
 
   // ✅ Maneja la selección de un reporte y cierra el menú antes de abrirlo
   const handleSelectReport = (report) => {

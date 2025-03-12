@@ -3,12 +3,14 @@ import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
 import { ReportLocationToast } from './ReportLocationToast';
 import { useEffect } from 'react';
+import { useUserAuth } from '@/lib/store/useUserAuth'; // Add this import
 
 // Track if a toast is currently active
 let isToastActive = false;
 
 export default function MapClickHandler() {
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);
+  const { user } = useUserAuth(); // Get user authentication status
 
   // Add cleanup effect to ensure isToastActive is reset if component unmounts
   useEffect(() => {
@@ -19,6 +21,9 @@ export default function MapClickHandler() {
 
   useMapEvents({
     click(e) {
+      // Skip if user is not logged in
+      if (!user) return;
+      
       // Filtramos si el evento es un doble clic
       if (e.originalEvent.detail === 2) return; // ⬅️ Evita capturar doble clic
 
