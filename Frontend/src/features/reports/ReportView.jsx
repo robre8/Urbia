@@ -12,9 +12,10 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import ReportMarker from "@/components/mapview/ReportMarker";
 import UrbiaLikes from "./UrbiaLikes";
-import ReportActions from "./ReportActions"; // ✅ Importamos el nuevo componente
+import ReportActions from "./ReportActions";
 import deleteAlert from "@/components/alerts/deleteAlerts/DeleteAlert";
-import useReportsStore from "@/lib/store/useReportsStore"; // Add this import
+import useReportsStore from "@/lib/store/useReportsStore";
+import { useUserAuth } from "@/lib/store/useUserAuth"; // Add this import
 
 // Updated category mapping to match backend category IDs
 const categoryMapping = {
@@ -28,6 +29,7 @@ export default function ReportView({ report, onClose, deleteReport }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
   const [showImagePreview, setShowImagePreview] = useState(false);
+  const { user } = useUserAuth(); // Get the current logged-in user
   
   // Get the setReportPreview function from the store
   
@@ -103,6 +105,9 @@ export default function ReportView({ report, onClose, deleteReport }) {
     }, 300);
   };
 
+  // Check if the current user is the owner of the report
+  const isReportOwner = user && currentReport && user.id === currentReport.usuarioId;
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={handleOpenChange}>
@@ -119,11 +124,13 @@ export default function ReportView({ report, onClose, deleteReport }) {
               <div className="flex items-center justify-between px-2">
 
               <SheetTitle className="text-lg font-semibold">Incidente</SheetTitle>
-            {/* ✅ Botón de acciones (Editar/Eliminar) */}
-            <ReportActions
-              onEdit={handleEdit} // Connect to our new handleEdit function
-              onDelete={handleDelete}
-            />
+            {/* Only show ReportActions if the user is the owner of the report */}
+            {isReportOwner && (
+              <ReportActions
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            )}
               </div>
             </SheetHeader>
           </div>
