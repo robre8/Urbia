@@ -2,8 +2,9 @@ import { useMapEvents } from 'react-leaflet';
 import useMapStore from '@/lib/store/useMapStore';
 import { toast } from "sonner";
 import { ReportLocationToast } from './ReportLocationToast';
-import { useEffect } from 'react';
-import { useUserAuth } from '@/lib/store/useUserAuth'; // Add this import
+import { useEffect, useRef } from 'react';
+import { useUserAuth } from '@/lib/store/useUserAuth';
+import frogError from "@/assets/frogError.png"; // Import the frog error image
 
 // Track if a toast is currently active
 let isToastActive = false;
@@ -11,6 +12,7 @@ let isToastActive = false;
 export default function MapClickHandler() {
   const setSelectedCoords = useMapStore((state) => state.setSelectedCoords);
   const { user } = useUserAuth(); // Get user authentication status
+  const prevUserRef = useRef(null);
 
   // Add cleanup effect to ensure isToastActive is reset if component unmounts
   useEffect(() => {
@@ -19,11 +21,13 @@ export default function MapClickHandler() {
     };
   }, []);
 
+  // Track user login state changes to prevent duplicate toasts
+  useEffect(() => {
+    prevUserRef.current = user;
+  }, [user]);
+
   useMapEvents({
     click(e) {
-      // Skip if user is not logged in
-      if (!user) return;
-      
       // Filtramos si el evento es un doble clic
       if (e.originalEvent.detail === 2) return; // ⬅️ Evita capturar doble clic
 
@@ -36,7 +40,47 @@ export default function MapClickHandler() {
       const coords = [e.latlng.lat, e.latlng.lng];
       console.log('📍 Coordenadas seleccionadas:', coords);
       
-      // Store coordinates in the map store
+      // Check if user is logged in
+      if (!user) {
+        // User is not logged in, show login required toast
+        isToastActive = true;
+        
+        // Create a timeout to reset isToastActive after toast duration
+        const toastTimeout = setTimeout(() => {
+          isToastActive = false;
+          console.log('Toast timeout reached, resetting active state');
+        }, 5500);
+        
+        toast(
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+            <div className="flex-shrink-0 w-32 flex justify-center">
+              <img src={frogError} alt="Frog" className="h-28 w-auto object-contain" />
+            </div>
+            <div className="text-center sm:text-left">
+              ¡No tan rápido renacuajo! primero debes <strong>iniciar sesión</strong> para empezar a crear reportes.
+            </div>
+          </div>,
+          {
+            duration: 5000,
+            position: "bottom-center",
+            className: "p-4 bg-white rounded-xl shadow-lg mx-auto",
+            style: { 
+              width: "min(90vw, 600px)",
+              maxWidth: "600px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              margin: "0 auto"
+            },
+            onDismiss: () => {
+              clearTimeout(toastTimeout);
+              isToastActive = false;
+            }
+          }
+        );
+        return;
+      }
+      
+      // User is logged in, continue with normal flow
       setSelectedCoords(coords);
       
       // Set toast as active
