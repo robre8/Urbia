@@ -8,7 +8,7 @@ Mira la **[Documentación](https://github.com/No-Country-simulation/s21-19-t-web
 
 Podes probar la aplicacion desde **[Urbia App](https://urbia.onrender.com/)** !!
 
-## 📋 Acerca de este proyecto 
+## 📃 Acerca de este proyecto 
 
 Presentamos **"Urbia"** – La plataforma que transforma la voz de la comunidad en acción 🚀🏙️🔊
 
@@ -72,11 +72,11 @@ _Crear una red de ciudadanos informados y conectados, promoviendo seguridad y ac
 [![Google_Meet](https://img.shields.io/badge/Google_Meet-Real_time_Meetings-00897B?logo=googlemeet)](https://www.microsoft.com/en-gb/microsoft-365/powerpoint)
 
 ## 🚀 Implementación y CI/CD
-- **Railway / Vercel**: Configuración automática para despliegue.
+- **Railway / Render**: Configuración automática para despliegue.
 - **GitHub Actions**: Automatización del despliegue al hacer push en `main`.
 
 ## 📡 Documentación API
-- **Base URL**: `https://urbia-back.onrender.com/swagger-ui/index.html`
+- **Base URL**: `https://api-urbia.up.railway.app/swagger-ui/index.html`
 
 ## 🤵‍♂️ Canales de comunicación del equipo
 [![Discord](https://img.shields.io/badge/Discord-Comunication-5865F2?logo=discord)](https://discord.com/)
@@ -106,16 +106,16 @@ cd ../Backend
 mvn spring-boot:run
 ```
 
-## 🤵‍♂️Teams 
+## 🤵‍♂️💻 Teams 
 
-### 👷‍♂️ Project Manager 
+### 🙋🏾‍♀️ Project Manager 
 
 | <img src="https://github.com/user-attachments/assets/17482a9c-bb6c-4e20-8d28-141ef5dae1f3" width="100" height="100" /> | 
 |:-:|
 | **Sara Elizabeth Alcántara** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')](https://www.linkedin.com/in/sara-e-alcantara-r/) |
 
-### 🎨 UX/UI
+### 👨🏽‍🎨 UX/UI
 
 | <img src="https://github.com/user-attachments/assets/9f570c89-25e0-4a78-a8a6-4465a9634948" width="100" height="100" /> | 
 |:-:|
@@ -129,19 +129,26 @@ mvn spring-boot:run
 | **Alejandro Luna** | **Celina Garcés** | **Cesar Hernan Ruscica** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/AlejandroLunaDev) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/celinagrcs) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/hernanruscica) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
 
-### 💻 Backend 
+### 👨🏽‍💻 Backend 
 
 | <img src="https://github.com/user-attachments/assets/182edd84-dda3-449c-8d17-0304fe92b842" width="100" height="100" /> | <img src="https://github.com/user-attachments/assets/bfbcccf4-6a40-4aa1-a4e1-e013e3677ea8" width="100" height="100" /> |
 |:-:|:-:|
 | **Alberto Gutierrez** | **Ronny Brenes** |
 | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/Albert0GR) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/robre8) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
 
-### 🧪 QA Manual 
+### 👩🏽‍💻 QA Manual 
 
 | <img src="https://github.com/user-attachments/assets/17482a9c-bb6c-4e20-8d28-141ef5dae1f3" width="100" height="100" /> |
 |:-:|
 | **Sara Elizabeth Alcántara** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')](https://www.linkedin.com/in/sara-e-alcantara-r/) |
+
+### 👩🏻‍🏫 Team Leader
+
+| <img src="https://github.com/user-attachments/assets/27f20a87-3fc2-455d-b90d-b2e7a8ded9ff" width="100" height="100" /> |
+|:-:|
+| **Julieta Mores** |
+| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/julieta-mores-t) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')](https://www.linkedin.com/in/julieta-mores/) |
 
 ## ✒️ Resumen de Autores 
 
@@ -152,6 +159,7 @@ mvn spring-boot:run
 * **Ronny Brenes** - *Backend Developer* - [robre8](https://github.com/robre8)
 * **Santiago García** - *UX/UI Design* - [santigarciaa](https://github.com/santigarciaa)
 * **Sara Elizabeth Alcántara** - *Project Manager and QA-Tester* - [SaraAlcantara](https://github.com/SaraAlcantara)
+* **Julieta Mores** - *Team Leader* - [julieta-mores-t](https://github.com/julieta-mores-t)
     
 ---
 ⌨️ con ❤️ por Equipo s21-19-t-webapp 2025 😊
