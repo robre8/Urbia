@@ -1,6 +1,6 @@
-# 🎨 UX/UI Design - Ciudad Escucha
+# 🎨 UX/UI Design - Urbia
 
-Este documento describe la estrategia de diseño UX/UI para "Ciudad Escucha", asegurando accesibilidad, usabilidad y una experiencia óptima para los usuarios.
+Este documento describe la estrategia de diseño UX/UI para "Urbia", asegurando accesibilidad, usabilidad y una experiencia óptima para los usuarios.
 
 ---
 
@@ -14,7 +14,7 @@ Este documento describe la estrategia de diseño UX/UI para "Ciudad Escucha", as
 ---
 
 ## 🎨 Herramientas y Tecnologías UX/UI
-- **Diseño:** [Figma](https://www.figma.com/)
+- **Diseño:** [Figma](https://www.figma.com/design/NoP3UTmNAwFsjzckY82wNS/equipo-s21-19-t-webapp?node-id=249-48&t=pePo41v8GhgxSpeN-0)
 - **Mapas:** OpenStreetMap / Leaflet
 - **Iconografía:** Lucide Icons
 - **Guías de Accesibilidad:** WCAG 2.1
@@ -24,13 +24,15 @@ Este documento describe la estrategia de diseño UX/UI para "Ciudad Escucha", as
 ## 📜 Guía de Estilos
 
 ### 🎭 Colores Primarios
-- **Azul Principal:** `#007AFF`
+- **Verde Principal:** `#7ee239`
+- **Morado secundario:** `#8958fa`
+#### Botones:
 - **Rojo Alerta:** `#FF3B30`
 - **Verde Confirmación:** `#34C759`
 - **Gris Neutro:** `#8E8E93`
 
 ### 🔤 Tipografía
-- **Fuente Primaria:** Inter
+- **Fuente Primaria:** Poppins
 - **Jerarquía:**
   - **Título Principal:** `24px, Bold`
   - **Subtítulos:** `18px, Medium`
@@ -47,7 +49,7 @@ Este documento describe la estrategia de diseño UX/UI para "Ciudad Escucha", as
 ## 🛠 Roadmap UX/UI
 | Sprint | Entregables |
 |--------|------------|
-| **Sprint 1** | Prototipo en Figma con flujo de usuario detallado **y primeras implementaciones en código**. |
+| **Sprint 1** | Prototipo en Figma con flujo de usuario detallado y primeras implementaciones en código. |
 | **Sprint 2** | Ajustes UI y revisión con el equipo de desarrollo. |
 | **Sprint 3** | Integración total en el código, optimización de accesibilidad y feedback iterativo. |
 | **Sprint 4** | Refinamiento y ajustes finales antes de la entrega. |
@@ -77,4 +79,3 @@ Este documento describe la estrategia de diseño UX/UI para "Ciudad Escucha", as
 ---
 
 📌 **Este documento se actualizará conforme avancen los sprints UX/UI.**
-
