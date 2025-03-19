@@ -1,6 +1,6 @@
 # 🔀 GIT Workflow y Convención de Commits
 
-Este documento describe el flujo de trabajo en Git y la convención de commits para mantener una estructura organizada en el desarrollo del proyecto "Ciudad Escucha".
+Este documento describe el flujo de trabajo en Git y la convención de commits para mantener una estructura organizada en el desarrollo del proyecto "Urbia".
 
 ## 🚀 Flujo de Trabajo en Git
 1. **Crear una rama a partir de `dev`**:

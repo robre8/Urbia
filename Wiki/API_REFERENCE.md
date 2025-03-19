@@ -1,12 +1,12 @@
-# 📡 Documentación de la API - Ciudad Escucha
+# 📡 Documentación de la API - Urbia
 
-Este documento detalla los endpoints disponibles en la API de "Ciudad Escucha". Como el MVP **no tendrá login**, se utilizará un usuario precargado en la base de datos para realizar las interacciones.
+Este documento detalla los endpoints disponibles en la API de "Urbia". Como el MVP **no tendrá login**, se utilizará un usuario precargado en la base de datos para realizar las interacciones.
 
 ---
 
 ## 🌐 Base URL
 ```
-https://api.ciudadescucha.com
+https://urbia.onrender.com/
 ```
 
 ---
