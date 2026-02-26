@@ -1,0 +1,45 @@
+services:
+  # Backend - Java Spring Boot
+  - type: web
+    name: urbia-backend
+    runtime: java
+    region: oregon
+    plan: free
+    buildCommand: cd Backend && ./mvnw clean install -DskipTests
+    startCommand: cd Backend && java -Dserver.port=$PORT -jar target/urbia-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: JAVA_VERSION
+        value: 17
+      - key: FINAL_JDBC_DATABASE_URL
+        fromDatabase:
+          name: urbia-postgres
+          property: connectionString
+      - key: FINAL_JDBC_DATABASE_USERNAME
+        fromDatabase:
+          name: urbia-postgres
+          property: user
+      - key: FINAL_JDBC_DATABASE_PASSWORD
+        fromDatabase:
+          name: urbia-postgres
+          property: password
+      - key: S3_KEY
+        sync: false
+      - key: S3_SECRETKEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRATION
+        value: 86400000
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://urbia-ciudad-escucha.vercel.app,http://localhost:5173
+    healthCheckPath: /api/health
+    
+  # PostgreSQL Database
+  - type: pv-database
+    name: urbia-postgres
+    region: oregon
+    plan: free
+    databaseName: urbia_db
+    databaseUser: urbia_user
