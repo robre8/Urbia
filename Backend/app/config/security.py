@@ -23,7 +23,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     
     encoded_jwt = jwt.encode(
         to_encode,
-        settings.jwt_secret_key,
+        settings.jwt_secret,
         algorithm=settings.jwt_algorithm
     )
     return encoded_jwt
@@ -36,7 +36,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
     try:
         payload = jwt.decode(
             token,
-            settings.jwt_secret_key,
+            settings.jwt_secret,
             algorithms=[settings.jwt_algorithm]
         )
         user_id: str = payload.get("sub")

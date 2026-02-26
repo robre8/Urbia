@@ -10,15 +10,15 @@ class Settings(BaseSettings):
     # Base de datos
     database_url: str = "postgresql://user:password@localhost/urbia"
     
-    # JWT
-    jwt_secret_key: str = "tu_secreto_super_seguro"
+    # JWT - Nombre debe coincidir con render.yaml (JWT_SECRET)
+    jwt_secret: str = "tu_secreto_super_seguro"
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 24
     
-    # AWS S3
+    # AWS S3 - Nombres deben coincidir con render.yaml (S3_KEY, S3_SECRETKEY)
     s3_bucket_name: str = "urbia-imagenes"
-    aws_access_key_id: str = ""
-    aws_secret_access_key: str = ""
+    s3_key: str = ""
+    s3_secretkey: str = ""
     aws_region: str = "us-east-2"
     
     # Google Cloud
