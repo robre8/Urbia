@@ -1,5 +1,6 @@
 import cloudinary
 import cloudinary.uploader
+import os
 from app.config.settings import get_settings
 
 settings = get_settings()
@@ -9,12 +10,13 @@ class CloudinaryService:
     """Servicio para interactuar con Cloudinary"""
     
     def __init__(self):
-        cloudinary.config(
-            cloud_name=settings.cloudinary_cloud_name,
-            api_key=settings.cloudinary_api_key,
-            api_secret=settings.cloudinary_api_secret,
-            secure=True
-        )
+        # Cloudinary puede inicializarse desde CLOUDINARY_URL automáticamente
+        if settings.cloudinary_url:
+            os.environ['CLOUDINARY_URL'] = settings.cloudinary_url
+            cloudinary.config(secure=True)
+        else:
+            # Fallback: intentar leer de variable de entorno directamente
+            cloudinary.config(secure=True)
     
     def upload_file(self, file_bytes: bytes, file_name: str, folder: str = "") -> str:
         """Subir archivo a Cloudinary"""

@@ -15,10 +15,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 24
     
-    # Cloudinary - Reemplaza AWS S3
-    cloudinary_cloud_name: str = ""
-    cloudinary_api_key: str = ""
-    cloudinary_api_secret: str = ""
+    # Cloudinary - Reemplaza AWS S3 (formato: cloudinary://api_key:api_secret@cloud_name)
+    cloudinary_url: str = ""
     
     # Google Cloud
     gcp_bucket_name: str = "bucket-urbia"
