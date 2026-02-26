@@ -5,7 +5,7 @@ from app.config.database import get_db
 from app.config.security import verify_token
 from app.models.models import Report
 from app.schemas.schemas import ReportCreate, ReportResponse, ReportUpdate
-from app.services.s3_service import get_s3_service, S3Service
+from app.services.cloudinary_service import get_cloudinary_service, CloudinaryService
 
 router = APIRouter(prefix="/api/reports", tags=["reports"])
 
@@ -68,7 +68,7 @@ async def upload_report_image(
     file: UploadFile = File(...),
     payload: dict = Depends(verify_token),
     db: Session = Depends(get_db),
-    s3_service: S3Service = Depends(get_s3_service)
+    cloudinary_service: CloudinaryService = Depends(get_cloudinary_service)
 ):
     """Subir imagen a reporte"""
     # Verificar reporte existe
@@ -88,9 +88,9 @@ async def upload_report_image(
             detail="No tienes permiso para actualizar este reporte"
         )
     
-    # Subir imagen a S3
+    # Subir imagen a Cloudinary
     file_bytes = await file.read()
-    file_url = s3_service.upload_file(
+    file_url = cloudinary_service.upload_file(
         file_bytes,
         f"{report_id}_{file.filename}",
         folder="reports"

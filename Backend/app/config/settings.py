@@ -15,11 +15,10 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 24
     
-    # AWS S3 - Nombres deben coincidir con render.yaml (S3_KEY, S3_SECRETKEY)
-    s3_bucket_name: str = "urbia-imagenes"
-    s3_key: str = ""
-    s3_secretkey: str = ""
-    aws_region: str = "us-east-2"
+    # Cloudinary - Reemplaza AWS S3
+    cloudinary_cloud_name: str = ""
+    cloudinary_api_key: str = ""
+    cloudinary_api_secret: str = ""
     
     # Google Cloud
     gcp_bucket_name: str = "bucket-urbia"
