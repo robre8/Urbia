@@ -2,28 +2,36 @@
 
 ## 🚀 Desarrollo Local
 
-### Backend (Java Spring Boot)
+### Backend (Python + FastAPI)
 
 ```bash
 # 1. Navegar al directorio del backend
 cd Backend
 
-# 2. Copiar el archivo de ejemplo de variables de entorno
+# 2. Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# 3. Copiar el archivo de ejemplo de variables de entorno
 cp .env.example .env
 
-# 3. Editar .env con tus credenciales reales
+# 4. Editar .env con tus credenciales reales
 # - GEMINI_API_KEY: Obtener en https://makersuite.google.com/app/apikey
 # - S3_KEY y S3_SECRETKEY: Credenciales de AWS
-# - Database: Configurar PostgreSQL local
+# - DATABASE_URL: Configurar PostgreSQL local
 
-# 4. Iniciar PostgreSQL local (Docker recomendado)
+# 5. Instalar dependencias
+pip install -r requirements.txt
+
+# 6. Iniciar PostgreSQL local (Docker recomendado)
 docker run --name urbia-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=urbia_db -p 5432:5432 -d postgres:15
 
-# 5. Ejecutar el backend
-./mvnw spring-boot:run
+# 7. Ejecutar el backend
+uvicorn main:app --reload
 
-# Backend disponible en: http://localhost:8080
-# API disponible en: http://localhost:8080/api
+# Backend disponible en: http://localhost:8000
+# API documentada en: http://localhost:8000/docs
+# Alternativa OpenAPI: http://localhost:8000/redoc
 ```
 
 ### Frontend (React + Vite)
@@ -71,9 +79,8 @@ Ver [DEPLOYMENT.md](./DEPLOYMENT.md) para instrucciones completas de despliegue.
 - `GEMINI_API_KEY` ⚠️ **Obligatorio**
 - `S3_KEY` ⚠️ **Obligatorio**
 - `S3_SECRETKEY` ⚠️ **Obligatorio**
-- `FINAL_JDBC_DATABASE_URL`
-- `FINAL_JDBC_DATABASE_USERNAME`
-- `FINAL_JDBC_DATABASE_PASSWORD`
+- `DATABASE_URL`
+- `JWT_SECRET`
 
 ### Frontend
 - `VITE_API_URL` (URL del backend)
@@ -84,14 +91,26 @@ Ver [DEPLOYMENT.md](./DEPLOYMENT.md) para instrucciones completas de despliegue.
 
 ### Backend
 ```bash
-# Limpiar y compilar
-./mvnw clean install
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar servidor de desarrollo
+uvicorn main:app --reload
 
 # Ejecutar tests
-./mvnw test
+pytest
 
-# Empaquetar JAR
-./mvnw package
+# Ejecutar tests con coverage
+pytest --cov=app
+
+# Formatear código
+black .
+
+# Linter
+flake8 .
+
+# Inicializar base de datos con datos de ejemplo
+python init_db.py
 ```
 
 ### Frontend
@@ -119,12 +138,14 @@ npm run lint
 ### Backend no arranca
 - Verificar que PostgreSQL esté corriendo
 - Verificar credenciales en `.env`
-- Revisar logs: `./mvnw spring-boot:run`
+- Verificar que Python 3.11+ esté instalado
+- Verificar que virtual environment esté activado
+- Revisar logs en la consola
 
 ### Frontend no conecta al backend
 - Verificar `VITE_API_URL` en `.env.local`
-- Verificar que backend esté corriendo en puerto 8080
-- Revisar CORS en backend
+- Verificar que backend esté corriendo en puerto 8000
+- Revisar CORS en `app/config/settings.py`
 
 ### Problemas con S3
 - Verificar que el bucket existe

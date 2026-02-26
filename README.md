@@ -62,10 +62,13 @@ Imagina una ciudad donde la información fluye en tiempo real y los ciudadanos p
 
 ### 🧰 Back End [🔝](#-back-end-)
 
-- **Java Spring Boot**
+- **Python 3.11 + FastAPI**
 - **PostgreSQL**
-- **Procesamiento de imágenes y audio con IA** (API gratuita)
-- **WebSockets / Polling** para actualizaciones en tiempo real.
+- **SQLAlchemy** (ORM)
+- **JWT** para autenticación
+- **AWS S3** para almacenamiento de archivos
+- **Google Gemini API** para procesamiento de IA
+- **WebSockets** para actualizaciones en tiempo real
 
 ### 🌠 Quality Assurance [🔝](#-quality-assurance-)
 
@@ -74,25 +77,38 @@ Imagina una ciudad donde la información fluye en tiempo real y los ciudadanos p
 ## 🛠 Installation & Setup [🔝](#-installation--setup-)
 
 ### Prerequisites
-- Node.js & npm
-- Java JDK 17+
+- Node.js & npm (para Frontend)
+- Python 3.11+ (para Backend)
 - PostgreSQL
 - Docker (opcional)
 
 ### Steps to Run
 ```sh
 # Clonar el repositorio
-git clone https://github.com/ciudad-escucha
-cd ciudad-escucha
+git clone https://github.com/No-Country-simulation/s21-19-t-webapp.git
+cd s21-19-t-webapp
 
-# Instalar dependencias del frontend
+# 1. Instalar dependencias del frontend
 cd Frontend
 npm install
 npm run dev
 
-# Configurar y ejecutar el backend
+# 2. Configurar y ejecutar el backend (en otra terminal)
 cd ../Backend
-mvn spring-boot:run
+
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+
+# Ejecutar servidor
+uvicorn main:app --reload
 ```
 
 ## 🚀 Deployment & CI/CD [🔝](#-deployment--cicd-)

@@ -3,7 +3,7 @@
 ## 📋 Resumen
 
 Este proyecto se despliega en:
-- **Backend (Java Spring Boot)**: Render.com
+- **Backend (Python FastAPI)**: Render.com
 - **Frontend (React + Vite)**: Vercel
 - **Base de datos**: PostgreSQL en Render
 
@@ -23,7 +23,7 @@ Este proyecto se despliega en:
 ```bash
 # En Render Dashboard:
 1. New → Blueprint
-2. Conectar tu repositorio GitHub (robre8/Urbia)
+2. Conectar tu repositorio GitHub (No-Country-simulation/s21-19-t-webapp)
 3. Seleccionar rama: dev
 4. Render detectará automáticamente render.yaml
 ```
@@ -34,15 +34,14 @@ En Render Dashboard → Backend Service → Environment:
 
 | Variable | Valor | Descripción |
 |----------|-------|-------------|
-| `FINAL_JDBC_DATABASE_URL` | Auto | Se genera automáticamente desde PostgreSQL |
-| `FINAL_JDBC_DATABASE_USERNAME` | Auto | Se genera automáticamente |
-| `FINAL_JDBC_DATABASE_PASSWORD` | Auto | Se genera automáticamente |
+| `DATABASE_URL` | Auto | Se genera automáticamente desde PostgreSQL |
 | `S3_KEY` | **Tu AWS Access Key** | Credenciales de AWS S3 |
 | `S3_SECRETKEY` | **Tu AWS Secret Key** | Credenciales de AWS S3 |
+| `S3_BUCKET_NAME` | `urbia-imagenes` | Nombre del bucket S3 |
 | `GEMINI_API_KEY` | **Tu API Key** | Obtener en [Google AI Studio](https://makersuite.google.com/app/apikey) |
+| `GCP_BUCKET_NAME` | `bucket-urbia` | Bucket de Google Cloud |
 | `JWT_SECRET` | Auto-generado | Se genera automáticamente |
-| `JWT_EXPIRATION` | `86400000` | 24 horas en ms |
-| `CORS_ALLOWED_ORIGINS` | `https://tu-app.vercel.app` | URL del frontend en Vercel |
+| `DEBUG` | `false` | Desactivado en producción |
 
 #### 3. Configurar AWS S3
 
@@ -54,8 +53,36 @@ En Render Dashboard → Backend Service → Environment:
 #### 4. Build Settings en Render
 
 ```yaml
-Build Command: cd Backend && ./mvnw clean install -DskipTests
-Start Command: cd Backend && java -Dserver.port=$PORT -jar target/urbia-0.0.1-SNAPSHOT.jar
+Build Command: pip install -r Backend/requirements.txt
+Start Command: cd Backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+
+#### 5. Instalación Local para Desarrollo
+
+```bash
+# Clonar repositorio
+git clone https://github.com/No-Country-simulation/s21-19-t-webapp.git
+cd s21-19-t-webapp
+
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r Backend/requirements.txt
+
+# Copiar archivo de configuración
+cp Backend/.env.example Backend/.env
+
+# Configurar BASE DE DATOS en .env
+# Asegúrate de tener PostgreSQL corriendo
+
+# Ejecutar la aplicación
+cd Backend
+uvicorn main:app --reload
+
+# La API estará disponible en http://localhost:8000
+# Documentación interactiva en http://localhost:8000/docs
 ```
 
 ---

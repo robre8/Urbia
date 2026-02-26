@@ -1,16 +1,29 @@
-#FROM amazoncorretto:17-alpine-jdk
+# Dockerfile para aplicación Python FastAPI
+FROM python:3.11-slim
 
-#COPY target/urbia-0.0.1-SNAPSHOT.jar app.jar
-
-#ENTRYPOINT ["java", "-jar", "/app.jar"]
-
-# Etapa de build
-FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package
 
-# Etapa de producción
-FROM amazoncorretto:17-alpine-jdk
-COPY --from=build /app/target/urbia-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY Backend/requirements.txt .
+
+# Instalar dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código de la aplicación
+COPY Backend/ .
+
+# Crear usuario no-root
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Exponer puerto
+EXPOSE 8000
+
+# Comando de inicio
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
