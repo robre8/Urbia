@@ -1,208 +1,249 @@
-# 📚 Readme for Ciudad Escucha ✨
+# 🏙️ Urbia - Ciudad Escucha
 
-- `📚 Root`/[`📕 Frontend`](./Frontend/README.MD)/
-- `📚 Root`/[`📘 Backend`](./Backend/README.MD)/
+> Plataforma de reportes urbanos en tiempo real con inteligencia artificial
 
-## 📖 Table Of Contents
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-- [📚 Readme for Ciudad Escucha ✨](#-readme-for-ciudad-escucha-)
-  - [📖 Table Of Contents](#-table-of-contents)
-  - [📋 About this project 🔝](#-about-this-project-)
-  - [⚙️ Technology Stack 🔝](#️-technology-stack-)
-    - [🎨 UX UI Design 🔝](#-ux-ui-design-)
-    - [🎆 Front End 🔝](#-front-end-)
-    - [🧰 Back End 🔝](#-back-end-)
-    - [🌠 Quality Assurance 🔝](#-quality-assurance-)
-  - [🛠 Installation \& Setup 🔝](#-installation--setup-)
-    - [Prerequisites](#prerequisites)
-    - [Steps to Run](#steps-to-run)
-  - [🚀 Deployment \& CI/CD 🔝](#-deployment--cicd-)
-  - [📡 API Documentation 🔝](#-api-documentation-)
-  - [🤵‍♂️ Team communication channels 🔝](#️-team-communication-channels-)
-  - [🗃️ Project info 🔝](#️-project-info-)
-    - [📚 License 🔝](#-license-)
-    - [📚 Workspaces info 🔝](#-workspaces-info-)
-    - [📚 Deploy 🔝](#-deploy-)
-    - [🎆 Front End 🔝](#-front-end--1)
-    - [🧰 Back End 🔝](#-back-end--1)
-    - [🌠 Quality Assurance 🔝](#-quality-assurance--1)
-  - [🤵‍♂️ Team communication channels 🔝](#️-team-communication-channels--1)
-  - [🤵‍♂️Teams 🔝](#️teams-)
-    - [👷‍♂️ Project Manager 🔝](#️-project-manager-)
-    - [🎨 UX/UI 🔝](#-uxui-)
-    - [🧑‍💻 Frontend 🔝](#-frontend-)
-    - [💻 Backend 🔝](#-backend-)
-    - [🧪 QA Manual 🔝](#-qa-manual-)
+**Ver documentación detallada:**
+- [📕 Frontend](./Frontend/README.md) - React + Vite + TailwindCSS
+- [📘 Backend](./Backend/README.md) - Python + FastAPI
+- [🚀 Deployment](./DEPLOYMENT.md) - Guía de despliegue
+- [📝 Changelog](./CHANGELOG.md) - Historial de cambios
 
-## 📋 About this project [🔝](#-readme-for-ciudad-escucha-)
+---
 
-🚀 Presentamos **"Ciudad Escucha"** – La plataforma que transforma la voz de la comunidad en acción 🏙️🔊
+## 📋 Acerca del Proyecto
 
-Imagina una ciudad donde la información fluye en tiempo real y los ciudadanos pueden ayudarse entre sí. "Ciudad Escucha" es una plataforma donde cualquier persona puede reportar incidentes urbanos al instante, simplemente subiendo una foto y comentando con su voz, mientras una IA analiza y genera un reporte detallado.
+**Urbia "Ciudad Escucha"** es una plataforma web que transforma la voz de la comunidad en acción. Permite a los ciudadanos reportar incidentes urbanos en tiempo real con una interfaz intuitiva estilo Waze, facilitando una ciudad más conectada y segura.
 
-📍 **Características:**
-- Interfaz estilo **Waze** para reportes comunitarios en tiempo real.
-- **Inteligencia Artificial** para analizar imágenes y audios.
-- **Mapas interactivos** para visualizar y gestionar incidentes.
-- **Notificaciones inteligentes** para alertar a la comunidad sobre eventos en su ciudad.
+### ✨ Características Principales
 
-🎯 **Objetivo:** Crear una red de ciudadanos informados y conectados, promoviendo seguridad y acción inmediata ante incidentes urbanos.
+- 📍 **Reportes en tiempo real** - Interfaz interactiva con mapas para reportar incidentes
+- 🤖 **IA integrada** - Análisis automático de imágenes y audios con Google Gemini
+- 🗺️ **Mapas interactivos** - Visualización geolocalizada con OpenStreetMap
+- 🔔 **Notificaciones** - Alertas inteligentes sobre eventos en tu ciudad  
+- 👥 **Comunidad activa** - Sistema de likes y comentarios para fortalecer la participación
+- 📱 **PWA** - Funciona como aplicación nativa en dispositivos móviles
+- 🔒 **Autenticación segura** - Sistema JWT para protección de datos
 
-## ⚙️ Technology Stack [🔝](#-readme-for-ciudad-escucha-)
+---
 
-### 🎨 UX UI Design [🔝](#-ux-ui-design-)
+## 🛠️ Stack Tecnológico
 
-[![Figma Link](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/)
+### Frontend
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-443E38?style=for-the-badge)](https://zustand-demo.pmnd.rs/)
+[![Shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)](https://ui.shadcn.com/)
 
-### 🎆 Front End [🔝](#-front-end-)
+### Backend
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge)](https://www.sqlalchemy.org/)
+[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-- **React + TailwindCSS**
-- **Zustand** para gestión de estado.
-- **Mapas interactivos** con OpenStreetMap.
+### DevOps & Cloud
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![AWS S3](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
+[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 
-### 🧰 Back End [🔝](#-back-end-)
+### IA & Servicios
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-7EBC6F?style=for-the-badge&logo=openstreetmap&logoColor=white)](https://www.openstreetmap.org/)
 
-- **Python 3.11 + FastAPI**
-- **PostgreSQL**
-- **SQLAlchemy** (ORM)
-- **JWT** para autenticación
-- **AWS S3** para almacenamiento de archivos
-- **Google Gemini API** para procesamiento de IA
-- **WebSockets** para actualizaciones en tiempo real
+---
 
-### 🌠 Quality Assurance [🔝](#-quality-assurance-)
+## 🚀 Inicio Rápido
 
-- **Testing manual** con casos de prueba.
+### Prerrequisitos
 
-## 🛠 Installation & Setup [🔝](#-installation--setup-)
+- **Node.js** 18+ y npm
+- **Python** 3.11+
+- **PostgreSQL** 12+ (o SQLite para desarrollo local)
+- **Git**
 
-### Prerequisites
-- Node.js & npm (para Frontend)
-- Python 3.11+ (para Backend)
-- PostgreSQL
-- Docker (opcional)
+### Instalación
 
-### Steps to Run
-```sh
-# Clonar el repositorio
+```bash
+# 1. Clonar el repositorio
 git clone https://github.com/No-Country-simulation/s21-19-t-webapp.git
 cd s21-19-t-webapp
+```
 
-# 1. Instalar dependencias del frontend
-cd Frontend
-npm install
-npm run dev
+### Backend Setup
 
-# 2. Configurar y ejecutar el backend (en otra terminal)
-cd ../Backend
+```bash
+# 2. Navegar al directorio del backend
+cd Backend
 
-# Crear entorno virtual
+# 3. Crear entorno virtual
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-# Instalar dependencias
+# Activar entorno virtual
+# En Windows:
+venv\Scripts\activate
+# En macOS/Linux:
+source venv/bin/activate
+
+# 4. Instalar dependencias
 pip install -r requirements.txt
 
-# Configurar variables de entorno
+# 5. Configurar variables de entorno
 cp .env.example .env
-# Editar .env con tus credenciales
+# Editar .env con tus credenciales (ver Backend/README.md)
 
-# Ejecutar servidor
+# 6. Inicializar base de datos (opcional - incluye categorías de ejemplo)
+python init_db.py
+
+# 7. Ejecutar el servidor
 uvicorn main:app --reload
 ```
 
-## 🚀 Deployment & CI/CD [🔝](#-deployment--cicd-)
-- **Railway / Vercel**: Configuración automática para despliegue.
-- **GitHub Actions**: Automatización del despliegue al hacer push en `main`.
+El backend estará disponible en:
+- 🌐 API: http://localhost:8000
+- 📚 Docs (Swagger): http://localhost:8000/docs
+- 📖 ReDoc: http://localhost:8000/redoc
 
-## 📡 API Documentation [🔝](#-api-documentation-)
-- **Base URL**: `https://api.ciudadescucha.com`
-- **Endpoints:**
-  - `POST /reports` - Crear un nuevo reporte
-  - `GET /reports` - Obtener reportes existentes
-  - `GET /reports/:id` - Obtener un reporte específico
-  - `POST /upload` - Subir imágenes o audios
+### Frontend Setup
 
-## 🤵‍♂️ Team communication channels [🔝](#-team-communication-channels-)
+```bash
+# 8. En otra terminal, navegar al frontend
+cd Frontend
 
-[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com)
+# 9. Instalar dependencias
+npm install
 
-## 🗃️ Project info [🔝](#-project-info-)
+# 10. Configurar variables de entorno
+cp .env.example .env
+# Editar VITE_API_URL=http://localhost:8000/api
 
-### 📚 License [🔝](#-license-)
+# 11. Ejecutar servidor de desarrollo
+npm run dev
+```
 
-| License | [![License Link](https://img.shields.io/badge/MIT-FF0000?style=for-the-badge)](./LICENSE.MD) |
-| :-: | :-: |
+El frontend estará disponible en:
+- 🌐 App: http://localhost:3000
 
-### 📚 Workspaces info [🔝](#-workspaces-info-)
+---
 
-| Name | Path | Description |
-| :-: | :-: | :-: |
-| `✨ root` | / | The project's root path |
-| `🖼️ Frontend` | /Frontend | Application Front-End |
-| `🎛️ Backend` | /Backend | Application Back-End |
+## 📡 API Documentation
 
-### 📚 Deploy [🔝](#-deploy-)
+### Endpoints Principales
 
-| Description | Deploy | Link |
-| :-: | :-: | :-: |
-| Repository | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white)](https://github.com) | [Repo App](https://github.com) |
-| Frontend | Por desplegar | Sin enlace |
-| Backend | Por desplegar | Sin enlace |
+#### Autenticación
+- `POST /api/auth/register` - Registrar nuevo usuario
+- `POST /api/auth/login` - Login de usuario  
+- `GET /api/auth/me` - Obtener usuario actual (requiere auth)
 
-### 🎆 Front End [🔝](#-readme-for-app-)
+#### Reportes
+- `GET /api/reports` - Listar todos los reportes
+- `GET /api/reports/{id}` - Obtener un reporte específico
+- `POST /api/reports` - Crear nuevo reporte (requiere auth)
+- `PUT /api/reports/{id}` - Actualizar reporte (requiere auth)
+- `DELETE /api/reports/{id}` - Eliminar reporte (requiere auth)
+- `POST /api/reports/{id}/upload-image` - Subir imagen (requiere auth)
+- `POST /api/reports/{id}/like` - Dar like a un reporte (requiere auth)
 
-[![TypeScript Link](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white 'TypeScript Link')](https://www.typescriptlang.org/) [![React Link](  https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB 'React Link')](https://react.dev/)[![Next Link](https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white 'Next Link')](https://nextjs.org/)
-[![tailwind Link](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white 'Tailwind Link')](https://tailwindcss.com/) [![PossCss Link](https://img.shields.io/badge/posscss-DD3A0A?style=for-the-badge&logo=postcss&logoColor=DD3A0A&color=ffffff 'PossCss Link')](https://postcss.org/) [![Shadcn/ui link](https://img.shields.io/badge/shadcn%2Fui-ffffff?style=for-the-badge&logo=shadcnui&logoColor=ffffff&color=000000 'Shadcn/ui Link')](https://ui.shadcn.com/)
-[![Zod Link](https://img.shields.io/badge/zod-3E67B1?style=for-the-badge&logo=zod&logoColor=892CA0&color=313131)](https://zod.dev/ 'Zod Link')[![Zustand Link](https://img.shields.io/badge/zustand-3E67B1?style=for-the-badge&color=714B67 'Zustand Link')](https://zustand-demo.pmnd.rs/)[![JSON_WEB_TOKENS](https://img.shields.io/badge/JSON_WEB_TOKENS-212121?style=for-the-badge&logo=jsonwebtokens&logoColor=ffffff 'JSON_WEB_TOKENS')](https://jwt.io/)
-[![Eslint link](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white 'Eslint Link')](https://eslint.org/) [![Prettier link](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E 'Prettier Link')](https://prettier.io/)
+#### Categorías
+- `GET /api/categories` - Listar todas las categorías
 
-### 🧰 Back End [🔝](#-readme-for-app-)
+### Documentación Interactiva
 
-[![Python Link](https://img.shields.io/badge/Python-%20%233776AB?style=for-the-badge&logo=Python&logoColor=%23FFFFFF 'Python Link')](https://www.python.org/) [![Postgres](https://img.shields.io/badge/Postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](#) [![Django](https://img.shields.io/badge/Django-%23092E20.svg?logo=django&logoColor=white&style=for-the-badge)](#) [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff&style=for-the-badge)](#)
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
-### 🌠 Quality Assurance [🔝](#-readme-for-app-)
+---
 
-[![Excel Link](https://img.shields.io/badge/Microsoft_Excel-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white 'Excell Link')](https://www.office.com/) [![Word Link](https://img.shields.io/badge/Microsoft_Word-2B579A?style=for-the-badge&logo=microsoft-word&logoColor=white 'Word Link')](https://www.office.com/) 
+## 🌐 Deployment
 
-## 🤵‍♂️ Team communication channels [🔝](#-readme-for-app-)
+### Producción
 
-[![Slack Link](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white 'Slack Link')](https://slack.com) [![Discord Link](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white 'Discord Link')](https://discord.com) [![LinkedIn Link](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')](https://linkedIn.com) [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/No-Country-simulation/s18-03-m-python-react)
+- **Frontend**: Desplegado en [Vercel](https://vercel.com/)
+- **Backend**: Desplegado en [Render](https://render.com/)
+- **Base de Datos**: PostgreSQL en Render
 
-## 🤵‍♂️Teams [🔝](#-teams-)
+Ver [DEPLOYMENT.md](./DEPLOYMENT.md) para instrucciones detalladas de despliegue.
 
-### 👷‍♂️ Project Manager [🔝](#-project-manager-)
+### Variables de Entorno
 
-| ![Avatar](https://avatars.githubusercontent.com/u/135073545?s=96&v=4 'Project Manager') |
+#### Backend (.env)
+```env
+DATABASE_URL=postgresql://user:password@host:5432/urbia_db
+JWT_SECRET_KEY=your-secret-key-here
+AWS_ACCESS_KEY_ID=your-aws-key
+AWS_SECRET_ACCESS_KEY=your-aws-secret
+GEMINI_API_KEY=your-gemini-api-key
+DEBUG=false
+```
+
+#### Frontend (.env)
+```env
+VITE_API_URL=https://tu-backend.onrender.com/api
+```
+
+---
+
+## 👥 Equipo
+
+### 👷‍♂️ Project Manager
+| <img src="https://avatars.githubusercontent.com/u/135073545?v=4" width="100" height="100"> |
 |:-:|
 | **Alejandro Luna** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/AlejandroLunaDev) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AlejandroLunaDev) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
 
-### 🎨 UX/UI [🔝](#-uxui-)
-
-| ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) |
+### 🎨 UX/UI Designer
+| <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> |
 |:-:|
 | **Santiago Garcia** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/santigarciaa) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/santigarciaa) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
 
-### 🧑‍💻 Frontend [🔝](#-frontend-)
-
-| ![Avatar](https://avatars.githubusercontent.com/u/135073545?s=96&v=4) | ![Avatar](https://avatars.githubusercontent.com/u/125300652?s=96&v=4) | ![Avatar](https://avatars.githubusercontent.com/u/47112525?s=96&v=4) |
+### 🧑‍💻 Frontend Team
+| <img src="https://avatars.githubusercontent.com/u/135073545?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/125300652?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/47112525?v=4" width="100" height="100"> |
 |:-:|:-:|:-:|
 | **Alejandro Luna** | **Celina Garcés** | **Cesar Hernan Ruscica** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/AlejandroLunaDev) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/celinagrcs) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/hernanruscica) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AlejandroLunaDev) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/celinagrcs) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hernanruscica) |
 
-### 💻 Backend [🔝](#-backend-)
-
-| ![Avatar](https://avatars.githubusercontent.com/u/84197042?s=96&v=4) | ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) | ![Avatar](https://avatars.githubusercontent.com/u/138052981?s=96&v=4) |
+### 💻 Backend Team
+| <img src="https://avatars.githubusercontent.com/u/84197042?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> |
 |:-:|:-:|:-:|
 | **Daiana Amado** | **Alberto Gutierrez** | **Ronny Brenes** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/Daiana-Amado) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/Albert0GR) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() | [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/robre8) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Daiana-Amado) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Albert0GR) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robre8) |
 
-### 🧪 QA Manual [🔝](#-qa-manual-)
-
-| ![Avatar](https://avatars.githubusercontent.com/u/107267047?s=96&v=4) |
+### 🧪 QA Manual
+| <img src="https://avatars.githubusercontent.com/u/107267047?v=4" width="100" height="100"> |
 |:-:|
 | **Sara Elizabeth Alcántara** |
-| [![Github Link](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white 'Github Link')](https://github.com/SaraAlcantara) [![LinkedIn Link](https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white 'LinkedIn Link')]() |
+| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SaraAlcantara) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
 
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver [LICENSE](./LICENSE) para más detalles.
+
+---
+
+## 🔗 Enlaces
+
+- **Repositorio**: [GitHub](https://github.com/No-Country-simulation/s21-19-t-webapp)
+- **Documentación Frontend**: [Frontend README](./Frontend/README.md)
+- **Documentación Backend**: [Backend README](./Backend/README.md)
+- **Guía de Despliegue**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+---
+
+<div align="center">
+
+**Desarrollado con ❤️ por el equipo de No Country - Cohorte s21-19-t**
+
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com)
+[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://slack.com)
+
+</div>
