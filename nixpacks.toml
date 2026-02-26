@@ -1,0 +1,8 @@
+[build]
+cmd = "cd Backend && pip install -r requirements.txt"
+
+[start]
+cmd = "cd Backend && uvicorn main:app --host 0.0.0.0 --port 8000"
+
+[env]
+PORT = "8000"
