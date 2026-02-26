@@ -2,19 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.config.settings import get_settings
-from app.config.database import Base, engine
 from app.routes import auth, reports, categories
 import logging
 
 logger = logging.getLogger(__name__)
-
-# Intentar crear tablas en la base de datos
-try:
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database tables created successfully")
-except Exception as e:
-    logger.warning(f"Could not create database tables on startup: {e}")
-    logger.warning("Tables will be created on first database access")
 
 settings = get_settings()
 
@@ -40,6 +31,19 @@ app.add_middleware(
     TrustedHostMiddleware,
     allowed_hosts=["*"]
 )
+
+
+# Evento de startup para inicializar la BD
+@app.on_event("startup")
+def startup_event():
+    """Inicializar base de datos en startup"""
+    try:
+        from app.config.database import Base, engine
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables initialized successfully")
+    except Exception as e:
+        logger.warning(f"Database initialization warning: {e}")
+
 
 # Incluir rutas
 app.include_router(auth.router)
