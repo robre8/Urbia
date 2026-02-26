@@ -1,7 +1,12 @@
 import axios from "axios";
 
+// API URL configuration for axios
+// Development: http://localhost:8000
+// Production (Vercel): Set VITE_API_URL in Vercel environment variables
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const api = axios.create({
-  baseURL: "https://api-urbia.up.railway.app/",
+  baseURL: baseURL,
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
