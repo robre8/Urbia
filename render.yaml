@@ -6,8 +6,8 @@ services:
     pythonVersion: 3.11
     region: oregon
     plan: free
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: bash -c 'pip install -r $(find . -name requirements.txt | grep -i backend | head -1)'
+    startCommand: bash -c 'cd $(find . -type d -name backend -o -name Backend | head -1) && uvicorn main:app --host 0.0.0.0 --port $PORT'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
