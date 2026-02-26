@@ -3,10 +3,8 @@ services:
   - type: web
     name: urbia-backend
     runtime: python
-    pythonVersion: 3.11
-    region: oregon
     plan: free
-    rootDirectory: Backend
+    rootDir: Backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
@@ -33,7 +31,5 @@ services:
 databases:
   # PostgreSQL Database
   - name: urbia-postgres
-    region: oregon
     plan: free
     databaseName: urbia_db
-    databaseUser: urbia_user
