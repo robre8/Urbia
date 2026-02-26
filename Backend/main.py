@@ -4,9 +4,17 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.config.settings import get_settings
 from app.config.database import Base, engine
 from app.routes import auth, reports, categories
+import logging
 
-# Crear tablas en la base de datos
-Base.metadata.create_all(bind=engine)
+logger = logging.getLogger(__name__)
+
+# Intentar crear tablas en la base de datos
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database tables created successfully")
+except Exception as e:
+    logger.warning(f"Could not create database tables on startup: {e}")
+    logger.warning("Tables will be created on first database access")
 
 settings = get_settings()
 
