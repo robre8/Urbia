@@ -24,7 +24,7 @@ Este proyecto se despliega en:
 # En Render Dashboard:
 1. New → Blueprint
 2. Conectar tu repositorio GitHub (robre8/Urbia)
-3. Seleccionar rama: frontend-dev
+3. Seleccionar rama: dev
 4. Render detectará automáticamente render.yaml
 ```
 
@@ -74,7 +74,7 @@ Start Command: cd Backend && java -Dserver.port=$PORT -jar target/urbia-0.0.1-SN
 # En Vercel Dashboard:
 1. New Project → Import Git Repository
 2. Seleccionar: robre8/Urbia
-3. Rama: frontend-dev
+3. Rama: dev
 4. Root Directory: Frontend
 ```
 
@@ -242,15 +242,15 @@ gemini.api.key=${GEMINI_API_KEY}
 ### Backend
 ```bash
 # Render detecta automáticamente cambios en GitHub
-# Push a frontend-dev → Auto-deploy en Render
-git push origin frontend-dev
+# Push a dev → Auto-deploy en Render
+git push origin dev
 ```
 
 ### Frontend
 ```bash
 # Vercel detecta automáticamente cambios en GitHub
-# Push a frontend-dev → Auto-deploy en Vercel
-git push origin frontend-dev
+# Push a dev → Auto-deploy en Vercel
+git push origin dev
 ```
 
 ---
