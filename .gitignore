@@ -1,7 +1,146 @@
-Backend/target/urbia-0.0.1-SNAPSHOT.jar
-/Backend/target
-Backend/target/urbia-0.0.1-SNAPSHOT.jar
-/Backend/target
-Backend/target/classes/com/nocountry/urbia/controller/ReportesController.class
-Backend/target/classes/com/nocountry/urbia/controller/ReportesController.class
-/Backend/target
+# ==========================================
+# Operating System
+# ==========================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# Python (Backend)
+# ==========================================
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+urbia.db
+
+# Logs
+*.log
+logs/
+
+# ==========================================
+# Node.js (Frontend)
+# ==========================================
+# Dependencies
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs
+Frontend/dist/
+Frontend/.vite/
+Frontend/.next/
+Frontend/out/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Package lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ==========================================
+# IDE & Editor
+# ==========================================
+.vscode/
+.vscode-test/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.AppleDouble
+.LSOverride
+*.code-workspace
+
+# ==========================================
+# OS Specific
+# ==========================================
+.Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# ==========================================
+# IntelliJ
+# ==========================================
+*.iml
+.idea/
+*.iws
+*.ipr
+*.swp
+.gradle/
+
+# ==========================================
+# Build Artifacts (Legacy Java - just in case)
+# ==========================================
+target/
+build/
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml
+*.jar
+*.war
+*.ear
+
+# ==========================================
+# Misc
+# ==========================================
+.env.example.bak
+.editorconfig.bak
+*.bak
+# Leave out sensitive files
+!.env.example
+!.gitkeep
+
+# Generated files
+dist/
+build/
+*.egg-info/
