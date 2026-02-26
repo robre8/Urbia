@@ -30,9 +30,9 @@ services:
         value: "false"
     healthCheckPath: /health
     
+databases:
   # PostgreSQL Database
-  - type: pv-database
-    name: urbia-postgres
+  - name: urbia-postgres
     region: oregon
     plan: free
     databaseName: urbia_db
