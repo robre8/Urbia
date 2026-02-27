@@ -82,7 +82,7 @@ export default function CleanReportForm() {
     stopRecording,
     resetRecording
   } = useAudioRecording();
-  const { previewImage, imageFile, imageError, handleFileChange, resetImage } =
+  const { previewImage, imageFile, imageRemoved, imageError, handleFileChange, resetImage } =
     useImageUpload();
   // Load categories on mount
   useEffect(() => {
@@ -200,7 +200,8 @@ export default function CleanReportForm() {
       // This ensures we use the original coordinates that were preserved
       latitud: formData.reporte.latitud,
       longitud: formData.reporte.longitud,
-      usuarioId: user?.id || ''
+      usuarioId: user?.id || '',
+      eliminarImagen: Boolean(isConfirm && imageRemoved && !imageFile)
     };
 
     // Log all form data for debugging

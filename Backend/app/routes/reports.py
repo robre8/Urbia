@@ -322,6 +322,7 @@ async def update_report(
         titulo = report_data.get("titulo", "").strip()
         descripcion = report_data.get("descripcion", "").strip()
         categoria_id = report_data.get("categoriaId")
+        eliminar_imagen = bool(report_data.get("eliminarImagen", False))
         
         if not titulo or not categoria_id:
             raise HTTPException(
@@ -342,6 +343,7 @@ async def update_report(
         print(f"imagen param: {imagen}")
         print(f"imagen.filename: {imagen.filename if imagen else 'No imagen'}")
         print(f"imagen.content_type: {imagen.content_type if imagen else 'No imagen'}")
+        print(f"eliminarImagen flag: {eliminar_imagen}")
 
         # FIRST: Read image bytes if new image provided (but don't upload yet)
         image_url = report.image_url
@@ -398,7 +400,17 @@ async def update_report(
                 },
             )
         
-        # THIRD: Upload new image AFTER moderation passes
+        # THIRD: Handle image changes AFTER moderation passes
+        if eliminar_imagen and report.image_url and not new_image_filename:
+            try:
+                parts = report.image_url.split('/')
+                filename_part = parts[-1].split('.')[0]
+                cloudinary_service.delete_file(filename_part, folder="reports")
+            except Exception as e:
+                print(f"Error deleting old image: {e}")
+            image_url = None
+
+        # If there is a replacement image, upload it
         if new_image_filename and image_bytes:
             # Delete old image from Cloudinary if exists
             if report.image_url:
