@@ -99,16 +99,70 @@ class GeminiService:
         description: str,
         category_name: str,
         image_url: str | None = None,
+        image_bytes: bytes | None = None,
+        image_mime_type: str | None = None,
     ) -> dict:
         """Mejora título y descripción del reporte usando Gemini."""
         if not settings.gemini_api_key:
             return self._fallback_enhancement(title, description, category_name)
 
+        category_normalized = (category_name or "").strip().lower()
+        title_normalized = (title or "").strip().lower()
+        description_normalized = (description or "").strip().lower()
+
+        social_markers = {
+            "fiesta",
+            "cumple",
+            "cumpleaños",
+            "evento",
+            "feria",
+            "celebración",
+            "celebracion",
+            "festival",
+            "niños",
+            "ninos",
+            "familia",
+        }
+        serious_markers = {
+            "protesta",
+            "manifestación",
+            "manifestacion",
+            "disturbio",
+            "disturbios",
+            "incendio",
+            "accidente",
+            "choque",
+            "heridos",
+            "violencia",
+            "riesgo",
+            "emergencia",
+        }
+
+        combined_text = f"{title_normalized} {description_normalized}"
+        is_social_category = "evento" in category_normalized or "social" in category_normalized
+        has_social_context = any(marker in combined_text for marker in social_markers)
+        has_serious_context = any(marker in combined_text for marker in serious_markers)
+
+        if is_social_category and has_social_context and not has_serious_context:
+            tone_guide = (
+                "Usa un tono ameno, cercano y claro, manteniendo respeto y precisión. "
+                "Evita tono excesivamente formal."
+            )
+        else:
+            tone_guide = (
+                "Usa tono de reportero ciudadano: claro, objetivo y ligeramente serio. "
+                "Prioriza precisión y contexto útil para autoridades/comunidad."
+            )
+
         prompt = (
-            "Eres un asistente de reportes ciudadanos de Urbia. "
-            "Con la información recibida, redacta un reporte más claro, específico y útil para autoridades locales. "
-            "No inventes hechos. Si falta información, mantenlo realista. "
-            "Responde SOLO en JSON válido con esta forma exacta: "
+            "Eres editor de reportes ciudadanos de Urbia. "
+            "Debes mejorar título y descripción usando el texto y, si existe, el contenido visual de la imagen. "
+            "Si la imagen muestra contexto adicional evidente (ej.: niños en una fiesta), incorpóralo en el título y la descripción. "
+            "No inventes hechos no sustentados; si algo no es claro, usa lenguaje probable (ej.: 'aparentemente', 'se observa'). "
+            "La descripción NO debe copiar literalmente el título ni repetirlo al inicio. "
+            "Mantén el título breve (4-8 palabras) y específico. "
+            f"{tone_guide} "
+            "Responde SOLO JSON válido con forma exacta: "
             '{"titulo":"...","descripcion":"..."}.\n\n'
             f"Categoría: {category_name}\n"
             f"Título original: {title}\n"
@@ -118,7 +172,16 @@ class GeminiService:
 
         try:
             model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
+            content_parts = [prompt]
+            if image_bytes:
+                content_parts.append(
+                    {
+                        "mime_type": image_mime_type or "image/jpeg",
+                        "data": image_bytes,
+                    }
+                )
+
+            response = model.generate_content(content_parts)
             raw_text = (response.text or "").strip()
 
             # Intentar parseo directo JSON
@@ -131,6 +194,12 @@ class GeminiService:
 
             improved_title = (parsed.get("titulo") or title).strip()
             improved_description = (parsed.get("descripcion") or description).strip()
+
+            # Evitar que la descripción arranque repitiendo el título exacto
+            if improved_title and improved_description.lower().startswith(improved_title.lower()):
+                improved_description = improved_description[len(improved_title):].lstrip(" .:-\n\t")
+                if not improved_description:
+                    improved_description = (description or "").strip()
 
             # Si Gemini devuelve casi igual al original, aplicar enriquecimiento mínimo
             title_changed = improved_title.lower() != (title or '').strip().lower()

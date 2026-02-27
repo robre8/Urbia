@@ -146,6 +146,8 @@ async def create_report_combined(
         description=descripcion,
         category_name=category.name,
         image_url=image_url,
+        image_bytes=image_bytes,
+        image_mime_type=image_mime_type,
     )
 
     db_report = Report(
@@ -436,6 +438,8 @@ async def update_report(
             description=descripcion,
             category_name=category.name,
             image_url=image_url,
+            image_bytes=image_bytes,
+            image_mime_type=image_mime_type,
         )
         
         # FIFTH: Update report fields and commit to DB (only after all processing succeeds)
