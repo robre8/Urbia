@@ -21,6 +21,34 @@ class GeminiService:
         except Exception as e:
             raise Exception(f"Error al generar texto con Gemini: {str(e)}")
 
+    def _fallback_enhancement(self, title: str, description: str, category_name: str) -> dict:
+        normalized_title = (title or '').strip()
+        normalized_description = (description or '').strip()
+
+        if normalized_title and len(normalized_title) < 12:
+            improved_title = f"Reporte de {category_name}: {normalized_title}".strip()
+        else:
+            improved_title = normalized_title or f"Reporte ciudadano de {category_name}".strip()
+
+        if normalized_description:
+            improved_description = (
+                f"Se reporta el siguiente incidente en la categoría {category_name}: "
+                f"{normalized_description}. "
+                "Se solicita revisión y atención por parte de la autoridad correspondiente."
+            )
+        else:
+            improved_description = (
+                f"Se registra un incidente en la categoría {category_name}. "
+                "Se solicita verificación en el sitio y gestión de una solución."
+            )
+
+        return {
+            "title": improved_title,
+            "description": improved_description,
+            "used_ai": False,
+            "reason": "fallback_enhancement",
+        }
+
     def enhance_report(
         self,
         title: str,
@@ -30,12 +58,7 @@ class GeminiService:
     ) -> dict:
         """Mejora título y descripción del reporte usando Gemini."""
         if not settings.gemini_api_key:
-            return {
-                "title": title,
-                "description": description,
-                "used_ai": False,
-                "reason": "gemini_api_key_not_configured",
-            }
+            return self._fallback_enhancement(title, description, category_name)
 
         prompt = (
             "Eres un asistente de reportes ciudadanos de Urbia. "
@@ -65,6 +88,12 @@ class GeminiService:
             improved_title = (parsed.get("titulo") or title).strip()
             improved_description = (parsed.get("descripcion") or description).strip()
 
+            # Si Gemini devuelve casi igual al original, aplicar enriquecimiento mínimo
+            title_changed = improved_title.lower() != (title or '').strip().lower()
+            description_changed = improved_description.lower() != (description or '').strip().lower()
+            if not title_changed and not description_changed:
+                return self._fallback_enhancement(title, description, category_name)
+
             return {
                 "title": improved_title or title,
                 "description": improved_description or description,
@@ -72,12 +101,7 @@ class GeminiService:
                 "reason": None,
             }
         except Exception:
-            return {
-                "title": title,
-                "description": description,
-                "used_ai": False,
-                "reason": "gemini_processing_failed",
-            }
+            return self._fallback_enhancement(title, description, category_name)
 
     def moderate_report_content(
         self,

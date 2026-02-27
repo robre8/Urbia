@@ -1,4 +1,5 @@
 import api from "../axios";
+import { normalizeReport } from "./normalizeReport";
 
 const putReport = async (id, formData) => {
   // Use multipart/form-data for PUT requests just like POST
@@ -13,7 +14,7 @@ const putReport = async (id, formData) => {
     // Send the formData directly to a combined endpoint
     const response = await api.put(`/api/reporte/${id}`, formData, config);   
     if (response.status === 200) {  // Changed from 201 to 200 to match Swagger docs
-      return { message: "OK", data: response.data };
+      return { message: "OK", data: normalizeReport(response.data) };
     } else {
       return { message: "ERROR", data: response };
     }

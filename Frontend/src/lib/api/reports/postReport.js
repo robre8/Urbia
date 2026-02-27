@@ -1,4 +1,5 @@
 import api from "../axios";
+import { normalizeReport } from "./normalizeReport";
 
 const postReport = async (formData) => {
   const config = {
@@ -11,7 +12,7 @@ const postReport = async (formData) => {
   try {
     const response = await api.post("/api/reporte/combinado", formData, config);   
     if (response.status == 201) {
-      return { message: "OK", data: response.data };
+      return { message: "OK", data: normalizeReport(response.data) };
     } else {
       return { message: "ERROR", data: response };
     }
