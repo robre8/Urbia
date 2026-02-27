@@ -79,6 +79,77 @@ class GeminiService:
                 "reason": "gemini_processing_failed",
             }
 
+    def moderate_report_content(
+        self,
+        title: str,
+        description: str,
+        category_name: str,
+        image_bytes: bytes | None = None,
+        image_mime_type: str | None = None,
+    ) -> dict:
+        """Analiza seguridad del contenido textual y visual para reportes ciudadanos."""
+        if not settings.gemini_api_key:
+            return {
+                "is_allowed": False,
+                "risk_level": "unknown",
+                "blocked_reasons": ["gemini_api_key_not_configured"],
+                "message": "No se puede validar seguridad de contenido en este momento.",
+            }
+
+        moderation_prompt = (
+            "Evalúa si este reporte ciudadano es apto para publicarse en una plataforma general. "
+            "Debes bloquear si detectas: desnudos o contenido sexual explícito, violencia explícita/gore, "
+            "discurso de odio, amenazas, acoso severo, autolesión, o contenido altamente ofensivo. "
+            "Responde SOLO JSON válido con formato exacto: "
+            '{"is_allowed":true,"risk_level":"low|medium|high","blocked_reasons":["..."],"message":"..."}. '
+            "Si hay imagen, inclúyela en el análisis. No inventes información."
+            f"\n\nCategoría: {category_name}"
+            f"\nTítulo: {title}"
+            f"\nDescripción: {description}"
+        )
+
+        content_parts = [moderation_prompt]
+        if image_bytes:
+            content_parts.append(
+                {
+                    "mime_type": image_mime_type or "image/jpeg",
+                    "data": image_bytes,
+                }
+            )
+
+        try:
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(content_parts)
+            raw_text = (response.text or "").strip()
+
+            try:
+                parsed = json.loads(raw_text)
+            except Exception:
+                match = re.search(r"\{.*\}", raw_text, re.DOTALL)
+                parsed = json.loads(match.group(0)) if match else {}
+
+            is_allowed = bool(parsed.get("is_allowed", True))
+            risk_level = str(parsed.get("risk_level", "low"))
+            blocked_reasons = parsed.get("blocked_reasons") or []
+            if not isinstance(blocked_reasons, list):
+                blocked_reasons = [str(blocked_reasons)]
+
+            message = str(parsed.get("message") or "")
+
+            return {
+                "is_allowed": is_allowed,
+                "risk_level": risk_level,
+                "blocked_reasons": blocked_reasons,
+                "message": message,
+            }
+        except Exception:
+            return {
+                "is_allowed": False,
+                "risk_level": "unknown",
+                "blocked_reasons": ["moderation_failed"],
+                "message": "No se pudo validar la seguridad del contenido.",
+            }
+
 
 def get_gemini_service() -> GeminiService:
     """Obtener instancia del servicio Gemini"""

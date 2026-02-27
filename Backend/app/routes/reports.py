@@ -90,9 +90,34 @@ async def create_report_combined(
 
     user_id = int(payload.get("sub"))
 
-    image_url = None
+    image_bytes = None
+    image_mime_type = None
     if imagen and imagen.filename:
         image_bytes = await imagen.read()
+        image_mime_type = imagen.content_type
+
+    moderation_result = gemini_service.moderate_report_content(
+        title=titulo,
+        description=descripcion,
+        category_name=category.name,
+        image_bytes=image_bytes,
+        image_mime_type=image_mime_type,
+    )
+
+    if not moderation_result.get("is_allowed", False):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "code": "unsafe_content",
+                "message": moderation_result.get("message")
+                or "El contenido del reporte no cumple las políticas de seguridad.",
+                "risk_level": moderation_result.get("risk_level", "unknown"),
+                "reasons": moderation_result.get("blocked_reasons", []),
+            },
+        )
+
+    image_url = None
+    if imagen and imagen.filename:
         image_url = cloudinary_service.upload_file(
             image_bytes,
             f"report_{user_id}_{imagen.filename}",
