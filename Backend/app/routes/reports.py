@@ -1,13 +1,120 @@
+import json
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List
 from app.config.database import get_db
 from app.config.security import verify_token
-from app.models.models import Report
+from app.models.models import Report, Category
 from app.schemas.schemas import ReportCreate, ReportResponse, ReportUpdate
 from app.services.cloudinary_service import get_cloudinary_service, CloudinaryService
 
 router = APIRouter(prefix="/api/reporte", tags=["reports"])
+
+
+def _serialize_report_for_frontend(report: Report, categoria_id: int | None = None):
+    category_map = {
+        "salud": 1,
+        "infraestructura": 2,
+        "seguridad": 3,
+        "eventos sociales": 4,
+    }
+
+    normalized_category = (report.category or "").strip().lower()
+    resolved_categoria_id = categoria_id or category_map.get(normalized_category)
+
+    return {
+        "id": report.id,
+        "titulo": report.title,
+        "descripcion": report.description or "",
+        "descripcionDespuesDeIa": report.description or "",
+        "categoriaId": resolved_categoria_id,
+        "latitud": report.latitude,
+        "longitud": report.longitude,
+        "usuarioId": report.user_id,
+        "nombreUsuario": "",
+        "urlImagen": report.image_url or "",
+        "estado": report.status,
+        "likes": report.likes_count,
+        "createdAt": report.created_at.isoformat() if report.created_at else None,
+        "updatedAt": report.updated_at.isoformat() if report.updated_at else None,
+    }
+
+
+@router.post("/combinado")
+async def create_report_combined(
+    reporte: UploadFile = File(...),
+    imagen: UploadFile = File(None),
+    audio: UploadFile = File(None),
+    payload: dict = Depends(verify_token),
+    db: Session = Depends(get_db),
+    cloudinary_service: CloudinaryService = Depends(get_cloudinary_service),
+):
+    """Crear reporte usando multipart/form-data (reporte JSON + imagen opcional)."""
+    try:
+        raw_json = await reporte.read()
+        report_data = json.loads(raw_json.decode("utf-8"))
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Campo 'reporte' inválido. Debe ser JSON válido.",
+        )
+
+    titulo = (report_data.get("titulo") or "").strip()
+    descripcion = (report_data.get("descripcion") or "").strip()
+    categoria_id = report_data.get("categoriaId")
+
+    if not titulo:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El título es requerido",
+        )
+
+    if not categoria_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La categoría es requerida",
+        )
+
+    category = db.query(Category).filter(
+        (Category.id == int(categoria_id)) & (Category.is_active == True)
+    ).first()
+
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Categoría inválida",
+        )
+
+    user_id = int(payload.get("sub"))
+
+    db_report = Report(
+        user_id=user_id,
+        title=titulo,
+        description=descripcion,
+        category=category.name,
+        latitude=report_data.get("latitud"),
+        longitude=report_data.get("longitud"),
+        location_name=report_data.get("direccion") or report_data.get("location_name"),
+        status="pending",
+    )
+
+    if imagen and imagen.filename:
+        image_bytes = await imagen.read()
+        db_report.image_url = cloudinary_service.upload_file(
+            image_bytes,
+            f"report_{user_id}_{imagen.filename}",
+            folder="reports",
+        )
+
+    db.add(db_report)
+    db.commit()
+    db.refresh(db_report)
+
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED,
+        content=_serialize_report_for_frontend(db_report, categoria_id=int(categoria_id)),
+    )
 
 
 @router.get("", response_model=List[ReportResponse])
