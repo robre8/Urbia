@@ -90,14 +90,17 @@ class GeminiService:
         """Analiza seguridad del contenido textual y visual para reportes ciudadanos."""
         if not settings.gemini_api_key:
             return {
-                "is_allowed": False,
+                "is_allowed": True,
                 "risk_level": "unknown",
-                "blocked_reasons": ["gemini_api_key_not_configured"],
-                "message": "No se puede validar seguridad de contenido en este momento.",
+                "blocked_reasons": [],
+                "message": "Moderación automática no disponible en este momento.",
+                "reason": "gemini_api_key_not_configured",
             }
 
         moderation_prompt = (
             "Evalúa si este reporte ciudadano es apto para publicarse en una plataforma general. "
+            "Importante: reportar incidentes urbanos como incendios, choques o inseguridad SI está permitido, "
+            "siempre que NO incluya detalles gráficos extremos. "
             "Debes bloquear si detectas: desnudos o contenido sexual explícito, violencia explícita/gore, "
             "discurso de odio, amenazas, acoso severo, autolesión, o contenido altamente ofensivo. "
             "Responde SOLO JSON válido con formato exacto: "
@@ -136,18 +139,34 @@ class GeminiService:
 
             message = str(parsed.get("message") or "")
 
+            normalized_reasons = [str(reason).strip().lower() for reason in blocked_reasons]
+
+            # Si el modelo no está seguro o reporta error de análisis, no bloquear por falso positivo
+            uncertain_markers = {
+                "uncertain",
+                "unknown",
+                "cannot_determine",
+                "unable_to_analyze",
+                "analysis_failed",
+                "low_confidence",
+            }
+            if any(marker in uncertain_markers for marker in normalized_reasons):
+                is_allowed = True
+                normalized_reasons = []
+
             return {
                 "is_allowed": is_allowed,
                 "risk_level": risk_level,
-                "blocked_reasons": blocked_reasons,
+                "blocked_reasons": normalized_reasons,
                 "message": message,
             }
         except Exception:
             return {
-                "is_allowed": False,
+                "is_allowed": True,
                 "risk_level": "unknown",
-                "blocked_reasons": ["moderation_failed"],
-                "message": "No se pudo validar la seguridad del contenido.",
+                "blocked_reasons": [],
+                "message": "No se pudo validar la seguridad del contenido automáticamente.",
+                "reason": "moderation_failed",
             }
 
 
