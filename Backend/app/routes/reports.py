@@ -261,38 +261,107 @@ async def upload_report_image(
     return {"image_url": file_url}
 
 
-@router.put("/{report_id}", response_model=ReportResponse)
-def update_report(
+@router.put("/{report_id}")
+async def update_report(
     report_id: int,
-    report_update: ReportUpdate,
+    reporte: UploadFile = File(...),
+    imagen: UploadFile = File(None),
+    audio: UploadFile = File(None),
     payload: dict = Depends(verify_token),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    cloudinary_service: CloudinaryService = Depends(get_cloudinary_service),
+    gemini_service: GeminiService = Depends(get_gemini_service),
 ):
-    """Actualizar reporte"""
-    report = db.query(Report).filter(Report.id == report_id).first()
-    
-    if not report:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Reporte no encontrado"
+    """Actualizar reporte con soporte para multipart/form-data (reporte JSON + imagen opcional)."""
+    try:
+        # Obtener el reporte existente
+        report = db.query(Report).filter(Report.id == report_id).first()
+        
+        if not report:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Reporte no encontrado"
+            )
+        
+        # Verificar que sea el propietario
+        user_id = int(payload.get("sub"))
+        if report.user_id != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="No tienes permiso para actualizar este reporte"
+            )
+        
+        # Parse reporte JSON from FormData
+        try:
+            raw_json = await reporte.read()
+            report_data = json.loads(raw_json.decode("utf-8"))
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Formato JSON inválido en el campo reporte"
+            )
+        
+        # Extract and validate required fields
+        titulo = report_data.get("titulo", "").strip()
+        descripcion = report_data.get("descripcion", "").strip()
+        categoria_id = report_data.get("categoriaId")
+        
+        if not titulo or not categoria_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Título y categoría son requeridos"
+            )
+        
+        # Verify category exists
+        category = db.query(Category).filter(Category.id == categoria_id).first()
+        if not category:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Categoría no encontrada"
+            )
+        
+        # Handle image upload if new image provided
+        image_url = report.image_url
+        if imagen and imagen.filename:
+            # Delete old image from Cloudinary if exists
+            if report.image_url:
+                try:
+                    # Extract public_id from secure_url
+                    public_id = report.image_url.split('/')[-1].split('.')[0]
+                    cloudinary_service.delete_image(public_id)
+                except Exception as e:
+                    print(f"Error deleting old image: {e}")
+            
+            # Upload new image
+            imagen_bytes = await imagen.read()
+            image_url = cloudinary_service.upload_image(imagen_bytes, imagen.filename)
+        
+        # Enrich report with Gemini (improvement, not moderation on update)
+        ai_result = gemini_service.enhance_report(titulo, descripcion)
+        
+        # Update report fields
+        report.title = ai_result.get("title") or titulo
+        report.description = ai_result.get("description") or descripcion
+        report.category = category.name
+        report.image_url = image_url
+        
+        db.commit()
+        db.refresh(report)
+        
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=_serialize_report_for_frontend(report, categoria_id=int(categoria_id)),
         )
     
-    # Verificar que sea el propietario
-    user_id = int(payload.get("sub"))
-    if report.user_id != user_id:
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error al actualizar reporte: {e}")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="No tienes permiso para actualizar este reporte"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al actualizar reporte: {str(e)}"
         )
-    
-    # Actualizar campos
-    for field, value in report_update.dict(exclude_unset=True).items():
-        setattr(report, field, value)
-    
-    db.commit()
-    db.refresh(report)
-    
-    return report
+
 
 
 @router.delete("/{report_id}")
