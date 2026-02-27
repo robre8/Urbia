@@ -1,215 +1,228 @@
-# 🏙️ Urbia - Ciudad Escucha
+# Urbia
 
-> Plataforma de reportes urbanos en tiempo real con inteligencia artificial
+> ⚠️ **Blueprint Enterprise (Propuesta de Mejora):** este documento describe el estado actual del proyecto y una hoja de ruta para evolucionarlo a nivel enterprise. No todos los puntos del blueprint están implementados hoy.
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-
-**Ver documentación detallada:**
-- [📕 Frontend](./Frontend/README.md) - React + Vite + TailwindCSS
-- [📘 Backend](./Backend/README.md) - Python + FastAPI
-- [🚀 Deployment](./DEPLOYMENT.md) - Guía de despliegue
-- [📝 Changelog](./CHANGELOG.md) - Historial de cambios
+Plataforma de reportes urbanos con mapa interactivo, autenticación JWT y asistencia con IA para moderación y mejora de contenido.
 
 ---
 
-## 📋 Acerca del Proyecto
+## 1) Resumen Ejecutivo
 
-**Urbia "Ciudad Escucha"** es una plataforma web que transforma la voz de la comunidad en acción. Permite a los ciudadanos reportar incidentes urbanos en tiempo real con una interfaz intuitiva estilo Waze, facilitando una ciudad más conectada y segura.
+Urbia permite a ciudadanos crear y gestionar reportes geolocalizados (incidentes urbanos), adjuntar evidencia multimedia y consultar el estado de reportes en una interfaz web moderna.
 
-### ✨ Características Principales
-
-- 📍 **Reportes en tiempo real** - Interfaz interactiva con mapas para reportar incidentes
-- 🤖 **IA integrada** - Análisis automático de imágenes y audios con Google Gemini
-- 🗺️ **Mapas interactivos** - Visualización geolocalizada con OpenStreetMap
-- 🔔 **Notificaciones** - Alertas inteligentes sobre eventos en tu ciudad  
-- 👥 **Comunidad activa** - Sistema de likes y comentarios para fortalecer la participación
-- 📱 **PWA** - Funciona como aplicación nativa en dispositivos móviles
-- 🔒 **Autenticación segura** - Sistema JWT para protección de datos
+### Capacidades actuales
+- Creación y edición de reportes con `multipart/form-data`.
+- Moderación de contenido con Gemini (bloqueo de contenido explícito; tolerancia a incidentes reales como accidentes/incendios).
+- Mejora de redacción con IA (fallback local cuando IA no responde).
+- Subida de imágenes a Cloudinary.
+- Transcripción de audio y anexado automático a la descripción.
+- Autenticación y autorización por JWT.
+- PWA y mapa interactivo en frontend.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 2) Arquitectura Actual
 
 ### Frontend
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Zustand](https://img.shields.io/badge/Zustand-443E38?style=for-the-badge)](https://zustand-demo.pmnd.rs/)
-[![Shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)](https://ui.shadcn.com/)
+- React + Vite
+- Zustand (estado global)
+- Tailwind + componentes UI
+- Leaflet/OpenStreetMap para visualización geográfica
 
 ### Backend
-[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge)](https://www.sqlalchemy.org/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+- FastAPI
+- SQLAlchemy ORM
+- PostgreSQL
+- JWT para auth
+- Integración con Gemini y Cloudinary
 
-### DevOps & Cloud
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![AWS S3](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
-[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
-
-### IA & Servicios
-[![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-7EBC6F?style=for-the-badge&logo=openstreetmap&logoColor=white)](https://www.openstreetmap.org/)
+### Despliegue
+- Frontend: Vercel
+- Backend: Railway/Render (según entorno)
+- Base de datos: PostgreSQL gestionado
 
 ---
 
-## 🚀 Inicio Rápido
+## 3) Funcionalidades Clave
 
-### Prerrequisitos
+### Reportes
+- Alta de reportes (`POST /api/reporte/combinado`) con:
+  - payload JSON (`reporte`)
+  - imagen opcional (`imagen`)
+  - audio opcional (`audio`)
+- Edición de reportes (`PUT /api/reporte/{id}`) con soporte para:
+  - reemplazo de imagen
+  - eliminación de imagen existente (`eliminarImagen`)
+  - transcripción de audio
+  - moderación + enriquecimiento de texto
+- Eliminación de reportes con validación de propietario.
+- Historial por usuario (`GET /api/reporte/usuario/{user_id}`).
 
-- **Node.js** 18+ y npm
-- **Python** 3.11+
-- **PostgreSQL** 12+ (o SQLite para desarrollo local)
-- **Git**
+### Seguridad y control de calidad
+- Verificación de token en operaciones sensibles.
+- Reglas de ownership para editar/eliminar.
+- Moderación IA para contenido explícito.
+- Estrategias fallback para no degradar UX ante fallas externas de IA.
 
-### Instalación
+---
 
+## 4) Estructura del Repositorio
+
+- `Backend/`: API FastAPI, modelos, rutas, servicios e integración IA.
+- `Frontend/`: aplicación React (mapa, auth, formularios, estados).
+- `Wiki/`: documentación funcional y de producto.
+- `DEPLOYMENT.md`: guía de despliegue.
+- `CHANGELOG.md`: historial de cambios.
+
+---
+
+## 5) Guía de Ejecución Local
+
+## Requisitos
+- Node.js 18+
+- Python 3.11+
+- PostgreSQL
+
+## Backend
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/No-Country-simulation/s21-19-t-webapp.git
-cd s21-19-t-webapp
-```
-
-### Backend Setup
-
-```bash
-# 2. Navegar al directorio del backend
 cd Backend
-
-# 3. Crear entorno virtual
-python -m venv venv
-
-# Activar entorno virtual
-# En Windows:
-venv\Scripts\activate
-# En macOS/Linux:
-source venv/bin/activate
-
-# 4. Instalar dependencias
+python -m venv .venv
+.venv\Scripts\activate   # Windows
 pip install -r requirements.txt
-
-# 5. Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus credenciales (ver Backend/README.md)
-
-# 6. Inicializar base de datos (opcional - incluye categorías de ejemplo)
 python init_db.py
-
-# 7. Ejecutar el servidor
 uvicorn main:app --reload
 ```
 
-El backend estará disponible en:
-- 🌐 API: http://localhost:8000
-- 📚 Docs (Swagger): http://localhost:8000/docs
-- 📖 ReDoc: http://localhost:8000/redoc
+API local:
+- `http://localhost:8000`
+- `http://localhost:8000/docs`
 
-### Frontend Setup
-
+## Frontend
 ```bash
-# 8. En otra terminal, navegar al frontend
 cd Frontend
-
-# 9. Instalar dependencias
 npm install
-
-# 10. Configurar variables de entorno
-cp .env.example .env
-# Editar VITE_API_URL=http://localhost:8000/api
-
-# 11. Ejecutar servidor de desarrollo
 npm run dev
 ```
 
-El frontend estará disponible en:
-- 🌐 App: http://localhost:3000
+App local:
+- `http://localhost:3000` (o puerto asignado por Vite)
 
 ---
 
-## 📡 API Documentation
+## 6) Variables de Entorno (Referencia)
 
-### Endpoints Principales
-
-#### Autenticación
-- `POST /api/auth/register` - Registrar nuevo usuario
-- `POST /api/auth/login` - Login de usuario  
-- `GET /api/auth/me` - Obtener usuario actual (requiere auth)
-
-#### Reportes
-- `GET /api/reports` - Listar todos los reportes
-- `GET /api/reports/{id}` - Obtener un reporte específico
-- `POST /api/reports` - Crear nuevo reporte (requiere auth)
-- `PUT /api/reports/{id}` - Actualizar reporte (requiere auth)
-- `DELETE /api/reports/{id}` - Eliminar reporte (requiere auth)
-- `POST /api/reports/{id}/upload-image` - Subir imagen (requiere auth)
-- `POST /api/reports/{id}/like` - Dar like a un reporte (requiere auth)
-
-#### Categorías
-- `GET /api/categories` - Listar todas las categorías
-
-### Documentación Interactiva
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
----
-
-## 🌐 Deployment
-
-### Producción
-
-- **Frontend**: Desplegado en [Vercel](https://vercel.com/)
-- **Backend**: Desplegado en [Render](https://render.com/)
-- **Base de Datos**: PostgreSQL en Render
-
-Ver [DEPLOYMENT.md](./DEPLOYMENT.md) para instrucciones detalladas de despliegue.
-
-### Variables de Entorno
-
-#### Backend (.env)
+## Backend
 ```env
-DATABASE_URL=postgresql://user:password@host:5432/urbia_db
-JWT_SECRET_KEY=your-secret-key-here
-AWS_ACCESS_KEY_ID=your-aws-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret
-GEMINI_API_KEY=your-gemini-api-key
-DEBUG=false
+DATABASE_URL=postgresql://user:password@host:5432/db
+JWT_SECRET_KEY=change_me
+GEMINI_API_KEY=your_key
+CLOUDINARY_URL=cloudinary://...
 ```
 
-#### Frontend (.env)
+## Frontend
 ```env
-VITE_API_URL=https://tu-backend.onrender.com/api
+VITE_API_URL=http://localhost:8000
 ```
 
 ---
 
-## 📄 Licencia
+## 7) API (Estado actual resumido)
 
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](./LICENSE) para más detalles.
+### Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+
+### Reportes
+- `GET /api/reporte`
+- `GET /api/reporte/{id}`
+- `GET /api/reporte/usuario/{user_id}`
+- `POST /api/reporte/combinado`
+- `PUT /api/reporte/{id}`
+- `DELETE /api/reporte/{id}`
+- `DELETE /api/reporte/id/{id}` (ruta legacy)
+
+### Categorías
+- Endpoints en `Backend/app/routes/categories.py`.
 
 ---
 
-## 🔗 Enlaces
+## 8) Blueprint Enterprise (Roadmap de Mejora)
 
-- **Repositorio**: [GitHub](https://github.com/No-Country-simulation/s21-19-t-webapp)
-- **Documentación Frontend**: [Frontend README](./Frontend/README.md)
-- **Documentación Backend**: [Backend README](./Backend/README.md)
-- **Guía de Despliegue**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+Este blueprint propone una evolución incremental, sin romper el producto actual.
+
+## Fase 1 — Foundation (0-2 meses)
+- **Observabilidad:** logs estructurados, trazas distribuidas y dashboards SLO.
+- **Errores estandarizados:** contrato de error único (código, mensaje, contexto).
+- **Migraciones DB formales:** Alembic + strategy de versionado por entorno.
+- **Configuración segura:** secretos centralizados (Vault/SSM), rotación y mínimo privilegio.
+- **CI baseline:** lint + tests + escaneo de dependencias en pull requests.
+
+## Fase 2 — Reliability & Security (2-4 meses)
+- **RBAC completo:** roles (ciudadano, moderador, operador, admin).
+- **Rate limiting y anti-abuso:** por IP/usuario/ruta.
+- **Idempotencia:** claves idempotentes para operaciones críticas.
+- **Políticas de contenido versionadas:** reglas de moderación auditables.
+- **Backups y DR:** RPO/RTO definidos, restore tests automáticos.
+
+## Fase 3 — Data & Platform (4-6 meses)
+- **Arquitectura asíncrona:** colas para jobs pesados (IA, media processing).
+- **Cache distribuida:** Redis para consultas hot y reducción de latencia.
+- **Búsqueda avanzada:** indexación geoespacial + full-text.
+- **Data governance:** catálogo de datos, trazabilidad y políticas de retención.
+- **Entorno staging productivo:** paridad de infraestructura con producción.
+
+## Fase 4 — Enterprise Product (6-12 meses)
+- **Multi-tenant / organizaciones** con aislamiento lógico y políticas por tenant.
+- **Audit trail inmutable** para acciones críticas y compliance.
+- **SLA operativos formales** con on-call, runbooks y postmortems.
+- **FinOps:** presupuestos por servicio, alertas de costo y capacity planning.
+- **Gobierno de IA:** métricas de calidad, drift, revisión humana en casos sensibles.
 
 ---
 
-<div align="center">
+## 9) Métricas Recomendadas (Enterprise)
 
-**Desarrollado con ❤️ por el equipo de No Country - Cohorte s21-19-t**
+### Ingeniería
+- Lead time de cambio
+- Change failure rate
+- MTTR
+- Cobertura de tests críticos
 
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com)
-[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://slack.com)
+### Producto
+- Tiempo promedio de creación de reporte
+- Tasa de reportes moderados/bloqueados
+- % reportes con evidencia multimedia útil
+- Tiempo de resolución por categoría
 
-</div>
+### Plataforma
+- p95/p99 de latencia API
+- Disponibilidad mensual
+- Error rate por endpoint
+- Costo por 1.000 reportes procesados
+
+---
+
+## 10) Estándares de Calidad Recomendados
+
+- Definition of Done por feature (tests, seguridad, observabilidad, documentación).
+- ADRs para decisiones arquitectónicas relevantes.
+- Convenciones de API y versionado semántico.
+- Revisión de seguridad para cambios en auth, archivos e IA.
+
+---
+
+## 11) Enlaces internos
+
+- `Frontend/README.md`
+- `Backend/README.md`
+- `DEPLOYMENT.md`
+- `CHANGELOG.md`
+- `Wiki/API_REFERENCE.md`
+
+---
+
+## 12) Licencia
+
+MIT — ver `LICENSE`.
