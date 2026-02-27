@@ -17,8 +17,14 @@ app = FastAPI(
 )
 
 # Middleware de CORS
-cors_origins = settings.cors_allowed_origins.split(",") if isinstance(settings.cors_allowed_origins, str) else settings.cors_allowed_origins
-logger.info(f"🔧 CORS configured for origins: {cors_origins}")
+cors_origins_str = settings.cors_allowed_origins.strip()
+if cors_origins_str == "*":
+    cors_origins = ["*"]
+    logger.info("🔧 CORS configured: Allow all origins (*)")
+else:
+    cors_origins = [o.strip() for o in cors_origins_str.split(",")]
+    logger.info(f"🔧 CORS configured for origins: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -59,7 +65,7 @@ def health_check():
         "status": "healthy",
         "app": settings.app_title,
         "version": settings.app_version,
-        "cors_origins": cors_origins
+        "cors_allow_all": settings.cors_allowed_origins == "*"
     }
 
 

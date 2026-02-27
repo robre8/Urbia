@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     gemini_api_url: str = "https://generativelanguage.googleapis.com"
     
     # CORS
-    cors_allowed_origins: str = "http://localhost:3000,http://localhost:5173"
+    cors_allowed_origins: str = "*"
     
     # App
     app_title: str = "Urbia API"
