@@ -224,3 +224,11 @@ def get_current_user(
         )
     
     return user
+
+
+@router.post("/logout")
+def logout():
+    """Cerrar sesión (JWT stateless)."""
+    return {
+        "message": "Sesión cerrada correctamente"
+    }
