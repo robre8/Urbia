@@ -190,40 +190,6 @@ VITE_API_URL=https://tu-backend.onrender.com/api
 
 ---
 
-## 👥 Equipo
-
-### 👷‍♂️ Project Manager
-| <img src="https://avatars.githubusercontent.com/u/135073545?v=4" width="100" height="100"> |
-|:-:|
-| **Alejandro Luna** |
-| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AlejandroLunaDev) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
-
-### 🎨 UX/UI Designer
-| <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> |
-|:-:|
-| **Santiago Garcia** |
-| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/santigarciaa) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
-
-### 🧑‍💻 Frontend Team
-| <img src="https://avatars.githubusercontent.com/u/135073545?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/125300652?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/47112525?v=4" width="100" height="100"> |
-|:-:|:-:|:-:|
-| **Alejandro Luna** | **Celina Garcés** | **Cesar Hernan Ruscica** |
-| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AlejandroLunaDev) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/celinagrcs) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hernanruscica) |
-
-### 💻 Backend Team
-| <img src="https://avatars.githubusercontent.com/u/84197042?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/138052981?v=4" width="100" height="100"> |
-|:-:|:-:|:-:|
-| **Daiana Amado** | **Alberto Gutierrez** | **Ronny Brenes** |
-| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Daiana-Amado) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Albert0GR) | [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robre8) |
-
-### 🧪 QA Manual
-| <img src="https://avatars.githubusercontent.com/u/107267047?v=4" width="100" height="100"> |
-|:-:|
-| **Sara Elizabeth Alcántara** |
-| [![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SaraAlcantara) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]() |
-
----
-
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver [LICENSE](./LICENSE) para más detalles.
