@@ -60,7 +60,7 @@ export function FormFields({
                   value={cat.id.toString()}
                   className="text-sm"
                 >
-                  {cat.nombre || 'Sin nombre'}
+                  {cat.nombre || cat.name || 'Sin nombre'}
                 </SelectItem>
               ))
             )}

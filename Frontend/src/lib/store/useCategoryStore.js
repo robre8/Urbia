@@ -28,9 +28,16 @@ const useCategoryStore = create((set, get) => ({
 
     try {
       const categories = await getCategories();
-      
+
+      // Normalizar payload para compatibilidad name/nombre
+      const normalizedCategories = categories.map((cat) => ({
+        ...cat,
+        nombre: cat.nombre ?? cat.name ?? '',
+        name: cat.name ?? cat.nombre ?? '',
+      }));
+
       // Sort categories to ensure consistent order
-      const sortedCategories = [...categories].sort((a, b) => a.id - b.id);
+      const sortedCategories = [...normalizedCategories].sort((a, b) => a.id - b.id);
       
       set({ 
         categories: sortedCategories, 

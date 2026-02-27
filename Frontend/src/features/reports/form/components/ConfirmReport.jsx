@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
 // Better to define constants outside the component
-const CATEGORY_DEFAULT = { id: 99, nombre: 'default' };
+const CATEGORY_DEFAULT = { id: 99, nombre: 'Sin categoría', name: 'Sin categoría' };
 
 // Add address and loadingAddress to props
 const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address}) => {
@@ -117,7 +117,7 @@ const ConfirmReport = ({ open, setOpen, setOpenParent, setIsConfirm, address}) =
                   Categoría 
                 </h3>              
                 <p className="text-sm">
-                  {currentCategory.nombre}
+                  {currentCategory.nombre || currentCategory.name || 'Sin categoría'}
                 </p>
               </div>
 
