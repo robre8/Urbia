@@ -12,20 +12,12 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
-    """Hashear contraseña
-    
-    Bcrypt solo puede hashear hasta 72 bytes.
-    Si la contraseña en UTF-8 excede 72 bytes, se trunca.
-    """
-    # Convertir a bytes UTF-8 y truncar a 72 bytes máximo
-    password_bytes = password.encode('utf-8')[:72]
-    # Convertir de vuelta a string para passlib
-    password_truncated = password_bytes.decode('utf-8', errors='ignore')
-    return pwd_context.hash(password_truncated)
+    """Hashear contraseña usando Argon2"""
+    return pwd_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
