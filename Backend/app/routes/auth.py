@@ -64,6 +64,12 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class LoginRequest(BaseModel):
+    """Schema para login"""
+    email: str
+    password: str
+
+
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     """Login de usuario"""
