@@ -35,15 +35,10 @@ HASHING_ALGORITHM, pwd_context = _detect_hashing_algorithm()
 
 
 def hash_password(password: str) -> str:
-    """Hashear contraseña - intenta el algoritmo detectado, fallback si es necesario"""
+    """Hashear contraseña - el schema ya trunca a 72 bytes si es necesario"""
     global HASHING_ALGORITHM, pwd_context
     
     try:
-        # Si usamos bcrypt como fallback, truncar a 72 bytes si es necesario
-        if HASHING_ALGORITHM == "bcrypt":
-            password_bytes = password.encode('utf-8')[:72]
-            password = password_bytes.decode('utf-8', errors='ignore')
-        
         hashed = pwd_context.hash(password)
         logger.debug(f"✅ Contraseña hasheada exitosamente ({HASHING_ALGORITHM})")
         return hashed
@@ -56,8 +51,6 @@ def hash_password(password: str) -> str:
             try:
                 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
                 HASHING_ALGORITHM = "bcrypt"
-                password_bytes = password.encode('utf-8')[:72]
-                password = password_bytes.decode('utf-8', errors='ignore')
                 hashed = pwd_context.hash(password)
                 logger.info(f"✅ Fallback a bcrypt exitoso")
                 return hashed
