@@ -7,7 +7,7 @@ from app.models.models import Report
 from app.schemas.schemas import ReportCreate, ReportResponse, ReportUpdate
 from app.services.cloudinary_service import get_cloudinary_service, CloudinaryService
 
-router = APIRouter(prefix="/api/reports", tags=["reports"])
+router = APIRouter(prefix="/api/reporte", tags=["reports"])
 
 
 @router.get("", response_model=List[ReportResponse])
