@@ -74,6 +74,12 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         )
 
 
+class LoginRequest(BaseModel):
+    """Schema para login"""
+    email: str
+    password: str
+
+
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     """Login de usuario"""
