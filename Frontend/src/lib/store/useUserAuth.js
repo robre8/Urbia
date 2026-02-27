@@ -41,12 +41,13 @@ export const useUserAuth = create(
       login: async (email, password) => {
         try {
           const userData = await loginRequest(email, password);
+          const resolvedUser = userData?.user || userData;
           set({
             user: {
-              id: userData.id,
-              name: userData.nombre, // Se adapta a la clave 'nombre'
-              email: userData.email,
-              avatar: userData.avatar || null, // Si no hay avatar, se mantiene null
+              id: resolvedUser.id,
+              name: resolvedUser.nombre || resolvedUser.name, // Se adapta a la clave 'nombre'
+              email: resolvedUser.email,
+              avatar: resolvedUser.avatar || null, // Si no hay avatar, se mantiene null
             },
           });
           return userData;
@@ -58,12 +59,13 @@ export const useUserAuth = create(
       register: async (nombre, email, password) => {
         try {
           const userData = await registerRequest(nombre, email, password);
+          const resolvedUser = userData?.user || userData;
           set({
             user: {
-              id: userData.id,
-              name: userData.nombre,
-              email: userData.email,
-              avatar: userData.avatar || null,
+              id: resolvedUser.id,
+              name: resolvedUser.nombre || resolvedUser.name,
+              email: resolvedUser.email,
+              avatar: resolvedUser.avatar || null,
             },
           });
           return userData;

@@ -106,7 +106,12 @@ export default function ReportView({ report, onClose, deleteReport }) {
   };
 
   // Check if the current user is the owner of the report
-  const isReportOwner = user && currentReport && user.id === currentReport.usuarioId;
+  const isReportOwner =
+    user &&
+    currentReport &&
+    Number(user.id) > 0 &&
+    Number(currentReport.usuarioId) > 0 &&
+    Number(user.id) === Number(currentReport.usuarioId);
 
   return (
     <>
