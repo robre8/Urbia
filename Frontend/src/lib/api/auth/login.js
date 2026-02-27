@@ -9,9 +9,9 @@ export const login = async (email, password) => {
     });
     
     // Store token if received
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+    if (response.data.access_token) {
+      localStorage.setItem('token', response.data.access_token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
     }
     
     console.log("✅ Datos recibidos:", response.data);
