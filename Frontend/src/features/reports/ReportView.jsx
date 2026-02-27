@@ -224,7 +224,7 @@ export default function ReportView({ report, onClose, deleteReport }) {
           )}
 
           <p className="text-xs text-gray-400 mt-4 px-4">
-            {new Date(currentReport.fechaHora).toLocaleString()}
+            {currentReport.createdAt ? new Date(currentReport.createdAt).toLocaleString('es-ES') : 'Fecha no disponible'}
           </p>
         </SheetContent>
       </Sheet>
