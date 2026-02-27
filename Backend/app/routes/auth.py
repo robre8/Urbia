@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 from app.config.database import get_db
 from app.config.security import create_access_token, verify_token
 from app.models.models import User
@@ -50,13 +51,19 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return db_user
 
 
+class LoginRequest(BaseModel):
+    """Schema para login"""
+    email: str
+    password: str
+
+
 @router.post("/login")
-def login(email: str, password: str, db: Session = Depends(get_db)):
+def login(request: LoginRequest, db: Session = Depends(get_db)):
     """Login de usuario"""
     # Buscar usuario
-    db_user = db.query(User).filter(User.email == email).first()
+    db_user = db.query(User).filter(User.email == request.email).first()
     
-    if not db_user or not verify_password(password, db_user.password_hash):
+    if not db_user or not verify_password(request.password, db_user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos"
