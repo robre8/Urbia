@@ -310,6 +310,16 @@ def delete_report(
     return {"message": "Reporte eliminado exitosamente"}
 
 
+@router.delete("/id/{report_id}")
+def delete_report_legacy(
+    report_id: int,
+    payload: dict = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
+    """Eliminar reporte (ruta legacy para compatibilidad frontend)."""
+    return delete_report(report_id=report_id, payload=payload, db=db)
+
+
 @router.post("/{report_id}/like")
 def like_report(
     report_id: int,
