@@ -17,7 +17,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     """Hashear contraseña"""
-    return pwd_context.hash(password)
+    # Bcrypt solo puede hashear hasta 72 bytes
+    password_truncated = password[:72]
+    return pwd_context.hash(password_truncated)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -32,15 +34,20 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         logger.info(f"📝 Intentando registrar usuario: email={user.email}, username={user.username}")
         
         # Verificar si usuario existe
-        db_user = db.query(User).filter(
-            (User.email == user.email) | (User.username == user.username)
-        ).first()
-        
-        if db_user:
-            logger.warning(f"⚠️  Usuario o email ya existe: {user.email}")
+        existing_email = db.query(User).filter(User.email == user.email).first()
+        if existing_email:
+            logger.warning(f"⚠️ Email ya registrado: {user.email}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El usuario o email ya existe"
+                detail="Este email ya está registrado"
+            )
+        
+        existing_username = db.query(User).filter(User.username == user.username).first()
+        if existing_username:
+            logger.warning(f"⚠️ Username ya registrado: {user.username}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Este nombre de usuario ya está en uso"
             )
         
         # Crear usuario
