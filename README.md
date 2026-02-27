@@ -1,82 +1,82 @@
 # Urbia
 
-> ⚠️ **Blueprint Enterprise (Propuesta de Mejora):** este documento describe el estado actual del proyecto y una hoja de ruta para evolucionarlo a nivel enterprise. No todos los puntos del blueprint están implementados hoy.
-
 Plataforma de reportes urbanos con mapa interactivo, autenticación JWT y asistencia con IA para moderación y mejora de contenido.
 
 ---
 
-## 1) Resumen Ejecutivo
+## Resumen
 
-Urbia permite a ciudadanos crear y gestionar reportes geolocalizados (incidentes urbanos), adjuntar evidencia multimedia y consultar el estado de reportes en una interfaz web moderna.
+Urbia permite crear y gestionar reportes geolocalizados, adjuntar evidencia multimedia y visualizar incidentes en un mapa en tiempo real.
 
-### Capacidades actuales
-- Creación y edición de reportes con `multipart/form-data`.
-- Moderación de contenido con Gemini (bloqueo de contenido explícito; tolerancia a incidentes reales como accidentes/incendios).
-- Mejora de redacción con IA (fallback local cuando IA no responde).
+### Estado actual (implementado)
+- Creación de reportes con `multipart/form-data`.
+- Edición de reportes con reemplazo/eliminación de imagen.
+- Moderación de contenido con Gemini (bloqueo explícito, tolerancia a incidentes urbanos legítimos).
+- Mejora de redacción con IA + fallback seguro.
 - Subida de imágenes a Cloudinary.
-- Transcripción de audio y anexado automático a la descripción.
-- Autenticación y autorización por JWT.
+- Transcripción de audio y anexado a descripción.
+- Autenticación/autorización JWT.
 - PWA y mapa interactivo en frontend.
 
 ---
 
-## 2) Arquitectura Actual
+## Arquitectura actual
 
 ### Frontend
 - React + Vite
-- Zustand (estado global)
-- Tailwind + componentes UI
-- Leaflet/OpenStreetMap para visualización geográfica
+- Zustand
+- Tailwind/UI components
+- Leaflet/OpenStreetMap
 
 ### Backend
 - FastAPI
-- SQLAlchemy ORM
+- SQLAlchemy
 - PostgreSQL
-- JWT para auth
-- Integración con Gemini y Cloudinary
+- JWT
+- Gemini + Cloudinary
 
 ### Despliegue
 - Frontend: Vercel
-- Backend: Railway/Render (según entorno)
+- Backend: Railway
 - Base de datos: PostgreSQL gestionado
 
 ---
 
-## 3) Funcionalidades Clave
+## Funcionalidades clave
 
 ### Reportes
-- Alta de reportes (`POST /api/reporte/combinado`) con:
-  - payload JSON (`reporte`)
-  - imagen opcional (`imagen`)
-  - audio opcional (`audio`)
-- Edición de reportes (`PUT /api/reporte/{id}`) con soporte para:
+- `POST /api/reporte/combinado`
+  - `reporte` (JSON)
+  - `imagen` (opcional)
+  - `audio` (opcional)
+- `PUT /api/reporte/{id}`
   - reemplazo de imagen
-  - eliminación de imagen existente (`eliminarImagen`)
+  - eliminación de imagen (`eliminarImagen`)
   - transcripción de audio
-  - moderación + enriquecimiento de texto
-- Eliminación de reportes con validación de propietario.
-- Historial por usuario (`GET /api/reporte/usuario/{user_id}`).
+  - moderación + enriquecimiento IA
+- `DELETE /api/reporte/{id}`
+- `GET /api/reporte/usuario/{user_id}`
 
-### Seguridad y control de calidad
+### Seguridad y calidad
 - Verificación de token en operaciones sensibles.
-- Reglas de ownership para editar/eliminar.
-- Moderación IA para contenido explícito.
-- Estrategias fallback para no degradar UX ante fallas externas de IA.
+- Control de ownership para editar/eliminar.
+- Moderación de contenido explícito.
+- Fallbacks para fallas de servicios externos.
 
 ---
 
-## 4) Estructura del Repositorio
+## Estructura del repositorio
 
-- `Backend/`: API FastAPI, modelos, rutas, servicios e integración IA.
-- `Frontend/`: aplicación React (mapa, auth, formularios, estados).
-- `Wiki/`: documentación funcional y de producto.
+- `Backend/`: API FastAPI, modelos, rutas y servicios.
+- `Frontend/`: app React (mapa, auth, formularios, estado).
+- `Wiki/`: documentación funcional/producto.
 - `DEPLOYMENT.md`: guía de despliegue.
 - `CHANGELOG.md`: historial de cambios.
+- `ENTERPRISE.md`: blueprint de mejoras enterprise.
 
 ---
 
-## 5) Guía de Ejecución Local
+## Ejecución local
 
 ## Requisitos
 - Node.js 18+
@@ -109,7 +109,7 @@ App local:
 
 ---
 
-## 6) Variables de Entorno (Referencia)
+## Variables de entorno
 
 ## Backend
 ```env
@@ -126,104 +126,18 @@ VITE_API_URL=http://localhost:8000
 
 ---
 
-## 7) API (Estado actual resumido)
-
-### Auth
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/auth/me`
-
-### Reportes
-- `GET /api/reporte`
-- `GET /api/reporte/{id}`
-- `GET /api/reporte/usuario/{user_id}`
-- `POST /api/reporte/combinado`
-- `PUT /api/reporte/{id}`
-- `DELETE /api/reporte/{id}`
-- `DELETE /api/reporte/id/{id}` (ruta legacy)
-
-### Categorías
-- Endpoints en `Backend/app/routes/categories.py`.
-
----
-
-## 8) Blueprint Enterprise (Roadmap de Mejora)
-
-Este blueprint propone una evolución incremental, sin romper el producto actual.
-
-## Fase 1 — Foundation (0-2 meses)
-- **Observabilidad:** logs estructurados, trazas distribuidas y dashboards SLO.
-- **Errores estandarizados:** contrato de error único (código, mensaje, contexto).
-- **Migraciones DB formales:** Alembic + strategy de versionado por entorno.
-- **Configuración segura:** secretos centralizados (Vault/SSM), rotación y mínimo privilegio.
-- **CI baseline:** lint + tests + escaneo de dependencias en pull requests.
-
-## Fase 2 — Reliability & Security (2-4 meses)
-- **RBAC completo:** roles (ciudadano, moderador, operador, admin).
-- **Rate limiting y anti-abuso:** por IP/usuario/ruta.
-- **Idempotencia:** claves idempotentes para operaciones críticas.
-- **Políticas de contenido versionadas:** reglas de moderación auditables.
-- **Backups y DR:** RPO/RTO definidos, restore tests automáticos.
-
-## Fase 3 — Data & Platform (4-6 meses)
-- **Arquitectura asíncrona:** colas para jobs pesados (IA, media processing).
-- **Cache distribuida:** Redis para consultas hot y reducción de latencia.
-- **Búsqueda avanzada:** indexación geoespacial + full-text.
-- **Data governance:** catálogo de datos, trazabilidad y políticas de retención.
-- **Entorno staging productivo:** paridad de infraestructura con producción.
-
-## Fase 4 — Enterprise Product (6-12 meses)
-- **Multi-tenant / organizaciones** con aislamiento lógico y políticas por tenant.
-- **Audit trail inmutable** para acciones críticas y compliance.
-- **SLA operativos formales** con on-call, runbooks y postmortems.
-- **FinOps:** presupuestos por servicio, alertas de costo y capacity planning.
-- **Gobierno de IA:** métricas de calidad, drift, revisión humana en casos sensibles.
-
----
-
-## 9) Métricas Recomendadas (Enterprise)
-
-### Ingeniería
-- Lead time de cambio
-- Change failure rate
-- MTTR
-- Cobertura de tests críticos
-
-### Producto
-- Tiempo promedio de creación de reporte
-- Tasa de reportes moderados/bloqueados
-- % reportes con evidencia multimedia útil
-- Tiempo de resolución por categoría
-
-### Plataforma
-- p95/p99 de latencia API
-- Disponibilidad mensual
-- Error rate por endpoint
-- Costo por 1.000 reportes procesados
-
----
-
-## 10) Estándares de Calidad Recomendados
-
-- Definition of Done por feature (tests, seguridad, observabilidad, documentación).
-- ADRs para decisiones arquitectónicas relevantes.
-- Convenciones de API y versionado semántico.
-- Revisión de seguridad para cambios en auth, archivos e IA.
-
----
-
-## 11) Enlaces internos
+## Enlaces internos
 
 - `Frontend/README.md`
 - `Backend/README.md`
 - `DEPLOYMENT.md`
 - `CHANGELOG.md`
+- `ENTERPRISE.md`
 - `Wiki/USER_STORIES.md`
 - `Wiki/UX_UI_DESIGN.md`
 
 ---
 
-## 12) Licencia
+## Licencia
 
 MIT — ver `LICENSE`.
