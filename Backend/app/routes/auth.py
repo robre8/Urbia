@@ -17,12 +17,25 @@ pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     """Hashear contraseña usando Argon2"""
-    return pwd_context.hash(password)
+    try:
+        hashed = pwd_context.hash(password)
+        logger.debug(f"✅ Contraseña hasheada exitosamente (argon2)")
+        return hashed
+    except Exception as e:
+        logger.error(f"❌ Error al hashear contraseña con argon2: {str(e)}", exc_info=True)
+        raise ValueError(f"Error al procesar contraseña: {str(e)}")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verificar contraseña"""
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        result = pwd_context.verify(plain_password, hashed_password)
+        if result:
+            logger.debug(f"✅ Contraseña verificada exitosamente")
+        return result
+    except Exception as e:
+        logger.error(f"❌ Error al verificar contraseña: {str(e)}", exc_info=True)
+        return False
 
 
 @router.post("/register")
@@ -103,23 +116,53 @@ class LoginRequest(BaseModel):
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     """Login de usuario"""
-    # Buscar usuario
-    db_user = db.query(User).filter(User.email == request.email).first()
-    
-    if not db_user or not verify_password(request.password, db_user.password_hash):
+    try:
+        logger.info(f"🔐 Intento de login: {request.email}")
+        
+        # Buscar usuario
+        db_user = db.query(User).filter(User.email == request.email).first()
+        
+        if not db_user:
+            logger.warning(f"⚠️ Usuario no encontrado: {request.email}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Email o contraseña incorrectos"
+            )
+        
+        # Verificar es_active
+        if not db_user.is_active:
+            logger.warning(f"⚠️ Usuario inactivo: {request.email}")
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Usuario desactivado"
+            )
+        
+        # Verificar contraseña
+        if not verify_password(request.password, db_user.password_hash):
+            logger.warning(f"⚠️ Contraseña incorrecta: {request.email}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Email o contraseña incorrectos"
+            )
+        
+        # Crear token
+        logger.info(f"🔐 Generando token para: {request.email}")
+        access_token = create_access_token(data={"sub": str(db_user.id)})
+        logger.info(f"✅ Login exitoso: {request.email}")
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": UserResponse.from_orm(db_user)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error en login: {str(e)}", exc_info=True)
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email o contraseña incorrectos"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error en login"
         )
-    
-    # Crear token
-    access_token = create_access_token(data={"sub": str(db_user.id)})
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": UserResponse.from_orm(db_user)
-    }
 
 
 @router.get("/me", response_model=UserResponse)
