@@ -170,6 +170,21 @@ def get_reports(
     return reports
 
 
+@router.get("/usuario/{user_id}")
+def get_reports_by_user(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    """Obtener reportes de un usuario específico"""
+    reports = db.query(Report).filter(
+        Report.user_id == user_id,
+        Report.is_active == True
+    ).all()
+    
+    # Normalizar los reportes al formato del frontend
+    return [_serialize_report_for_frontend(report) for report in reports]
+
+
 @router.get("/{report_id}", response_model=ReportResponse)
 def get_report(report_id: int, db: Session = Depends(get_db)):
     """Obtener reporte por ID"""
