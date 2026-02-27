@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     
     # App
     app_title: str = "Urbia API"
-    app_version: str = "0.0.1"
+    app_version: str = "0.0.5-categories"
     debug: bool = False
     
     class Config:

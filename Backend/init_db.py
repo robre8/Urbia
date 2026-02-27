@@ -12,49 +12,32 @@ def init_db():
     db = SessionLocal()
     
     try:
-        # Crear categorías
+        # Crear categorías que coinciden con el frontend
+        # ID 1: Salud, ID 2: Infraestructura, ID 3: Seguridad, ID 4: Eventos Sociales
         categories = [
             {
-                "name": "Baches",
-                "description": "Baches en calles y avenidas",
-                "color": "#FF6B6B",
-                "icon": "🕳️"
+                "name": "Salud",
+                "description": "Reportes relacionados con salud pública",
+                "color": "#4CAF50",
+                "icon": "🏥"
             },
             {
-                "name": "Iluminación",
-                "description": "Fallas en iluminación pública",
-                "color": "#FFD93D",
-                "icon": "💡"
-            },
-            {
-                "name": "Basura",
-                "description": "Acumulación de basura",
-                "color": "#6BCB77",
-                "icon": "🗑️"
+                "name": "Infraestructura",
+                "description": "Baches, calles en mal estado, infraestructura dañada",
+                "color": "#FF9800",
+                "icon": "🏗️"
             },
             {
                 "name": "Seguridad",
                 "description": "Reportes de seguridad ciudadana",
-                "color": "#4D96FF",
+                "color": "#2196F3",
                 "icon": "🚨"
             },
             {
-                "name": "Transporte",
-                "description": "Problemas de transporte público",
-                "color": "#FF6B9D",
-                "icon": "🚌"
-            },
-            {
-                "name": "Servicios Públicos",
-                "description": "Agua, luz, gas y otros servicios",
-                "color": "#C780FA",
-                "icon": "⚡"
-            },
-            {
-                "name": "Medio Ambiente",
-                "description": "Problemas ambientales",
-                "color": "#00D9FF",
-                "icon": "🌳"
+                "name": "Eventos Sociales",
+                "description": "Eventos comunitarios y sociales",
+                "color": "#9C27B0",
+                "icon": "🎉"
             }
         ]
         

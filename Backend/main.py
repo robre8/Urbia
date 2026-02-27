@@ -65,7 +65,7 @@ def health_check():
     return {
         "status": "healthy",
         "app": settings.app_title,
-        "version": "0.0.4-pbkdf2",  # Switched to PBKDF2 (no external deps)
+        "version": settings.app_version,  # Use version from settings
         "cors_allow_all": cors_setting == "*",
         "cors_configured": cors_setting
     }
