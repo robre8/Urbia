@@ -336,18 +336,29 @@ async def update_report(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Categoría no encontrada"
             )
-        
+
+        # Debug logging
+        print(f"PUT /api/reporte/{report_id} - Processing update")
+        print(f"imagen param: {imagen}")
+        print(f"imagen.filename: {imagen.filename if imagen else 'No imagen'}")
+        print(f"imagen.content_type: {imagen.content_type if imagen else 'No imagen'}")
+
         # FIRST: Read image bytes if new image provided (but don't upload yet)
         image_url = report.image_url
         image_bytes = None
         image_mime_type = None
         new_image_filename = None
-        
-        if imagen and imagen.filename:
+
+        # Check if imagen exists and has a valid filename (not empty string)
+        if imagen and hasattr(imagen, 'filename') and imagen.filename and imagen.filename.strip():
+            print(f"Reading new image: {imagen.filename}")
             # Read image bytes for moderation
             image_bytes = await imagen.read()
             image_mime_type = imagen.content_type
             new_image_filename = imagen.filename
+            print(f"Image bytes read: {len(image_bytes)} bytes, mime: {image_mime_type}")
+        else:
+            print("No new image provided or empty filename")
         
         # Transcribe audio if provided and append to description
         if audio and audio.filename:
