@@ -16,7 +16,7 @@ export const register = async (nombre, email, password) => {
     }
     
     console.log("✅ Usuario registrado:", response.data);
-    return response.data;
+    return response.data.user || response.data;
   } catch (error) {
     console.error("❌ Error en el registro:", error);
     
