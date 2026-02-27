@@ -5,15 +5,8 @@ import App from './App.jsx';
 import { Workbox } from 'workbox-window';
 
 // Registrar el Service Worker
-if ('serviceWorker' in navigator) {
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   const wb = new Workbox('/sw.js');
-
-  wb.addEventListener('installed', (event) => {
-    if (event.isUpdate) {
-      console.log('Nueva versión disponible. Recarga para actualizar.');
-    }
-  });
-
   wb.register();
 }
 

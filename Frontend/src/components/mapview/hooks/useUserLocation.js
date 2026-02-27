@@ -32,12 +32,23 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
 
     async function fetchIPLocationFallback() {
       if (!isMounted || !loading) return;
+      if (!IPINFO_API_KEY) {
+        clearTimeout(initialTimeoutId);
+        setLoading(false);
+        setGeolocationStatus('ip_error_default');
+        setError("No se pudo obtener ubicación por IP. Falta VITE_IPINFO_TOKEN.");
+        setPosition(defaultCenter);
+        return;
+      }
       let ipLocationData = null;
       let ipError = null;
 
       // Intentar solo ipinfo.io
       try {
         const ipinfoRes = await fetch(`https://ipinfo.io/json?token=${IPINFO_API_KEY}`);
+        if (!ipinfoRes.ok) {
+          throw new Error(`ipinfo response ${ipinfoRes.status}`);
+        }
         ipLocationData = await ipinfoRes.json();
         if (!ipLocationData.loc) throw new Error("No location data from ipinfo.io");
       } catch (ipinfoErr) {
@@ -48,8 +59,17 @@ export function useUserLocation(defaultCenter = [-34.6037, -58.3816]) {
       if (isMounted && loading) {
         clearTimeout(initialTimeoutId);
         if (ipLocationData && ipLocationData.loc) {
-          const [lat, lon] = ipLocationData.loc.split(",");
-          setPosition([parseFloat(lat), parseFloat(lon)]);
+          const [latStr, lonStr] = ipLocationData.loc.split(",");
+          const lat = Number.parseFloat(latStr);
+          const lon = Number.parseFloat(lonStr);
+          if (Number.isNaN(lat) || Number.isNaN(lon)) {
+            setLoading(false);
+            setGeolocationStatus('ip_error_default');
+            setError("Formato de ubicacion invalido desde ipinfo.io. Usando ubicacion por defecto.");
+            setPosition(defaultCenter);
+            return;
+          }
+          setPosition([lat, lon]);
           setAccuracy(5000);
           setLoading(false);
           setGeolocationStatus('ip_fallback');

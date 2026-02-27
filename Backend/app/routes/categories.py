@@ -5,7 +5,7 @@ from app.config.database import get_db
 from app.models.models import Category
 from app.schemas.schemas import CategoryCreate, CategoryResponse
 
-router = APIRouter(prefix="/api/categories", tags=["categories"])
+router = APIRouter(prefix="/api/categorias", tags=["categories"])
 
 
 @router.get("", response_model=List[CategoryResponse])
