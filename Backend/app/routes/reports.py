@@ -8,6 +8,7 @@ from app.config.security import verify_token
 from app.models.models import Report, Category
 from app.schemas.schemas import ReportCreate, ReportResponse, ReportUpdate
 from app.services.cloudinary_service import get_cloudinary_service, CloudinaryService
+from app.services.gemini_service import get_gemini_service, GeminiService
 
 router = APIRouter(prefix="/api/reporte", tags=["reports"])
 
@@ -49,6 +50,7 @@ async def create_report_combined(
     payload: dict = Depends(verify_token),
     db: Session = Depends(get_db),
     cloudinary_service: CloudinaryService = Depends(get_cloudinary_service),
+    gemini_service: GeminiService = Depends(get_gemini_service),
 ):
     """Crear reporte usando multipart/form-data (reporte JSON + imagen opcional)."""
     try:
@@ -88,24 +90,33 @@ async def create_report_combined(
 
     user_id = int(payload.get("sub"))
 
-    db_report = Report(
-        user_id=user_id,
-        title=titulo,
-        description=descripcion,
-        category=category.name,
-        latitude=report_data.get("latitud"),
-        longitude=report_data.get("longitud"),
-        location_name=report_data.get("direccion") or report_data.get("location_name"),
-        status="pending",
-    )
-
+    image_url = None
     if imagen and imagen.filename:
         image_bytes = await imagen.read()
-        db_report.image_url = cloudinary_service.upload_file(
+        image_url = cloudinary_service.upload_file(
             image_bytes,
             f"report_{user_id}_{imagen.filename}",
             folder="reports",
         )
+
+    ai_result = gemini_service.enhance_report(
+        title=titulo,
+        description=descripcion,
+        category_name=category.name,
+        image_url=image_url,
+    )
+
+    db_report = Report(
+        user_id=user_id,
+        title=ai_result.get("title") or titulo,
+        description=ai_result.get("description") or descripcion,
+        category=category.name,
+        latitude=report_data.get("latitud"),
+        longitude=report_data.get("longitud"),
+        location_name=report_data.get("direccion") or report_data.get("location_name"),
+        image_url=image_url,
+        status="pending",
+    )
 
     db.add(db_report)
     db.commit()
