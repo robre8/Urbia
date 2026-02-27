@@ -61,11 +61,13 @@ app.include_router(categories.router)
 @app.get("/health")
 def health_check():
     """Verificar salud de la aplicación"""
+    cors_setting = settings.cors_allowed_origins
     return {
         "status": "healthy",
         "app": settings.app_title,
-        "version": settings.app_version,
-        "cors_allow_all": settings.cors_allowed_origins == "*"
+        "version": "0.0.2-cors-fix",
+        "cors_allow_all": cors_setting == "*",
+        "cors_configured": cors_setting
     }
 
 
