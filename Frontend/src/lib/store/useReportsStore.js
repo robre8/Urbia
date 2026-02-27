@@ -10,7 +10,7 @@ import { getReportsByUserId } from "../api/reports/getReportsById";
 import { groupReports } from "../utils/groupReports";
 
 const STORAGE_VERSION = 3;
-const CACHE_DURATION = 300000;
+const CACHE_DURATION = 60000;
 
 const useReportsStore = create(
   devtools(

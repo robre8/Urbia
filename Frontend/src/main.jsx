@@ -14,6 +14,10 @@ if ('serviceWorker' in navigator) {
     }
   });
 
+  wb.addEventListener('waiting', () => {
+    wb.messageSkipWaiting();
+  });
+
   wb.register();
 }
 
