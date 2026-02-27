@@ -18,7 +18,7 @@ if ('serviceWorker' in navigator) {
     wb.messageSkipWaiting();
   });
 
-  wb.register();
+  // wb.register(); // SW disabled temporarily
 }
 
 createRoot(document.getElementById('root')).render(
