@@ -12,17 +12,30 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+# Intentar usar argon2, fallback a bcrypt si no está disponible
+try:
+    pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+    logger.info("✅ Usando Argon2 para hashing de contraseñas")
+    HASHING_ALGORITHM = "argon2"
+except Exception as e:
+    logger.warning(f"⚠️ Argon2 no disponible ({str(e)}), usando bcrypt como fallback")
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    HASHING_ALGORITHM = "bcrypt"
 
 
 def hash_password(password: str) -> str:
-    """Hashear contraseña usando Argon2"""
+    """Hashear contraseña con algoritmo automático (Argon2 or Bcrypt)"""
     try:
+        # Si usamos bcrypt como fallback, truncar a 72 bytes si es necesario
+        if HASHING_ALGORITHM == "bcrypt":
+            password_bytes = password.encode('utf-8')[:72]
+            password = password_bytes.decode('utf-8', errors='ignore')
+        
         hashed = pwd_context.hash(password)
-        logger.debug(f"✅ Contraseña hasheada exitosamente (argon2)")
+        logger.debug(f"✅ Contraseña hasheada exitosamente ({HASHING_ALGORITHM})")
         return hashed
     except Exception as e:
-        logger.error(f"❌ Error al hashear contraseña con argon2: {str(e)}", exc_info=True)
+        logger.error(f"❌ Error al hashear contraseña con {HASHING_ALGORITHM}: {str(e)}", exc_info=True)
         raise ValueError(f"Error al procesar contraseña: {str(e)}")
 
 
