@@ -29,7 +29,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def register(user: UserCreate, db: Session = Depends(get_db)):
     """Registrar nuevo usuario"""
     try:
-        logger.info(f"📝 Intentando registrar usuario: {user.email}")
+        logger.info(f"📝 Intentando registrar usuario: email={user.email}, username={user.username}")
         
         # Verificar si usuario existe
         db_user = db.query(User).filter(
@@ -51,26 +51,41 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
             password_hash=hashed_password
         )
         
+        logger.info(f"📝 Agregando usuario a la BD...")
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
-        logger.info(f"✅ Usuario registrado exitosamente: {user.email}")
+        logger.info(f"✅ Usuario registrado exitosamente en BD: {user.email} (id={db_user.id})")
         
         # Crear token
+        logger.info(f"🔐 Creando token de acceso...")
         access_token = create_access_token(data={"sub": str(db_user.id)})
+        logger.info(f"✅ Token creado exitosamente")
+        
+        # Serializar respuesta
+        logger.info(f"📦 Serializando respuesta del usuario...")
+        user_response = UserResponse.from_orm(db_user)
+        logger.info(f"✅ Respuesta serializada exitosamente")
         
         return {
             "access_token": access_token,
             "token_type": "bearer",
-            "user": UserResponse.from_orm(db_user)
+            "user": user_response
         }
-    except HTTPException:
+    except HTTPException as he:
+        logger.error(f"❌ HTTPException en registro: {he.detail}")
         raise
+    except ValueError as ve:
+        logger.error(f"❌ ValueError en registro: {str(ve)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Datos inválidos: {str(ve)}"
+        )
     except Exception as e:
-        logger.error(f"❌ Error al registrar usuario: {str(e)}")
+        logger.error(f"❌ Error inesperado al registrar usuario: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al registrar usuario: {str(e)}"
+            detail=f"Error al registrar usuario"
         )
 
 
