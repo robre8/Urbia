@@ -65,7 +65,7 @@ def health_check():
     return {
         "status": "healthy",
         "app": settings.app_title,
-        "version": "0.0.2-cors-fix",
+        "version": "0.0.3-password-fix",  # Updated to force Railway redeploy
         "cors_allow_all": cors_setting == "*",
         "cors_configured": cors_setting
     }
