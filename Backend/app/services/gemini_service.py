@@ -20,6 +20,34 @@ class GeminiService:
             return response.text
         except Exception as e:
             raise Exception(f"Error al generar texto con Gemini: {str(e)}")
+    
+    def transcribe_audio(self, audio_bytes: bytes, audio_mime_type: str) -> str:
+        """Transcribir audio a texto usando Gemini"""
+        if not settings.gemini_api_key:
+            return ""
+        
+        try:
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            # Crear el contenido con audio
+            audio_part = {
+                "mime_type": audio_mime_type,
+                "data": audio_bytes
+            }
+            
+            prompt = (
+                "Transcribe el siguiente audio a texto en español. "
+                "Devuelve SOLO el texto transcrito, sin comentarios adicionales. "
+                "Si no hay audio o no se puede transcribir, responde con una cadena vacía."
+            )
+            
+            response = model.generate_content([prompt, audio_part])
+            transcribed_text = (response.text or "").strip()
+            
+            return transcribed_text
+        except Exception as e:
+            print(f"Error transcribiendo audio: {e}")
+            return ""
 
     def _fallback_enhancement(self, title: str, description: str, category_name: str) -> dict:
         normalized_title = (title or '').strip()

@@ -95,6 +95,23 @@ async def create_report_combined(
     if imagen and imagen.filename:
         image_bytes = await imagen.read()
         image_mime_type = imagen.content_type
+    
+    # Transcribe audio if provided and append to description
+    if audio and audio.filename:
+        try:
+            audio_bytes = await audio.read()
+            audio_mime_type = audio.content_type
+            transcribed_text = gemini_service.transcribe_audio(audio_bytes, audio_mime_type)
+            
+            if transcribed_text:
+                # Append transcribed audio to description
+                if descripcion:
+                    descripcion = f"{descripcion}\n\nNota de audio: {transcribed_text}"
+                else:
+                    descripcion = f"Nota de audio: {transcribed_text}"
+        except Exception as e:
+            print(f"Error processing audio: {e}")
+            # Continue without audio transcription if it fails
 
     moderation_result = gemini_service.moderate_report_content(
         title=titulo,
@@ -346,6 +363,23 @@ async def update_report(
                 folder="reports",
             )
         
+        # Transcribe audio if provided and append to description
+        if audio and audio.filename:
+            try:
+                audio_bytes = await audio.read()
+                audio_mime_type = audio.content_type
+                transcribed_text = gemini_service.transcribe_audio(audio_bytes, audio_mime_type)
+                
+                if transcribed_text:
+                    # Append transcribed audio to description
+                    if descripcion:
+                        descripcion = f"{descripcion}\n\nNota de audio: {transcribed_text}"
+                    else:
+                        descripcion = f"Nota de audio: {transcribed_text}"
+            except Exception as e:
+                print(f"Error processing audio: {e}")
+                # Continue without audio transcription if it fails
+        
         # SECOND: Moderate content (allow accidents/fires, block explicit content)
         moderation_result = gemini_service.moderate_report_content(
             title=titulo,
@@ -380,7 +414,6 @@ async def update_report(
         report.description = ai_result.get("description") or descripcion
         report.category = category.name
         report.image_url = image_url
-        # Note: audio upload is received but not stored yet (audio_url column not in DB)
         
         db.commit()
         db.refresh(report)
