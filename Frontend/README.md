@@ -1,5 +1,7 @@
 # Urbia Frontend
 
+<!-- Trigger redeploy: Vercel env update -->
+
 React + Vite application for the Urbia platform. It consumes the Urbia API and provides the user-facing interface for authentication, reports, and map-based workflows.
 
 ## Requirements
