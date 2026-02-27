@@ -6,6 +6,9 @@ from app.config.security import create_access_token, verify_token
 from app.models.models import User
 from app.schemas.schemas import UserCreate, UserResponse
 from passlib.context import CryptContext
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -25,49 +28,50 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     """Registrar nuevo usuario"""
-    # Verificar si usuario existe
-    db_user = db.query(User).filter(
-        (User.email == user.email) | (User.username == user.username)
-    ).first()
-    
-    if db_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El usuario o email ya existe"
+    try:
+        logger.info(f"📝 Intentando registrar usuario: {user.email}")
+        
+        # Verificar si usuario existe
+        db_user = db.query(User).filter(
+            (User.email == user.email) | (User.username == user.username)
+        ).first()
+        
+        if db_user:
+            logger.warning(f"⚠️  Usuario o email ya existe: {user.email}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El usuario o email ya existe"
+            )
+        
+        # Crear usuario
+        hashed_password = hash_password(user.password)
+        db_user = User(
+            email=user.email,
+            username=user.username,
+            password_hash=hashed_password
         )
-    
-    # Crear usuario
-    hashed_password = hash_password(user.password)
-    db_user = User(
-        email=user.email,
-        username=user.username,
-        password_hash=hashed_password
-    )
-    
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    
-    # Crear token
-    access_token = create_access_token(data={"sub": str(db_user.id)})
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": UserResponse.from_orm(db_user)
-    }
-
-
-class LoginRequest(BaseModel):
-    """Schema para login"""
-    email: str
-    password: str
-
-
-class LoginRequest(BaseModel):
-    """Schema para login"""
-    email: str
-    password: str
+        
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        logger.info(f"✅ Usuario registrado exitosamente: {user.email}")
+        
+        # Crear token
+        access_token = create_access_token(data={"sub": str(db_user.id)})
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": UserResponse.from_orm(db_user)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error al registrar usuario: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al registrar usuario: {str(e)}"
+        )
 
 
 class LoginRequest(BaseModel):

@@ -1,25 +1,46 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 from typing import Optional
 
 
 class UserBase(BaseModel):
     """Schema base de Usuario"""
-    email: EmailStr
+    email: str
     username: str
 
 
 class UserCreate(UserBase):
     """Schema para crear Usuario"""
     password: str
+    
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v):
+        if not v or '@' not in v:
+            raise ValueError('email debe ser válido')
+        return v.lower()
+    
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, v):
+        if not v or len(v) < 3:
+            raise ValueError('username debe tener al menos 3 caracteres')
+        return v
+    
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v):
+        if not v or len(v) < 6:
+            raise ValueError('password debe tener al menos 6 caracteres')
+        return v
 
 
 class UserResponse(UserBase):
     """Schema de respuesta de Usuario"""
     id: int
-    is_active: bool
-    is_verified: bool
-    created_at: datetime
+    is_active: bool = True
+    is_verified: bool = False
+    created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     
     class Config:
