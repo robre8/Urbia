@@ -5,68 +5,76 @@ from app.config.database import get_db
 from app.config.security import create_access_token, verify_token
 from app.models.models import User
 from app.schemas.schemas import UserCreate, UserResponse
-from passlib.context import CryptContext
+import hashlib
+import os
+import base64
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
-# Detectar qué algoritmo de hashing está disponible
-def _detect_hashing_algorithm():
-    """Detectar qué backend de password hashing está disponible"""
-    # Intentar argon2 primero (más seguro)
-    try:
-        import argon2
-        logger.info("✅ Argon2 disponible - usando como algoritmo principal")
-        return "argon2", CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
-    except ImportError:
-        pass
-    
-    # Fallback a bcrypt (siempre disponible con passlib[bcrypt])
-    try:
-        logger.info("✅ Usando bcrypt - Argon2 no disponible")
-        return "bcrypt", CryptContext(schemes=["bcrypt"], deprecated="auto")
-    except Exception as e:
-        logger.critical(f"❌ CRITICAL: Ni bcrypt ni argon2 disponibles: {e}")
-        raise RuntimeError("No password hashing backend available!")
-
-HASHING_ALGORITHM, pwd_context = _detect_hashing_algorithm()
+# Usar PBKDF2-SHA256 de Python estándar (sin dependencias externas)
+# Esto evita problemas de versiones con bcrypt/argon2
+HASHING_ALGORITHM = "pbkdf2_sha256"
+logger.info(f"✅ Usando {HASHING_ALGORITHM} para hashing (Python stdlib, sin deps externas)")
 
 
 def hash_password(password: str) -> str:
-    """Hashear contraseña - el schema ya trunca a 72 bytes si es necesario"""
-    global HASHING_ALGORITHM, pwd_context
-    
+    """Hashear contraseña usando PBKDF2-SHA256 de Python estándar"""
     try:
-        hashed = pwd_context.hash(password)
-        logger.debug(f"✅ Contraseña hasheada exitosamente ({HASHING_ALGORITHM})")
-        return hashed
-    except Exception as e:
-        logger.error(f"❌ Error hashing con {HASHING_ALGORITHM}: {str(e)}", exc_info=True)
+        # Generar salt aleatorio
+        salt = os.urandom(32)
         
-        # Si fallamos y estábamos usando argon2, intentar con bcrypt como último recurso
-        if HASHING_ALGORITHM == "argon2":
-            logger.warning(f"⚠️ Argon2 falló, intentando fallback a bcrypt")
-            try:
-                pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-                HASHING_ALGORITHM = "bcrypt"
-                hashed = pwd_context.hash(password)
-                logger.info(f"✅ Fallback a bcrypt exitoso")
-                return hashed
-            except Exception as e2:
-                logger.error(f"❌ También falló bcrypt: {str(e2)}", exc_info=True)
-                raise ValueError(f"Error crítico al procesar contraseña: {str(e2)}")
-        else:
-            raise ValueError(f"Error al procesar contraseña: {str(e)}")
+        # Hash con PBKDF2-SHA256 (100,000 iteraciones)
+        pwd_hash = hashlib.pbkdf2_hmac(
+            'sha256',
+            password.encode('utf-8'),
+            salt,
+            100000  # Iteraciones (balance seguridad/velocidad)
+        )
+        
+        # Formato: algorithm$iterations$salt$hash (base64)
+        hash_str = f"pbkdf2_sha256$100000${base64.b64encode(salt).decode('ascii')}${base64.b64encode(pwd_hash).decode('ascii')}"
+        
+        logger.debug(f"✅ Contraseña hasheada exitosamente (pbkdf2_sha256)")
+        return hash_str
+    except Exception as e:
+        logger.error(f"❌ Error al hashear contraseña: {str(e)}", exc_info=True)
+        raise ValueError(f"Error al procesar contraseña: {str(e)}")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verificar contraseña"""
+    """Verificar contraseña contra hash PBKDF2"""
     try:
-        result = pwd_context.verify(plain_password, hashed_password)
+        # Parsear el hash almacenado
+        parts = hashed_password.split('$')
+        if len(parts) != 4 or parts[0] != 'pbkdf2_sha256':
+            logger.error(f"❌ Formato de hash inválido")
+            return False
+        
+        algorithm, iterations, salt_b64, stored_hash_b64 = parts
+        
+        # Decodificar salt
+        salt = base64.b64decode(salt_b64.encode('ascii'))
+        
+        # Calcular hash de la contraseña ingresada
+        pwd_hash = hashlib.pbkdf2_hmac(
+            'sha256',
+            plain_password.encode('utf-8'),
+            salt,
+            int(iterations)
+        )
+        
+        # Comparar hashes
+        computed_hash_b64 = base64.b64encode(pwd_hash).decode('ascii')
+        result = computed_hash_b64 == stored_hash_b64
+        
         if result:
             logger.debug(f"✅ Contraseña verificada exitosamente")
+        else:
+            logger.debug(f"❌ Contraseña incorrecta")
+        
         return result
     except Exception as e:
         logger.error(f"❌ Error al verificar contraseña: {str(e)}", exc_info=True)

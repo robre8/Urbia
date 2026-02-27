@@ -32,14 +32,9 @@ class UserCreate(UserBase):
     def validate_password(cls, v):
         if not v or len(v) < 6:
             raise ValueError('password debe tener al menos 6 caracteres')
-        
-        # CRÍTICO: Truncar a 72 bytes UTF-8 para bcrypt (límite máximo)
-        # Esto previene el error: "password cannot be longer than 72 bytes"
-        password_bytes = v.encode('utf-8')
-        if len(password_bytes) > 72:
-            # Truncar y decodificar de forma segura
-            v = password_bytes[:72].decode('utf-8', errors='ignore')
-        
+        # PBKDF2 no tiene límite de longitud (a diferencia de bcrypt)
+        if len(v) > 1000:
+            raise ValueError('password no puede exceder 1000 caracteres')
         return v
 
 
