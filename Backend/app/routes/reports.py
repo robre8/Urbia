@@ -343,7 +343,12 @@ async def update_report(
             )
         
         # SECOND: Enrich report with Gemini (improvement, not moderation on update)
-        ai_result = gemini_service.enhance_report(titulo, descripcion)
+        ai_result = gemini_service.enhance_report(
+            title=titulo,
+            description=descripcion,
+            category_name=category.name,
+            image_url=image_url,
+        )
         
         # THIRD: Update report fields and commit to DB (only after all processing succeeds)
         report.title = ai_result.get("title") or titulo
