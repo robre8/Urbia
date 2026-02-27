@@ -320,26 +320,32 @@ async def update_report(
                 detail="Categoría no encontrada"
             )
         
-        # Handle image upload if new image provided
+        # FIRST: Handle image upload if new image provided (process before DB update)
         image_url = report.image_url
         if imagen and imagen.filename:
             # Delete old image from Cloudinary if exists
             if report.image_url:
                 try:
-                    # Extract public_id from secure_url
-                    public_id = report.image_url.split('/')[-1].split('.')[0]
-                    cloudinary_service.delete_image(public_id)
+                    # Extract filename from secure_url for deletion
+                    # Format: "reports/report_userid_filename"
+                    parts = report.image_url.split('/')
+                    filename_part = parts[-1].split('.')[0]  # Get filename without extension
+                    cloudinary_service.delete_file(filename_part, folder="reports")
                 except Exception as e:
                     print(f"Error deleting old image: {e}")
             
-            # Upload new image
+            # Upload new image using the same pattern as POST
             imagen_bytes = await imagen.read()
-            image_url = cloudinary_service.upload_image(imagen_bytes, imagen.filename)
+            image_url = cloudinary_service.upload_file(
+                imagen_bytes,
+                f"report_{user_id}_{imagen.filename}",
+                folder="reports",
+            )
         
-        # Enrich report with Gemini (improvement, not moderation on update)
+        # SECOND: Enrich report with Gemini (improvement, not moderation on update)
         ai_result = gemini_service.enhance_report(titulo, descripcion)
         
-        # Update report fields
+        # THIRD: Update report fields and commit to DB (only after all processing succeeds)
         report.title = ai_result.get("title") or titulo
         report.description = ai_result.get("description") or descripcion
         report.category = category.name
