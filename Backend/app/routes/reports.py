@@ -337,31 +337,17 @@ async def update_report(
                 detail="Categoría no encontrada"
             )
         
-        # FIRST: Handle image upload if new image provided (process before DB update)
+        # FIRST: Read image bytes if new image provided (but don't upload yet)
         image_url = report.image_url
         image_bytes = None
         image_mime_type = None
+        new_image_filename = None
         
         if imagen and imagen.filename:
-            # Delete old image from Cloudinary if exists
-            if report.image_url:
-                try:
-                    # Extract filename from secure_url for deletion
-                    # Format: "reports/report_userid_filename"
-                    parts = report.image_url.split('/')
-                    filename_part = parts[-1].split('.')[0]  # Get filename without extension
-                    cloudinary_service.delete_file(filename_part, folder="reports")
-                except Exception as e:
-                    print(f"Error deleting old image: {e}")
-            
-            # Upload new image using the same pattern as POST
-            imagen_bytes = await imagen.read()
+            # Read image bytes for moderation
+            image_bytes = await imagen.read()
             image_mime_type = imagen.content_type
-            image_url = cloudinary_service.upload_file(
-                imagen_bytes,
-                f"report_{user_id}_{imagen.filename}",
-                folder="reports",
-            )
+            new_image_filename = imagen.filename
         
         # Transcribe audio if provided and append to description
         if audio and audio.filename:
@@ -401,7 +387,27 @@ async def update_report(
                 },
             )
         
-        # THIRD: Enrich report with Gemini (improvement after moderation)
+        # THIRD: Upload new image AFTER moderation passes
+        if new_image_filename and image_bytes:
+            # Delete old image from Cloudinary if exists
+            if report.image_url:
+                try:
+                    # Extract filename from secure_url for deletion
+                    # Format: "reports/report_userid_filename"
+                    parts = report.image_url.split('/')
+                    filename_part = parts[-1].split('.')[0]  # Get filename without extension
+                    cloudinary_service.delete_file(filename_part, folder="reports")
+                except Exception as e:
+                    print(f"Error deleting old image: {e}")
+            
+            # Upload new image
+            image_url = cloudinary_service.upload_file(
+                image_bytes,
+                f"report_{user_id}_{new_image_filename}",
+                folder="reports",
+            )
+        
+        # FOURTH: Enrich report with Gemini (improvement after moderation)
         ai_result = gemini_service.enhance_report(
             title=titulo,
             description=descripcion,
@@ -409,7 +415,7 @@ async def update_report(
             image_url=image_url,
         )
         
-        # FOURTH: Update report fields and commit to DB (only after all processing succeeds)
+        # FIFTH: Update report fields and commit to DB (only after all processing succeeds)
         report.title = ai_result.get("title") or titulo
         report.description = ai_result.get("description") or descripcion
         report.category = category.name
