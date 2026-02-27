@@ -25,6 +25,22 @@ class GeminiService:
         normalized_title = (title or '').strip()
         normalized_description = (description or '').strip()
 
+        # Check if text was already enhanced (to prevent duplication on updates)
+        already_enhanced = (
+            "Se reporta el siguiente incidente" in normalized_description or
+            "Se registra un incidente" in normalized_description or
+            "Se solicita revisión y atención" in normalized_description
+        )
+
+        if already_enhanced:
+            # Return text as-is if already enhanced
+            return {
+                "title": normalized_title,
+                "description": normalized_description,
+                "used_ai": False,
+                "reason": "already_enhanced",
+            }
+
         if normalized_title and len(normalized_title) < 12:
             improved_title = f"Reporte de {category_name}: {normalized_title}".strip()
         else:

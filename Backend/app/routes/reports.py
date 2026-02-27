@@ -322,6 +322,9 @@ async def update_report(
         
         # FIRST: Handle image upload if new image provided (process before DB update)
         image_url = report.image_url
+        image_bytes = None
+        image_mime_type = None
+        
         if imagen and imagen.filename:
             # Delete old image from Cloudinary if exists
             if report.image_url:
@@ -336,13 +339,35 @@ async def update_report(
             
             # Upload new image using the same pattern as POST
             imagen_bytes = await imagen.read()
+            image_mime_type = imagen.content_type
             image_url = cloudinary_service.upload_file(
                 imagen_bytes,
                 f"report_{user_id}_{imagen.filename}",
                 folder="reports",
             )
         
-        # SECOND: Enrich report with Gemini (improvement, not moderation on update)
+        # SECOND: Moderate content (allow accidents/fires, block explicit content)
+        moderation_result = gemini_service.moderate_report_content(
+            title=titulo,
+            description=descripcion,
+            category_name=category.name,
+            image_bytes=image_bytes,
+            image_mime_type=image_mime_type,
+        )
+        
+        if not moderation_result.get("is_allowed", False):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": "unsafe_content",
+                    "message": moderation_result.get("message")
+                    or "El contenido actualizado no cumple las políticas de seguridad.",
+                    "risk_level": moderation_result.get("risk_level", "unknown"),
+                    "reasons": moderation_result.get("blocked_reasons", []),
+                },
+            )
+        
+        # THIRD: Enrich report with Gemini (improvement after moderation)
         ai_result = gemini_service.enhance_report(
             title=titulo,
             description=descripcion,
@@ -350,11 +375,12 @@ async def update_report(
             image_url=image_url,
         )
         
-        # THIRD: Update report fields and commit to DB (only after all processing succeeds)
+        # FOURTH: Update report fields and commit to DB (only after all processing succeeds)
         report.title = ai_result.get("title") or titulo
         report.description = ai_result.get("description") or descripcion
         report.category = category.name
         report.image_url = image_url
+        # Note: audio upload is received but not stored yet (audio_url column not in DB)
         
         db.commit()
         db.refresh(report)
