@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, ZoomControl, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Toaster } from 'sonner';
 
 import { useUserLocation } from './hooks/useUserLocation';
 // Keep the useReverseGeocode import as it might be used elsewhere
@@ -110,24 +109,6 @@ export default function MapView() {
 
   return (
     <div className='relative w-full h-screen'>
-      <Toaster
-        position='bottom-center'
-        toastOptions={{
-          style: {
-            background: 'white',
-            color: 'black',
-            borderRadius: '12px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            padding: '16px',
-            width: 'min(90vw, 600px)',
-            maxWidth: '600px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            margin: '0 auto'
-          }
-        }}
-      />
-
       <MapContainer
         center={center}
         zoom={defaultZoom}
