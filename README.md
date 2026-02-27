@@ -219,7 +219,8 @@ Este blueprint propone una evolución incremental, sin romper el producto actual
 - `Backend/README.md`
 - `DEPLOYMENT.md`
 - `CHANGELOG.md`
-- `Wiki/API_REFERENCE.md`
+- `Wiki/USER_STORIES.md`
+- `Wiki/UX_UI_DESIGN.md`
 
 ---
 

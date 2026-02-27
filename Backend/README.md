@@ -1,147 +1,82 @@
-# Backend - API REST con FastAPI
+# Backend — Urbia (FastAPI)
 
-Backend de la aplicación Urbia construido con **Python 3.11** y **FastAPI**.
+API REST de Urbia construida con FastAPI + SQLAlchemy + PostgreSQL.
 
-## 🚀 Características
-
-- ✅ FastAPI (framework web moderno y rápido)
-- ✅ SQLAlchemy (ORM para base de datos)
-- ✅ PostgreSQL (base de datos)
-- ✅ JWT (autenticación)
-- ✅ AWS S3 (almacenamiento de archivos)
-- ✅ Google Gemini API (procesamiento de lenguaje natural)
-- ✅ CORS habilitado
-- ✅ Validación automática de datos con Pydantic
-- ✅ Documentación automática con Swagger
-
-## 📋 Requisitos Previos
-
+## Stack
 - Python 3.11+
-- PostgreSQL 12+
-- pip (gestor de paquetes de Python)
-- AWS S3 cuenta
-- Google Gemini API Key
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- JWT auth
+- Gemini (moderación + enriquecimiento + transcripción)
+- Cloudinary (media)
 
-## 🔧 Instalación Local
+---
 
-### 1. Clonar repositorio
-
-```bash
-git clone https://github.com/No-Country-simulation/s21-19-t-webapp.git
-cd s21-19-t-webapp
-```
-
-### 2. Crear entorno virtual
-
-```bash
-# En macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-
-# En Windows
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 3. Instalar dependencias
-
-```bash
-pip install -r Backend/requirements.txt
-```
-
-### 4. Configurar variables de entorno
+## Setup local
 
 ```bash
 cd Backend
-cp .env.example .env
-```
-
-Edita el archivo `.env` y completa:
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/urbia
-JWT_SECRET=tu_secreto_super_seguro
-S3_KEY=tu_aws_key
-S3_SECRETKEY=tu_aws_secret
-GEMINI_API_KEY=tu_gemini_key
-DEBUG=true
-```
-
-### 5. Configurar base de datos
-
-```bash
-# Asegúrate que PostgreSQL esté corriendo y crea la base de datos
-createdb urbia
-```
-
-### 6. Ejecutar servidor de desarrollo
-
-```bash
-cd Backend
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+python init_db.py
 uvicorn main:app --reload
 ```
 
-La API estará disponible en: `http://localhost:8000`
-Documentación interactiva: `http://localhost:8000/docs`
+Endpoints de documentación:
+- `http://localhost:8000/docs`
+- `http://localhost:8000/redoc`
 
-## 📚 Endpoints Principales
+---
 
-### Autenticación
-- `POST /api/auth/register` - Registrar nuevo usuario
-- `POST /api/auth/login` - Login de usuario
-- `GET /api/auth/me` - Obtener usuario actual (requiere auth)
+## Variables de entorno
 
-### Reportes
-- `GET /api/reports` - Listar reportes
-- `GET /api/reports/{id}` - Obtener reporte
-- `POST /api/reports` - Crear reporte (requiere auth)
-- `PUT /api/reports/{id}` - Actualizar reporte (requiere auth)
-- `DELETE /api/reports/{id}` - Eliminar reporte (requiere auth)
-- `POST /api/reports/{id}/upload-image` - Subir imagen (requiere auth)
-- `POST /api/reports/{id}/like` - Dar like (requiere auth)
-
-### Categorías
-- `GET /api/categories` - Listar categorías
-- `GET /api/categories/{id}` - Obtener categoría
-- `POST /api/categories` - Crear categoría
-
-## 🗂️ Estructura del Proyecto
-
-```
-Backend/
-├── main.py                 # Punto de entrada de la aplicación
-├── requirements.txt        # Dependencias de Python
-├── .env.example           # Variables de entorno ejemplo
-├── app/
-│   ├── __init__.py
-│   ├── config/            # Configuración de la app
-│   │   ├── settings.py    # Variables de configuración
-│   │   ├── database.py    # Configuración de BD
-│   │   └── security.py    # JWT y autenticación
-│   ├── models/            # Modelos de BD (ORM)
-│   │   └── models.py
-│   ├── schemas/           # DTOs para validación
-│   │   └── schemas.py
-│   ├── routes/            # Endpoints de la API
-│   │   ├── auth.py
-│   │   ├── reports.py
-│   │   └── categories.py
-│   └── services/          # Lógica de negocio
-│       ├── s3_service.py
-│       └── gemini_service.py
-└── Dockerfile            # Configuración Docker
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/urbia
+JWT_SECRET_KEY=replace_me
+GEMINI_API_KEY=replace_me
+CLOUDINARY_URL=cloudinary://...
+DEBUG=true
 ```
 
-## 🔐 Seguridad
+---
 
-- Contraseñas hasheadas con bcrypt
-- JWT para autenticación
-- CORS configurado
-- Variables de entorno para credenciales
+## Endpoints principales
 
-## 🚀 Deployment
+## Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
 
-Ver [DEPLOYMENT.md](../DEPLOYMENT.md) para instrucciones completas de despliegue en Render.
+## Reportes
+- `GET /api/reporte`
+- `GET /api/reporte/{id}`
+- `GET /api/reporte/usuario/{user_id}`
+- `POST /api/reporte/combinado` (multipart)
+- `PUT /api/reporte/{id}` (multipart)
+- `DELETE /api/reporte/{id}`
+- `DELETE /api/reporte/id/{id}` (legacy)
 
-## 📝 Licencia
+## Categorías
+- Definidas en `app/routes/categories.py`
 
-MIT
+---
+
+## Notas funcionales
+
+- El endpoint combinado procesa JSON + imagen + audio.
+- El audio se transcribe y se integra a la descripción.
+- En edición, se soporta reemplazo y eliminación de imagen (`eliminarImagen`).
+- Moderación bloquea contenido explícito y permite reportes de incidentes urbanos legítimos.
+
+---
+
+## Testing
+
+```bash
+pytest -v
+```
+
+Si hay fallas de entorno, validar dependencias y conexión a base de datos primero.

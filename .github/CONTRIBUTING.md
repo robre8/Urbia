@@ -1,79 +1,51 @@
-# 🤝 Guía de Contribución - Ciudad Escucha
+# Contributing Guide — Urbia
 
-¡Gracias por tu interés en contribuir a **Ciudad Escucha**! 🎉 Este documento describe las reglas y mejores prácticas para colaborar en el proyecto.
+Gracias por contribuir a Urbia.
 
----
+## Requisitos
+- Node.js 18+
+- Python 3.11+
+- PostgreSQL
+- Git
 
-## 📌 Cómo Contribuir
+## Flujo recomendado
+1. Crear rama desde `dev`.
+2. Implementar cambios pequeños y atómicos.
+3. Validar localmente backend/frontend.
+4. Abrir PR hacia `dev`.
+5. Merge a `main` solo con validación.
 
-### 🚀 1. Requisitos Previos
-Antes de contribuir, asegúrate de tener:
-- Node.js y npm instalados.
-- Java JDK 17+.
-- PostgreSQL.
-- Git configurado.
-- Un entorno de desarrollo adecuado (VS Code recomendado).
+## Convención de commits
+Usar Conventional Commits (preferido):
+- `feat:` nueva funcionalidad
+- `fix:` corrección
+- `docs:` documentación
+- `refactor:` refactor
+- `test:` pruebas
+- `chore:` mantenimiento
 
----
+Ejemplos:
+- `fix(reports): support image removal on update`
+- `docs(readme): align routes with /api/reporte`
 
-### 🔀 2. Flujo de Trabajo en Git
+## Calidad mínima antes de PR
 
-1. **Fork** el repositorio y clónalo en tu máquina.
-2. **Crea una rama** basada en `dev`:
-   ```sh
-   git checkout dev
-   git pull origin dev
-   git checkout -b feature/nueva-funcionalidad
-   ```
-3. **Realiza cambios**, sigue las convenciones de código y haz commits estructurados.
-4. **Haz push de tu rama** y crea un Pull Request a `dev`.
-5. **Espera revisión** y realiza los cambios sugeridos si es necesario.
-6. **Una vez aprobado, se mergea a `dev`** y se elimina la rama.
-
----
-
-### 🎯 3. Convención de Commits
-
-Cada commit debe incluir un **emoji** y una descripción clara en español:
-
-| Tipo                | Emoji | Ejemplo de Commit |
-|--------------------|--------|-------------------------------|
-| **Nueva funcionalidad** | 🚀 `:construction:` | `🚀 Agregar nueva funcionalidad de reportes` |
-| **Corrección de errores** | 🐛 `:bug:` | `🐛 Corregir error en la carga de imágenes` |
-| **Refactorización** | ♻️ `:recycle:` | `♻️ Refactorizar la lógica de autenticación` |
-| **Documentación** | 📝 `:memo:` | `📝 Actualizar README con guía de instalación` |
-
----
-
-### 🛠 4. Estilo y Formato de Código
-
-- Usamos **Prettier y ESLint** para el formateo automático.
-- Código limpio siguiendo principios **SOLID**.
-- Usa **nombres descriptivos** para variables y funciones.
-- Evita código comentado innecesario.
-
-Ejecuta antes de hacer commit:
-```sh
-npm run lint
-npm run format
+### Backend
+```bash
+cd Backend
+python -m py_compile app/routes/reports.py
+pytest -v
 ```
 
----
-
-### ✅ 5. Pruebas y Validaciones
-Antes de hacer un Pull Request:
-- Asegúrate de que el código no rompe otras funcionalidades.
-- Ejecuta pruebas unitarias y de integración.
-- Confirma que no haya errores de linting ni warnings.
-
-Ejemplo:
-```sh
-npm test
+### Frontend
+```bash
+cd Frontend
+npm install
+npm run build
 ```
 
----
-
-### 🗣 6. Comunicación
-Si tienes dudas o sugerencias, únete a nuestro canal de **Discord** o abre un **Issue** en GitHub.
-
-📢 **¡Tu contribución ayuda a mejorar Ciudad Escucha! 🚀**
+## Criterios de aceptación
+- No romper rutas existentes.
+- Mantener coherencia entre docs y código.
+- Evitar duplicar lógica de negocio.
+- Incluir fallback seguro para dependencias externas (IA/servicios de media).

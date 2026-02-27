@@ -1,5 +1,7 @@
 # Changelog - Migración Java a Python
 
+> Nota: este changelog es histórico de migración. Algunas rutas y tecnologías listadas aquí reflejan estados anteriores y pueden diferir del estado actual de producción.
+
 ## [2025-02-25] - Migración Completa de Java a Python
 
 ### 🎯 Cambios Principales
